@@ -1,5 +1,3 @@
-## Step 5 - Compiling
-
 Once _configure_ is completed, we are ready for the compiler. Nothing should go wrong any longer at this point.
 
 `make`{{execute}}

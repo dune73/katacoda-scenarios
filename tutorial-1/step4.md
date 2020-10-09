@@ -1,5 +1,3 @@
-## Step 4 - Unpacking and configuring the compiler
-
 After verification we can unpack the package.
 
 Extract the source code:

@@ -1,5 +1,3 @@
-## Step 3 - Downloading the source code and verifying the checksum
-
 We’ll now download the program code from the internet. This can be done by downloading it directly from Apache in a browser or, to save the Apache Project’s bandwidth, by using wget to get it from a mirror.
 
 Move back to the apache source code folder:

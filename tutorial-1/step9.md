@@ -1,5 +1,3 @@
-## Step 9 (Goodie) - Inspecting the binaries and the modules References
-
 Before completing the tutorial, we’d like to take a closer look at the server. Let’s open the engine compartment and take a peek inside. We can get information about our binary as follows:
 
 `sudo ./bin/httpd -V`{{execute}}

@@ -1,5 +1,3 @@
-## Step 7 - Starting
-
 Now let’s see if our server will start up. For the moment, this again has to be done by the super user:
 
 `sudo ./bin/httpd -X`{{execute}}

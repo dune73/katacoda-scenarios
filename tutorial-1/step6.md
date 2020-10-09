@@ -1,5 +1,3 @@
-## Step 6 - Installing
-
 When compiling is successful, we then install the Apache web server we built ourselves. Installation must be performed by the super user. But right afterwards we’ll see how we can again take ownership of the web server. This is much more practical for a test system.
 
 `sudo make install`{{execute}}

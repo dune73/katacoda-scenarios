@@ -1,5 +1,3 @@
-## Step 2 - Meeting the requirements for apr and apr-util
-
 Since the release of version 2.4, the Apache web server comes without two important libraries that used to be part of the distribution. We now have to install `apr` and `apr-util` ourselves before being able to compile Apache. `apr` is the Apache Portable Runtime library. It adds additional features to the normal set of C libraries typically needed by server software. They include features for managing hash tables and arrays. These libraries aren’t used by the Apache web server alone, but also by other Apache Software Foundation projects, which is why they were removed from Apache’s source code. Like `apr`, `apr-util` is part of the Portable Runtime libraries supplemented by `apr-util`.
 
 Let’s start with apr and download the package.
@@ -55,7 +53,7 @@ And once we are at it, let's install everything else we are going to need throug
 
 Here is how to install all this stuff with a single command:
 
-`sudo apt-get install build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby nikto gawk libxml2-dev libexpat1-dev libyajl-dev`{{execute}}
+`sudo apt-get install build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby gawk libxml2-dev libexpat1-dev libyajl-dev`{{execute}}
 
 
 These are the package names on Debian-based distributions. The packages may have different names elsewhere. The absence of these files can be easily rectified by re-installing them using the utilities from your own distribution. Afterwards, run configure again, perhaps re-install something again and eventually the script will run successfully (individual warnings during the configure steps are no big problem. We just need to be sure the script did not die unexpectedly).

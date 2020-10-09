@@ -1,5 +1,3 @@
-## Step 8 - Trying it out
-
 The engine is running. But is it also working? Time for the function test: We access Apache by entering the following URL in our browser:
 
 https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/index.html
