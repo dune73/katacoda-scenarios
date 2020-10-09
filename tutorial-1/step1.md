@@ -4,4 +4,8 @@ It’s not all that important where the source code is located. The following is
 
 `sudo mkdir /usr/src/apache`{{execute}}
 `sudo chown $(whoami) /usr/src/apache`{{execute}}
-`cd /usr/src/apache`{{execute}}
+
+```
+cd /usr/src/apache
+echo "hello"
+```{{execute}}
