@@ -43,8 +43,9 @@
       }
     ],
     "intro": {
-      "text": "intro.md"
-    },
+      "text": "intro.md",
+      "courseData": "bin/run-before-intro.sh"
+    }
     "finish": {
       "text": "finish.md"
     }

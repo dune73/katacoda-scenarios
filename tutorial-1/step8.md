@@ -12,4 +12,4 @@ Apache shows the first signs of life in the browser.
 
 Fantastic! Goal achieved: The self-compiled Apache is running.
 
-Return to the shell and stop the server via `^C`{{execute ctrl-seq}}.
+Return to the shell window and stop the server via `CTRL`+`C`.

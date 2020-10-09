@@ -25,7 +25,7 @@ Unpack the repository:
 
 Change into the folder:
 
-`cd apr-1.7.0`{{€xecute}}
+`cd apr-1.7.0`{{execute}}
 
 Configure the compilation process:
 
@@ -70,17 +70,42 @@ This takes a moment after which we get the compiled apr, which we promptly insta
 
 Once this is successful, we'll do the same with apr-util.
 
+Move back to the apache source code folder:
+
 `cd /usr/src/apache`{{execute}}
+
+Get the `apr-util` source code.
+
 `wget https://www-eu.apache.org/dist/apr/apr-util-1.6.1.tar.bz2`{{execute}}
+
+Get the checksum file:
+
 `wget https://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256`{{execute}}
+
+Perform the check:
+
 `sha256sum --check apr-util-1.6.1.tar.bz2.sha256`{{execute}}
 
 `apr-util-1.6.1.tar.bz2: OK`
 
+Extract the source code from the archive:
+
 `tar -xvjf apr-util-1.6.1.tar.bz2`{{execute}}
+
+Enter the folder:
+
 `cd apr-util-1.6.1`{{execute}}
+
+Configure the compiler:
+
 `./configure --prefix=/usr/local/apr/ --with-apr=/usr/local/apr/`{{execute}}
+
+Run the compilation:
+
 `make`{{execute}}
+
+Install the compiled binaries:
+
 `sudo make install`{{execute}}
 
 Once this works in both cases we're ready for the web server itself.

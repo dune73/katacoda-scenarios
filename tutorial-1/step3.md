@@ -8,7 +8,7 @@ Move back to the apache source code folder:
 
 Get the source code:
 
-`wget https://www-eu.apache.org/dist//httpd/httpd-2.4.43.tar.bz2`{{execute}}
+`wget https://www-eu.apache.org/dist//httpd/httpd-2.4.46.tar.bz2`{{execute}}
 
 The compressed source code is approximately 5 MB in size.
 
@@ -16,10 +16,10 @@ We’ll now download the checksum of the source code file from Apache. At least 
 
 Get the checksum file:
 
-`wget https://www.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256`{{execute}}
+`wget https://www.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha256`{{execute}}
 
 Execute the check:
 
-`sha256sum --check httpd-2.4.43.tar.bz2.sha256`{{execute}}
+`sha256sum --check httpd-2.4.46.tar.bz2.sha256`{{execute}}
 
-` httpd-2.4.43.tar.bz2: OK`
+`httpd-2.4.46.tar.bz2: OK`
