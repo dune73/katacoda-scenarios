@@ -3,7 +3,7 @@
 ERROR=0
 VER_APR="1.7.0"
 VER_APRUTIL="1.6.1"
-VER_APACHE="2.4.41"
+VER_APACHE="2.4.46"
 VER_MODSECURITY="2.9.3"
 APACHE_MIRROR=https://www-eu.apache.org/dist
 
