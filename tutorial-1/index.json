@@ -1,6 +1,6 @@
 {
-  "title": "My Test",
-  "description": "My Test Description",
+  "title": "Tutorial 1 - Compiling Apache",
+  "description": "We're compiling an Apache web server for a test system.",
   "difficulty": "Intermediate",
   "time": "30 min",
   "details": {
