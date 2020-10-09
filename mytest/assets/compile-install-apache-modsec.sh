@@ -18,7 +18,7 @@ function break_on_error {
 
 echo -n "Installing conditions ... "
 echo;
-sudo aot-get update
+sudo apt-get update
 sudo apt-get install build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby gawk libxml2-dev libexpat1-dev libyajl-dev wget
 ERROR=$(($ERROR|$?))	# logical OR
 break_on_error $ERROR
