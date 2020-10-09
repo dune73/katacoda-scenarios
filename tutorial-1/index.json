@@ -1,0 +1,59 @@
+{
+  "title": "My Test",
+  "description": "My Test Description",
+  "difficulty": "Intermediate",
+  "time": "30 min",
+  "details": {
+    "steps": [
+      {
+        "title": "Step 1 - Preparing the directory tree for the source code",
+        "text": "step1.md"
+      },
+      {
+        "title": "Step 2 - Meeting the requirements for apr and apr-util",
+        "text": "step2.md"
+      },
+      {
+        "title": "Step 3 - Downloading the source code and verifying the checksum",
+        "text": "step3.md"
+      },
+      {
+        "title": "Step 4 - Unpacking and configuring the compiler",
+        "text": "step4.md"
+      },
+      {
+        "title": "Step 5 - Compiling",
+        "text": "step5.md"
+      },
+      {
+        "title": "Step 6 - Installing",
+        "text": "step6.md"
+      },
+      {
+        "title": "Step 7 - Starting",
+        "text": "step7.md"
+      },
+      {
+        "title": "Step 8 - Trying it out",
+        "text": "step8.md"
+      },
+      {
+        "title": "Step 9 (Goodie) - Inspecting the binaries and the modules References",
+        "text": "step9.md"
+      }
+    ],
+    "intro": {
+      "text": "intro.md"
+    },
+    "finish": {
+      "text": "finish.md"
+    }
+    }
+  },
+  "environment": {
+    "uilayout": "terminal-terminal"
+  },
+  "backend": {
+    "imageid": "bash"
+  }
+}
