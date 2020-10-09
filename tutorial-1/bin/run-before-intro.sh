@@ -1,5 +1,7 @@
 #!/bin/sh
 
+touch /tmp/run-before-into-start
+
 apt-get update
 apt-get --assume-yes install bzip2
 
