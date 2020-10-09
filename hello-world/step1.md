@@ -1,4 +1,4 @@
-This is your VERY first step.
+This is your first step.
 
 ## Task
 
