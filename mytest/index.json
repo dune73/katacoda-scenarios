@@ -19,7 +19,8 @@
       }
     ],
     "intro": {
-      "text": "intro.md"
+      "text": "intro.md",
+      "courseData": "script-background-intro.sh"
     },
     "finish": {
       "text": "finish.md"
@@ -29,6 +30,6 @@
     "uilayout": "terminal-terminal"
   },
   "backend": {
-    "imageid": "ubuntu1904"
+    "imageid": "bash"
   }
 }
