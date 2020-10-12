@@ -52,7 +52,7 @@
       "text": "finish.md"
     },
     "assets": {
-      "host01": ]
+      "host01": [
 	            {"file": "scenario-status", "target": "/usr/local/bin/", "chmod": "+x"}
       ]
     }
