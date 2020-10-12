@@ -10,5 +10,4 @@ curl -X HEAD https://netnea.com/ping/katacoda-tutorial-1-intro -o /dev/null 2>/t
 # the asset has not been copied when this script here runs. We
 # prepare a chmodded file and the +x will persist then the asset 
 # is copied
-touch /usr/local/bin/scenario-status
 chmod +x /usr/local/bin/scenario-status
