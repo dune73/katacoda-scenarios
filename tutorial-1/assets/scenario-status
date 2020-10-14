@@ -1,8 +1,17 @@
 #!/bin/bash
 
-VERSION_APR=1.7.0
-VERSION_APRUTIL=1.6.1
-VERSION_HTTPD=2.4.46
+JSON=/usr/local/etc/scenario-status.json
+
+STEPS=8
+
+END_MSG="You have completed the entire scenario successfully. Congratulations!"
+
+if [ ! -z "$1" ]; then
+	if [ "$1" -gt 0 -a "$1" -lt $STEPS ]; then
+		STEPS=$1
+		END_MSG="You have completed the scenario up and including step $STEPS."
+	fi
+fi
 
 VERBOSE=1
 
@@ -13,225 +22,83 @@ function vprint {
         fi
 }
 
+for STEP in $(seq 1 1 $STEPS); do
+	vprint "Checking step $STEP ..."
+	ITEMS=$(cat $JSON | jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items' | jq length) 
+	N=0
+	while [[ $N -lt $ITEMS ]]; do 
+		OPERATOR=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].operator' $JSON | tr -d \") 
+		TARGET=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].target' $JSON| tr -d \") 
+		FAILMSG=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].failmsg' $JSON | sed -e "s/^.//" -e "s/.$//" -e 's/\\"/"/g')
+		SUCCESSMSG=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].successmsg' $JSON | sed -e "s/^.//" -e "s/.$//" -e 's/\\"/"/g') 
+		FAILMSG=$(echo "$FAILMSG" | sed -e "s:\$TARGET:$TARGET:g")
+		SUCCESSMSG=$(echo "$SUCCESSMSG" | sed -e "s:\$TARGET:$TARGET:g")
 
-# Step 1
-STEP=1
-
-echo "Examining scenario step $STEP ..."
-
-if [ -d /usr/src/apache ]; then
-	vprint " Folder /usr/src/apache created successfully."
-else
-	echo "Folder /usr/src/apache not existing. This is fatal. Please fix it."
-	exit 1
-fi
-
-	# FIXME: ownership of src code folder (can only be tested when it can be created properly)
-
-echo "You have passed step $STEP successfully."
-
-# Step 2
-STEP=2
-
-echo "Examining scenario step $STEP ..."
-
-	read -r -d '' PKGS << 'EOF'
-build-essential
-binutils
-gcc
-libpcre3-dev
-libssl-dev
-zlibc
-zlib1g-dev
-ssl-cert
-ruby
-gawk
-libxml2-dev
-libexpat1-dev
-libyajl-dev
-EOF
-	for PKG in $PKGS; do
-		dpkg -l $PKG &> /dev/null
-		if [ $? -eq 1 ]; then
-			echo "Package $PKG not existing. This is fatal. Please fix it."
+		case $OPERATOR in
+		"file-exists")
+			if [ ! -f $TARGET ]; then
+				echo " $FAILMSG"
+				exit 1
+			else
+				vprint " $SUCCESSMSG"
+			fi
+			;;
+		"folder-exists")
+			if [ ! -d $TARGET ]; then
+				echo " $FAILMSG"
+				exit 1
+			else
+				vprint " $SUCCESSMSG"
+			fi
+			;;
+		"softlink-exists")
+			if [ ! -L $TARGET ]; then
+				echo " $FAILMSG"
+				exit 1
+			else
+				vprint " $SUCCESSMSG"
+			fi
+			;;
+		"tail1-contains")
+			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
+			if [ ! "$(tail -1 $TARGET)" == "$TARGETSTRING" ]; then
+				echo " $FAILMSG"
+				exit 1
+			else
+				vprint " $SUCCESSMSG"
+			fi
+			;;
+		"file-contains")
+			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
+			grep -q "$TARGETSTRING" $TARGET
+			if [ ! $? -eq 0 ]; then
+				echo " $FAILMSG"
+				exit 1
+			else
+				vprint " $SUCCESSMSG"
+			fi
+			;;
+		"pkg-installed")
+			pkg -l $TARGET &> /dev/null
+			if [ $? -eq 1 ]; then
+				echo " $FAILMSG"
+				exit 1
+			else
+				vprint " $SUCCESSMSG"
+			fi
+			;;
+		*)
+			echo "Operator $OPERATOR unknown. This is fatal. Aborting."
 			exit 1
-		else
-			vprint " Package $PKG installed."
-		fi	
+			;;
+		esac
+
+		let N=$N+1
 	done
 
-	if [ ! -f /usr/src/apache/apr-$VERSION_APR.tar.bz2 ]; then
-		echo "Src code file apr-$VERSION_APR.tar.bz2 not downloaded properly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Src code file apr-$VERSION_APR.tar.bz2 downloaded properly."
-	fi
+	echo "Step $STEP finished successfully."
 
-	if [ ! -d /usr/src/apache/apr-$VERSION_APR ]; then
-		echo "Src code file apr-$VERSION_APR.tar.bz2 not unpacked propoerly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Src code file apr-$VERSION_APR.tar.bz2 unpacked properly."
-	fi
+done
 
-	if [ ! "$(tail -1 /usr/src/apache/apr-$VERSION_APR/config.log)" == "configure: exit 0" ]; then
-		echo "Configure for \"apr\" did not run properly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Configure for \"apr\" ran properly."
-	fi
+echo "$END_MSG"
 
-	if [ ! -f /usr/src/apache/apr-$VERSION_APR/libapr-1.la ]; then
-		echo "Compilation of \"apr\" failed. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Compilation of \"apr\" successful."
-	fi
-
-	if [ ! -d /usr/local/apr ]; then
-		echo "Installation of compiled \"apr\" failed. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Installation of \"apr\" successful."
-	fi
-
-	if [ ! -f /usr/src/apache/apr-util-$VERSION_APRUTIL.tar.bz2 ]; then
-		echo "Src code file apr-util-$VERSION_APRUTIL.tar.bz2 not downloaded properly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Src code file apr-util-$VERSION_APRUTIL.tar.bz2 downloaded properly."
-	fi
-
-	if [ ! -d /usr/src/apache/apr-util-$VERSION_APRUTIL ]; then
-		echo "Src code file apr-util-$VERSION_APRUTIL.tar.bz2 not unpacked propoerly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Src code file apr-util-$VERSION_APRUTIL.tar.bz2 unpacked properly."
-	fi
-
-	if [ ! "$(tail -1 /usr/src/apache/apr-util-$VERSION_APRUTIL/config.log)" == "configure: exit 0" ]; then
-		echo "Configure for \"apr-util\" did not run properly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Configure for \"apr-util\" ran properly."
-	fi
-
-	if [ ! -f /usr/src/apache/apr-util-$VERSION_APRUTIL/libaprutil-1.la ]; then
-		echo "Compilation of \"apr-util\" failed. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Compilation of \"apr-util\" successful."
-	fi
-
-	if [ ! -f /usr/local/apr/lib/pkgconfig/apr-util-1.pc ]; then
-		echo "Installation of compiled \"apr-util\" failed. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Installation of \"apr-util\" successful."
-	fi
-
-echo "You have passed step $STEP successfully."
-
-# Step 3
-STEP=3
-echo "Examining scenario step $STEP ..."
-
-	if [ ! -f /usr/src/apache/httpd-$VERSION_HTTPD.tar.bz2 ]; then
-		echo "Src code file httpd-$VERSION_HTTPD.tar.bz2 not downloaded properly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Src code file httpd-$VERSION_HTTPD.tar.bz2 downloaded properly."
-	fi
-
-echo "You have passed step $STEP successfully."
-
-# Step 4
-STEP=4
-echo "Examining scenario step $STEP ..."
-
-	if [ ! -d /usr/src/apache/httpd-$VERSION_HTTPD ]; then
-		echo "Src code file httpd-$VERSION_HTTPD.tar.bz2 not unpacked propoerly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Src code file httpd-$VERSION_HTTPD.tar.bz2 unpacked properly."
-	fi
-
-	if [ ! "$(tail -1 /usr/src/apache/httpd-$VERSION_HTTPD/config.log)" == "configure: exit 0" ]; then
-		echo "Configure for \"apache\" did not run properly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Configure for \"apache\" ran properly."
-	fi
-
-
-echo "You have passed step $STEP successfully."
-
-# Step 5
-STEP=5
-echo "Examining scenario step $STEP ..."
-
-
-	if [ ! -f /usr/src/apache/httpd-$VERSION_HTTPD/httpd ]; then
-		echo "Compilation of \"apache\" failed. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Compilation of \"apache\" successful."
-	fi
-
-echo "You have passed step $STEP successfully."
-
-# Step 6
-STEP=6
-echo "Examining scenario step $STEP ..."
-
-	if [ ! -d /opt/apache-$VERSION_HTTPD ]; then
-		echo "Installation of compiled \"apache\" failed. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Installation of \"apache\" successful."
-	fi
-
-	if [ ! -L /apache ]; then
-		echo "Softlink /apache not created properly. This is fatal. Please fix it."
-		exit 1
-	else
-		vprint " Softlink \"/apache\" created properly."
-	fi
-	
-	# FIXME: ownership of symlink (can only be tested when it can be created properly)
-
-echo "You have passed step $STEP successfully."
-	
-
-# Step 7
-STEP=7
-echo "Examining scenario step $STEP ..."
-
-	if [ ! -f /apache/logs/error_log ]; then
-		echo "Apache webserver not started properly. This is fatal. Please fix."
-		exit 1
-	else
-		vprint " Apache webserver started properly."
-	fi
-
-echo "You have passed step $STEP successfully."
-
-# Step 8
-STEP=8
-echo "Examining scenario step $STEP ..."
-
-	if [ ! -f /apache/logs/apache_log ]; then
-		echo "Apache webserver access log not created properly. This is fatal. Please fix."
-		exit 1
-	else
-		vprint " Apache webserver access log created properly."
-	fi
-	
-	if [ ! $(grep -q "GET /index.html HTTP/1.1" /apache/logs/access_log) -eq 0 ]; then
-		echo "Apache webserver access failed. This is fatal. Please make sure this work."
-		exit 1
-	else
-		vprint " Apache webserver accessed successfully."
-	fi
-	
-echo "You have passed step $STEP successfully."

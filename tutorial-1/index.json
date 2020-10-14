@@ -53,7 +53,8 @@
     },
     "assets": {
       "host01": [
-	            {"file": "scenario-status", "target": "/usr/local/bin/", "chmod": "+x"}
+	            {"file": "scenario-status", "target": "/usr/local/bin/", "chmod": "+x"},
+	            {"file": "scenario-status.json", "target": "/usr/local/etc/"}
       ]
     }
   },

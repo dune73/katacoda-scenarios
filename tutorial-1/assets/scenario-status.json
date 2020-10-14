@@ -1,0 +1,256 @@
+[
+	{
+		"scenario1": {
+			"steps": [
+				{
+					"step": "step-1",
+					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/usr/src/apache",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
+					]
+				},
+
+				{
+					"step": "step-2",
+					"items" : [
+						{
+							"operator": "pkg-installed",
+							"target": "build-essential",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "binutil",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "gcc",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "gawk",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "libexpat1-dev",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "libpcre3-dev",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "libssl-dev",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "libxml2-dev",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "libyajl-dev",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "ruby",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "issl-cert",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "zlibc",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "pkg-installed",
+							"target": "zlib1g-dev",
+							"failmsg": "Package $TARGET not installed. Please install it.",
+							"successmsg": "Package $TARGET installed."
+						},
+						{
+							"operator": "file-exists",
+							"target": "/usr/src/apache/apr-1.7.0.tar.bz2",
+							"failmsg": "File $TARGET not found. This is fatal. Please fix.",
+							"successmsg": "File $TARGET found."
+						},
+						{
+							"operator": "folder-exists",
+							"target": "/usr/src/apache/apr-1.7.0",
+							"failmsg": "Folder $TARGET not found. This is fatal. Please fix.",
+							"successmsg": "Folder $TARGET found."
+						},
+						{
+							"operator": "tail1-contains",
+							"target": "/usr/src/apache/apr-1.7.0/config.log",
+							"targetstring": "configure: exit 0",
+							"failmsg": "Configure for \"apr\" did not run properly. This is fatal. Please fix it.",
+							"successmsg": "Configure for \"apr\" ran properly."
+						},
+						{
+							"operator": "file-exists",
+							"target": "/usr/src/apache/apr-1.7.0/libapr-1.la",
+							"failmsg": "Compilation for \"apr\" failed. This is fatal. Please fix.",
+							"successmsg": "Compilation of \"apr\" successful."
+						},
+						{
+							"operator": "folder-exists",
+							"target": "/usr/local/apr",
+							"failmsg": "Installation of compiled \"apr\" failed. This is fatal. Please fix it.",
+							"successmsg": "Installation of \"apr\" successful."
+						},
+						{
+							"operator": "file-exists",
+							"target": "/usr/src/apache/apr-util-1.6.1.tar.bz2",
+							"failmsg": "File $TARGET not found. This is fatal. Please fix.",
+							"successmsg": "File $TARGET found."
+						},
+						{
+							"operator": "folder-exists",
+							"target": "/usr/src/apache/apr-util-1.6.1",
+							"failmsg": "Folder $TARGET not found. This is fatal. Please fix.",
+							"successmsg": "Folder $TARGET found."
+						},
+						{
+							"operator": "tail1-contains",
+							"target": "/usr/src/apache/apr-util-1.6.1/config.log",
+							"targetstring": "configure: exit 0",
+							"failmsg": "Configure for \"apr-util\" did not run properly. This is fatal. Please fix it.",
+							"successmsg": "Configure for \"apr-util\" ran properly."
+						},
+						{
+							"operator": "file-exists",
+							"target": "/usr/src/apache/apr-util-1.6.1/libaprutil-1.la",
+							"failmsg": "Compilation for \"apr\" failed. This is fatal. Please fix.",
+							"successmsg": "Compilation of \"apr-util\" successful."
+						},
+						{
+							"operator": "file-exists",
+							"target": "/usr/local/apr/lib/pkgconfig/apr-util-1.pc",
+							"failmsg": "Installation of compiled \"apr-util\" failed. This is fatal. Please fix it.",
+							"successmsg": "Installation of \"apr-util\" successful."
+						}
+					]
+				},		
+				{
+					"step": "step-3",
+					"items" : [
+						{
+							"operator": "file-exists",
+							"target": "/usr/src/apache/httpd-2.4.46.tar.bz2",
+							"failmsg": "Source code file \"httpd-2.4.46.tar.bz2\" not downloaded properly. This is fatal. Please fix it.",
+							"successmsg": "Source code file \"httpd-2.4.46.tar.bz2\" downloaded properly."
+						}
+					]
+				},
+				{
+					"step": "step-4",
+					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/usr/src/apache/httpd-2.4.46",
+							"failmsg": "Folder $TARGET not found. This is fatal. Please fix.",
+							"successmsg": "Folder $TARGET found."
+						},
+						{
+							"operator": "tail1-contains",
+							"target": "/usr/src/apache/httpd-2.4.46/config.log",
+							"targetstring": "configure: exit 0",
+							"failmsg": "Configure for \"apache\" did not run properly. This is fatal. Please fix it.",
+							"successmsg": "Configure for \"apache\" ran properly."
+						}
+					]
+				},
+				{
+					"step": "step-5",
+					"items" : [
+						{
+							"operator": "file-exists",
+							"target": "/usr/src/apache/httpd-2.4.46/httpd",
+							"failmsg": "Compilation for \"apache\" failed. This is fatal. Please fix.",
+							"successmsg": "Compilation of \"apache\" successful."
+						}
+					]
+				},
+				{
+					"step": "step-6",
+					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt/apache-2.4.46",
+							"failmsg": "Installation of compiled \"apache\" failed. This is fatal. Please fix it.",
+							"successmsg": "Installation of \"apache\" successful."
+						},
+						{
+							"operator": "softlink-exists",
+							"target": "/apache",
+							"failmsg": "Softlink \"$TARGET\" is not existing. This is fatal. Please fix.",
+							"successmsg": "Softlink \"$TARGET\" set properly."
+						}
+					]
+				},
+				{
+					"step": "step-7",
+					"items" : [
+						{
+							"operator": "file-exists",
+							"target": "/apache/logs/error_log",
+							"failmsg": "File $TARGET not found. This is fatal. Please fix.",
+							"successmsg": "File $TARGET found."
+						}
+					]
+				},
+				{
+					"step": "step-8",
+					"items" : [
+						{
+							"operator": "file-exists",
+							"target": "/apache/logs/access_log",
+							"failmsg": "File $TARGET not found. This is fatal. Please fix.",
+							"successmsg": "File $TARGET found."
+						},
+						{
+							"operator": "file-contains",
+							"target": "/apache/logs/access_log",
+							"targetstring": "GET /index.html HTTP/1.1",
+							"failmsg": "Apache webserver access failed. This is fatal. Please make sure this works.",
+							"successmsg": "Apache webserver accesses successfully."
+						}
+					]
+				}
+			]
+		}
+	}
+]
+
+
+
+
+
