@@ -152,7 +152,9 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		let N=$N+1
 	done
 
-	echo "Step $STEP finished successfully."
+	if [ ! $AUTOMATIC -eq 1 ]; then
+		echo "Step $STEP finished successfully."
+	fi
 
 done
 
