@@ -1,10 +1,10 @@
 This is a Katacoda scenario based on a tutorial that has been published as part of a larger series of Apache / ModSecurity / OWASP Core Rule Set tutorials at [netnea](https://netnea.com/apache-tutorials).
 
+This tutorial is also available as a [video walk through](https://www.youtube.com/watch?v=JdsWhVlU8i0).
+
 ## What are we doing?
 
 We're compiling an Apache web server for a test system.
-
-This tutorial is also available as a [video walk through](https://www.youtube.com/watch?v=JdsWhVlU8i0).
 
 ## Why are we doing this?
 
