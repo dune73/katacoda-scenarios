@@ -42,7 +42,7 @@ function usage {
 	echo
 	echo "The automatic mode is a separate mode used by Katacoda"
 	echo "scripts. It depends on an output of \"done\" on the final"
-	echo "line of the output. Katacoda will then decide that the"
+	echo "line of the output. Katacoda will then determine that the"
 	echo "check was successful."
         echo
 }
