@@ -1,6 +1,6 @@
 {
-  "title": "Scenario / Tutorial 1 - Compiling Apache",
-  "description": "We're compiling an Apache web server for a test system.",
+  "title": "Scenario / Tutorial 2 - Configuring a Miniml Apache Web Server",
+  "description": "We're configuring a minimal Apache web server for a test system or for debugging.",
   "difficulty": "Intermediate",
   "time": "30 min",
   "details": {
