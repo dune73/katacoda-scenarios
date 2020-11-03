@@ -4,8 +4,12 @@ curl -X HEAD https://netnea.com/ping/katacoda-tutorial-2-intro -o /dev/null 2>/t
 
 # Installed env as prepared in scenario 1
 cd /opt
-wget https://netnea.com/files/apache-compiled-2.4.46.tar.bz2
-tar xvjf https://netnea.com/files/apache-compiled-2.4.46.tar.bz2
+pwd >> /tmp/tmp.log
+echo "Downloading now" >> /tmp/tmp.log
+wget https://netnea.com/files/apache-compiled-2.4.46.tar.bz2 2>>/tmp/tmp.log
+echo $? >> /tmp/tmp.log
+echo "Downloaded" >> /tmp/tmp.log
+tar xvjf https://netnea.com/files/apache-compiled-2.4.46.tar.bz2 2>>/tmp/tmp.log
 ln -s /opt/apache-2.4.46 /apache
 #FIXME: sudo chown
 
