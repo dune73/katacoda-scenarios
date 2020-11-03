@@ -10,10 +10,6 @@
         "text": "step1.md",
         "answer": "step1-answer.md",
         "verify": "step1-verify.sh"
-      },
-      {
-        "title": "Step 9 (Goodie) - Inspecting the binaries and the modules References",
-        "text": "step9.md"
       }
     ],
     "intro": {
