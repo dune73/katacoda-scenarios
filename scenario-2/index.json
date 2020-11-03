@@ -1,0 +1,39 @@
+{
+  "title": "Scenario / Tutorial 1 - Compiling Apache",
+  "description": "We're compiling an Apache web server for a test system.",
+  "difficulty": "Intermediate",
+  "time": "30 min",
+  "details": {
+    "steps": [
+      {
+        "title": "Step 1 - Preparing the directory tree for the source code",
+        "text": "step1.md",
+        "answer": "step1-answer.md",
+        "verify": "step1-verify.sh"
+      },
+      {
+        "title": "Step 9 (Goodie) - Inspecting the binaries and the modules References",
+        "text": "step9.md"
+      }
+    ],
+    "intro": {
+      "text": "intro.md",
+      "courseData": "bin/run-before-intro.sh"
+    },
+    "finish": {
+      "text": "finish.md"
+    },
+    "assets": {
+      "host01": [
+	            {"file": "scenario-status", "target": "/usr/local/bin/", "chmod": "+x"},
+	            {"file": "scenario-status.json", "target": "/usr/local/etc/"}
+      ]
+    }
+  },
+  "environment": {
+    "uilayout": "terminal"
+  },
+  "backend": {
+    "imageid": "bash"
+  }
+}
