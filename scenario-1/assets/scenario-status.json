@@ -148,7 +148,7 @@
 						{
 							"operator": "file-exists",
 							"target": "/usr/src/apache/apr-util-1.6.1/libaprutil-1.la",
-							"failmsg": "Compilation for \"apr\" failed. This is fatal. Please fix.",
+							"failmsg": "Compilation for \"apr-util\" failed. This is fatal. Please fix.",
 							"successmsg": "Compilation of \"apr-util\" successful."
 						},
 						{
@@ -222,8 +222,8 @@
 						{
 							"operator": "file-exists",
 							"target": "/apache/logs/error_log",
-							"failmsg": "File $TARGET not found. This is fatal. Please fix.",
-							"successmsg": "File $TARGET found."
+							"failmsg": "File $TARGET not found. This indicates that Apache has not been launched. Please start it.",
+							"successmsg": "File $TARGET found. Apache thus started."
 						}
 					]
 				},
