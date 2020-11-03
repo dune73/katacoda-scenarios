@@ -2,6 +2,11 @@
 
 curl -X HEAD https://netnea.com/ping/katacoda-tutorial-2-intro -o /dev/null 2>/tmp/tmp.log
 
+apt-get update
+
+apt-get --assume-yes install bzip2 wget jq
+
+
 # Installed env as prepared in scenario 1
 cd /opt
 pwd >> /tmp/tmp.log
@@ -15,9 +20,5 @@ ln -s /opt/apache-2.4.46 /apache
 
 # chmod +x when copying assets does not work. Doing this by hand.
 chmod +x /usr/local/bin/scenario-status
-
-apt-get update
-
-apt-get --assume-yes install bzip2 wget jq
 
 
