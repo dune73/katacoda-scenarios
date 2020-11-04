@@ -4,7 +4,7 @@ JSON=/usr/local/etc/scenario-status.json
 
 STEPCOUNTERFILE=/usr/local/share/step-counter.txt
 
-TOTALSTEPS=8
+TOTALSTEPS=9
 
 VERBOSE=0
 AUTOMATIC=0
