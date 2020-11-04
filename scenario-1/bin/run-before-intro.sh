@@ -3,7 +3,7 @@
 # chmod +x when copying assets does not work. Doing this by hand.
 chmod +x /usr/local/bin/scenario-status
 
-#apt-get update
+apt-get update
 
 apt-get --assume-yes install bzip2 wget jq
 
