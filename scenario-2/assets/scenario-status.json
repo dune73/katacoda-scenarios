@@ -17,36 +17,78 @@
 				{
 					"step": "step-2",
 					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
 					]
 				},		
 				{
 					"step": "step-3",
 					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
 					]
 				},
 				{
 					"step": "step-4",
 					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
 					]
 				},
 				{
 					"step": "step-5",
 					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
 					]
 				},
 				{
 					"step": "step-6",
 					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
 					]
 				},
 				{
 					"step": "step-7",
 					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
 					]
 				},
 				{
 					"step": "step-8",
 					"items" : [
+						{
+							"operator": "folder-exists",
+							"target": "/opt",
+							"failmsg": "Folder $TARGET does not exist. Please create it.",
+							"successmsg": "Folder $TARGET exists."
+						}
 					]
 				}
 			]
