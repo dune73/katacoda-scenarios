@@ -38,10 +38,10 @@
 					"step": "step-3",
 					"items" : [
 						{
-							"operator": "folder-exists",
-							"target": "/opt",
-							"failmsg": "Folder $TARGET does not exist. Please create it.",
-							"successmsg": "Folder $TARGET exists."
+							"operator": "file-exists",
+							"target": "/apache/logs/error_log",
+							"failmsg": "File $TARGET not found. This indicates that Apache has not been launched. Please start it.",
+							"successmsg": "File $TARGET found. Apache thus started."
 						}
 					]
 				},

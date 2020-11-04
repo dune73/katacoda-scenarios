@@ -1,5 +1,11 @@
 Let’s go through this configuration step-by-step.
 
+It's probably best if you open the configuration file and browse it side by side with the text here.
+
+```
+less /apache/conf/httpd.conf
+```{{execute}}
+
 We are defining _ServerName_ as _localhost_, because we are still working in a lab-like setup. In production the fully qualified host name of the service has to be entered here.
 
 The server requires an administrator e-mail address, primarily for display on error pages. This is defined in _ServerAdmin_.
