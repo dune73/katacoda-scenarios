@@ -9,22 +9,22 @@
 							"operator": "file-contains",
 							"target": "/apache/conf/httpd.conf",
 							"targetstring": "logs/httpd.pid",
-							"failmsg": "New Apache configuration is not correct. his is fatal. Please make sure you access the link to your server and that you get a successful response.",
-							"successmsg": "New Apache configuration is fine."
+							"failmsg": "New Apache configuration is not correct. This is fatal. Please make sure you access the link to your server and that you get a successful response.",
+							"successmsg": "Config check 1: New Apache configuration is fine."
 						},
 						{
 							"operator": "file-contains",
 							"target": "/apache/conf/httpd.conf",
 							"targetstring": "[%{cu}t]",
-							"failmsg": "New Apache configuration is not correct. his is fatal. Please make sure you access the link to your server and that you get a successful response.",
-							"successmsg": "New Apache configuration is fine."
+							"failmsg": "New Apache configuration is not correct. This is fatal. Please make sure you access the link to your server and that you get a successful response.",
+							"successmsg": "Config check 2: New Apache configuration is fine."
 						},
 						{
 							"operator": "file-contains",
 							"target": "/apache/conf/httpd.conf",
 							"targetstring": "Options SymLinksIfOwnerMatch",
-							"failmsg": "New Apache configuration is not correct. his is fatal. Please make sure you access the link to your server and that you get a successful response.",
-							"successmsg": "New Apache configuration is fine."
+							"failmsg": "New Apache configuration is not correct. This is fatal. Please make sure you access the link to your server and that you get a successful response.",
+							"successmsg": "Config check 3: New Apache configuration is fine."
 						}
 					]
 				},
@@ -32,16 +32,6 @@
 				{
 					"step": "step-2",
 					"items" : [
-						{
-
-
-
-
-							"operator": "folder-exists",
-							"target": "/opt",
-							"failmsg": "Folder $TARGET does not exist. Please create it.",
-							"successmsg": "Folder $TARGET exists."
-						}
 					]
 				},		
 				{
