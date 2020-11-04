@@ -13,7 +13,7 @@
         "code": "step1-set-counter.sh"
       },
       {
-        "title": "Step 2 - "Understanding the configuration",
+        "title": "Step 2 - Understanding the configuration",
         "text": "step2.md",
         "answer": "step2-answer.md",
         "verify": "step2-verify.sh",
