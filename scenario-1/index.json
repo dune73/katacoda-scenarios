@@ -10,7 +10,7 @@
         "text": "step1.md",
         "answer": "step1-answer.md",
         "verify": "step1-verify.sh",
-	"code": "execute-counter.sh"
+	"code": "init-counter.sh"
       },
       {
         "title": "Step 2 - Meeting the requirements for apr and apr-util",
