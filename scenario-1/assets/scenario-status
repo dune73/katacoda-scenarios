@@ -92,6 +92,9 @@ if [ -z "$MAXSTEP" ]; then
 	MAXSTEP=$STEPCOUNTER
 fi
 
+if [ "$MINSTEP" -gt "$STEPCOUNTER" ]; then
+	echo "Checking steps beyond the current scenario step. This is likely going to fail."
+
 for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 	if [ ! $AUTOMATIC -eq 1 ]; then
 		echo -n "Checking step $STEP ... "
@@ -182,6 +185,8 @@ done
 
 if [ $MAXSTEP -eq $TOTALSTEPS ]; then
 	echo "You have completed the entire scenario successfully. Congratulations!"
+else
+	echo "You are ready for the next step."
 fi
 
 if [ $AUTOMATIC -eq 1 ]; then
