@@ -78,7 +78,6 @@
       "host01": [
 	            {"file": "counter.sh", "target": "/usr/local/bin/", "chmod": "+x"},
 	            {"file": "scenario-status", "target": "/usr/local/bin/", "chmod": "+x"},
-	            {"file": "scenario-status.sh", "target": "/usr/local/bin/", "chmod": "+x"},
 	            {"file": "scenario-status.json", "target": "/usr/local/etc/"}
       ]
     }

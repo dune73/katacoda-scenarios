@@ -2,6 +2,7 @@
 
 # chmod +x when copying assets does not work. Doing this by hand.
 chmod +x /usr/local/bin/scenario-status
+chmod +x /usr/local/bin/counter.sh
 
 apt-get update
 
