@@ -93,7 +93,9 @@ if [ -z "$MAXSTEP" ]; then
 fi
 
 for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
-	vprint "Checking step $STEP ..."
+	if [ ! $AUTOMATIC -eq 1 ]; then
+		echo -n "Checking step $STEP ... "
+	fi
 	ITEMS=$(cat $JSON | jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items' | jq length) 
 	N=0
 	while [[ $N -lt $ITEMS ]]; do 
@@ -107,6 +109,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		case $OPERATOR in
 		"file-exists")
 			if [ ! -f $TARGET ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -115,6 +118,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 			;;
 		"folder-exists")
 			if [ ! -d $TARGET ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -123,6 +127,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 			;;
 		"softlink-exists")
 			if [ ! -L $TARGET ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -132,6 +137,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		"tail1-contains")
 			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
 			if [ ! "$(tail -1 $TARGET)" == "$TARGETSTRING" ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -142,6 +148,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
 			grep -q "$TARGETSTRING" $TARGET
 			if [ ! $? -eq 0 ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -151,6 +158,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		"pkg-installed")
 			pkg -l $TARGET &> /dev/null
 			if [ $? -eq 1 ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -167,7 +175,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 	done
 
 	if [ ! $AUTOMATIC -eq 1 ]; then
-		echo "Step $STEP finished successfully."
+		echo "success"
 	fi
 
 done
