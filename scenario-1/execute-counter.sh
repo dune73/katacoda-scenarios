@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/local/bin/counter.sh 2> /dev/null ; clear
+/usr/local/bin/counter.sh && clear
