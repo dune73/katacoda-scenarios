@@ -18,6 +18,55 @@
         "answer": "step2-answer.md",
         "verify": "step2-verify.sh",
         "code": "step2-set-counter.sh"
+      },
+      {
+        "title": "Step 3 - FIXME",
+        "text": "step3.md",
+        "answer": "step3-answer.md",
+        "verify": "step3-verify.sh",
+        "code": "step3-set-counter.sh"
+      },
+      {
+        "title": "Step 4 - FIXME",
+        "text": "step4.md",
+        "answer": "step4-answer.md",
+        "verify": "step4-verify.sh",
+        "code": "step4-set-counter.sh"
+      },
+      {
+        "title": "Step 5 -  FIXME",
+        "text": "step5.md",
+        "answer": "step5-answer.md",
+        "verify": "step5-verify.sh",
+        "code": "step5-set-counter.sh"
+      },
+      {
+        "title": "Step 6 -  FIXME",
+        "text": "step6.md",
+        "answer": "step6-answer.md",
+        "verify": "step6-verify.sh",
+        "code": "step6-set-counter.sh"
+      },
+      {
+        "title": "Step 7 -  FIXME",
+        "text": "step7.md",
+        "answer": "step7-answer.md",
+        "verify": "step7-verify.sh",
+        "code": "step7-set-counter.sh"
+      },
+      {
+        "title": "Step 8 -  FIXME",
+        "text": "step8.md",
+        "answer": "step8-answer.md",
+        "verify": "step8-verify.sh",
+        "code": "step8-set-counter.sh"
+      },
+      {
+        "title": "Step 9 - FIXME",
+        "text": "step9.md",
+        "answer": "step9-answer.md",
+        "verify": "step9-verify.sh",
+        "code": "step9-set-counter.sh"
       }
     ],
     "intro": {
