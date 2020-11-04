@@ -1,1 +1,1 @@
-#FIXME /usr/local/bin/scenario-status --minstep 1 --step 1 --automatic
+/usr/local/bin/scenario-status --minstep 5 --step 5 --automatic
