@@ -83,14 +83,14 @@
                                                         "target": "/apache/logs/access.log",
                                                         "targetstring": "TRACE /index.html HTTP/1.1",
                                                         "failmsg": "It looks like you did not try out the TRACE method. Please get this done in order to advance.",
-                                                        "successmsg": "Apache webserver accesses successfully."
+                                                        "successmsg": "Apache webserver accessed successfully."
                                                 },
                                                 {
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/logs/access_log",
                                                         "targetstring": "TraceEnable.*Off",
                                                         "failmsg": "The TraceEnable directive is not set of Off. You probably forgot to edit the config file and return it to its original state. Please get this done in order to advance.",
-                                                        "successmsg": "Apache webserver accesses successfully."
+                                                        "successmsg": "Apache TraceEnable configuration returned to original state."
                                                 }
 					]
 				},

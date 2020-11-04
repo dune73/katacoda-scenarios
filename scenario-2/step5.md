@@ -2,7 +2,7 @@ This is what happens during an HTTP request. But what exactly is the server sayi
 t, let’s start _curl_. This time with the _verbose_ option.
 
 ```
-$> curl --verbose http://localhost/index.html
+curl --verbose http://localhost/index.html
 ```{{execute}}
 
 This brings the following output:

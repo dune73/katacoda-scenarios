@@ -7,7 +7,7 @@ TraceEnable On
 After you have edited the file, you have to stop and start the server anew in the separate terminal tab. Then let's make the following curl request:
 
 ```
-$> curl -v --request TRACE http://localhost/index.html
+curl -v --request TRACE http://localhost/index.html
 ```{{execute}}
 
 We are thus accessing the known _URL_ using the _HTTP TRACE method_ (in place of _GET_). We expect the following as the result:

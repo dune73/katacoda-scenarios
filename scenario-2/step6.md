@@ -1,7 +1,7 @@
 During communication it is possible to get a somewhat more detailed view in _curl_. We use the _--trace-ascii_ command line parameter to do this:
 
 ```
-$> curl   http://localhost/index.html --trace-ascii -
+curl  http://localhost/index.html --trace-ascii -
 ```{{execute}}
 
 ```

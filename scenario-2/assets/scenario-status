@@ -168,6 +168,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		"file-contains-regexp")
 			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
 			grep -q -e "$TARGETSTRING" $TARGET
+			echo "grep -q -e \"$TARGETSTRING\" $TARGET"
 			if [ ! $? -eq 0 ]; then
 				echo "FAIL"
 				echo " $FAILMSG"
