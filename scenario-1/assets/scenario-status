@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 JSON=/usr/local/etc/scenario-status.json
