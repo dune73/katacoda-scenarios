@@ -2,10 +2,9 @@
 
 JSON=/usr/local/etc/scenario-status.json
 
-TOTALSTEPS=8
+STEPCOUNTERFILE=/usr/local/share/step-counter.txt
 
-MINSTEP=1
-MAXSTEP=$TOTALSTEPS
+TOTALSTEPS=9
 
 VERBOSE=0
 AUTOMATIC=0
@@ -32,7 +31,9 @@ function usage {
         echo " -v --verbose      Verbose output"
         echo " -?                This text"
 	echo
-	echo "By default, all steps in the scenario will be checked."
+	echo "By default, all steps up to the value in the step-counter file"
+	echo "will be counted. The step-counter file is updated by Katacoda"
+	echo "and keeps track of the scenario steps as you advance."
 	echo 
 	echo "`basename $0` --step 5 will check from step 1 to step 5."
 	echo
@@ -77,9 +78,34 @@ do
 done
 
 
+if [ ! -f $STEPCOUNTERFILE ]; then
+	STEPCOUNTER=1
+else
+	STEPCOUNTER=$(head -n 1 $STEPCOUNTERFILE)
+fi
+
+if [ -z "$MINSTEP" ]; then
+	MINSTEP=$STEPCOUNTER
+fi
+
+if [ -z "$MAXSTEP" ]; then
+	MAXSTEP=$STEPCOUNTER
+fi
+
+if [ "$MINSTEP" -gt "$MAXSTEP" ]; then
+	echo "Minimal checking step is greater than the maximal checking step. This is fatal. Aborting."
+	exit 1
+fi
+
+if [ "$MINSTEP" -gt "$STEPCOUNTER" ]; then
+	echo "Checking steps beyond the current scenario step. This is likely going to fail."
+fi
+
 
 for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
-	vprint "Checking step $STEP ..."
+	if [ ! $AUTOMATIC -eq 1 ]; then
+		echo -n "Checking step $STEP ... "
+	fi
 	ITEMS=$(cat $JSON | jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items' | jq length) 
 	N=0
 	while [[ $N -lt $ITEMS ]]; do 
@@ -93,6 +119,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		case $OPERATOR in
 		"file-exists")
 			if [ ! -f $TARGET ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -101,6 +128,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 			;;
 		"folder-exists")
 			if [ ! -d $TARGET ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -109,6 +137,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 			;;
 		"softlink-exists")
 			if [ ! -L $TARGET ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -118,6 +147,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		"tail1-contains")
 			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
 			if [ ! "$(tail -1 $TARGET)" == "$TARGETSTRING" ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -128,6 +158,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
 			grep -q "$TARGETSTRING" $TARGET
 			if [ ! $? -eq 0 ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -137,6 +168,7 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 		"pkg-installed")
 			pkg -l $TARGET &> /dev/null
 			if [ $? -eq 1 ]; then
+				echo "FAIL"
 				echo " $FAILMSG"
 				exit 1
 			else
@@ -153,13 +185,15 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 	done
 
 	if [ ! $AUTOMATIC -eq 1 ]; then
-		echo "Step $STEP finished successfully."
+		echo "success"
 	fi
 
 done
 
 if [ $MAXSTEP -eq $TOTALSTEPS ]; then
 	echo "You have completed the entire scenario successfully. Congratulations!"
+else
+	echo "You are ready for the next step."
 fi
 
 if [ $AUTOMATIC -eq 1 ]; then
