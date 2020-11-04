@@ -17,7 +17,7 @@ TraceEnable             Off
 Timeout                 10
 MaxRequestWorkers       100
 
-Listen                  127.0.0.1:80
+Listen                  80
 
 LoadModule              mpm_event_module        modules/mod_mpm_event.so
 LoadModule              unixd_module            modules/mod_unixd.so
@@ -45,7 +45,7 @@ DocumentRoot            /apache/htdocs
 
 </Directory>
 
-<VirtualHost 127.0.0.1:80>
+<VirtualHost 80>
 
       <Directory /apache/htdocs>
 
