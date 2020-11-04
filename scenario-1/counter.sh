@@ -9,3 +9,4 @@ echo "Step was $COUNTER"
 COUNTER=`expr $COUNTER + 1`
 echo "Step advanced to $COUNTER"
 echo "$COUNTER" > $COUNTER_FILE
+clear
