@@ -13,6 +13,11 @@ cd /
 wget https://netnea.com/files/apache-compiled-2.4.46.tar.bz2
 tar xvjf apache-compiled-2.4.46.tar.bz2
 ln -s /opt/apache-2.4.46 /apache
+chown root:root /usr
+chown root:root /usr/local
+chown -R root:root /usr/local/apr
+chown -R root:root /opt
+chown root:root /apache
 #FIXME: sudo chown
 
 echo "Env downloaded and installed" >> /tmp/tmp.log
