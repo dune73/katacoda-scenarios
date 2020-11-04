@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 JSON=/usr/local/etc/scenario-status.json
@@ -92,8 +93,15 @@ if [ -z "$MAXSTEP" ]; then
 	MAXSTEP=$STEPCOUNTER
 fi
 
+if [ "$MINSTEP" -gt "$MAXSTEP" ]; then
+	echo "Minimal checking step is greater than the maximal checking step. This is fatal. Aborting."
+	exit 1
+fi
+
 if [ "$MINSTEP" -gt "$STEPCOUNTER" ]; then
 	echo "Checking steps beyond the current scenario step. This is likely going to fail."
+fi
+
 
 for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 	if [ ! $AUTOMATIC -eq 1 ]; then
