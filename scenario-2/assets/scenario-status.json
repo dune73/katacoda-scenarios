@@ -39,7 +39,7 @@
 					"items" : [
 						{
 							"operator": "file-exists",
-							"target": "/apache/logs/error_log",
+							"target": "/apache/logs/error.log",
 							"failmsg": "File $TARGET not found. This indicates that Apache has not been launched. Please start it.",
 							"successmsg": "File $TARGET found. Apache thus started."
 						}
@@ -50,61 +50,53 @@
 					"items" : [
                                                 {
                                                         "operator": "file-exists",
-                                                        "target": "/apache/logs/access_log",
+                                                        "target": "/apache/logs/access.log",
                                                         "failmsg": "File $TARGET not found. This is fatal. Please fix.",
                                                         "successmsg": "File $TARGET found."
                                                 },
                                                 {
                                                         "operator": "file-contains",
-                                                        "target": "/apache/logs/access_log",
+                                                        "target": "/apache/logs/access.log",
                                                         "targetstring": "GET /index.html HTTP/1.1",
-                                                        "failmsg": "Apache webserver access failed (or did not happen yet). This is fatal. Please make sure you access the link to your server and that you get a successful response.",
-                                                        "successmsg": "Apache webserver accesses successfully."
+                                                        "failmsg": "Apache webserver access failed (or did not happen yet). This is fatal. Please make sure you access the server with curl and that you get a successful response.",
+
+							"failmsg": "File $TARGET not found. This indicates that Apache has not been started. Please start it.",
+                                                        "successmsg": "Apache webserver accessed successfully."
                                                 }
 					]
 				},
 				{
 					"step": "step-5",
 					"items" : [
-						{
-							"operator": "folder-exists",
-							"target": "/opt",
-							"failmsg": "Folder $TARGET does not exist. Please create it.",
-							"successmsg": "Folder $TARGET exists."
-						}
 					]
 				},
 				{
 					"step": "step-6",
 					"items" : [
-						{
-							"operator": "folder-exists",
-							"target": "/opt",
-							"failmsg": "Folder $TARGET does not exist. Please create it.",
-							"successmsg": "Folder $TARGET exists."
-						}
 					]
 				},
 				{
 					"step": "step-7",
 					"items" : [
-						{
-							"operator": "folder-exists",
-							"target": "/opt",
-							"failmsg": "Folder $TARGET does not exist. Please create it.",
-							"successmsg": "Folder $TARGET exists."
-						}
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/access.log",
+                                                        "targetstring": "TRACE /index.html HTTP/1.1",
+                                                        "failmsg": "It looks like you did not try out the TRACE method. Please get this done in order to advance.",
+                                                        "successmsg": "Apache webserver accesses successfully."
+                                                },
+                                                {
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/logs/access_log",
+                                                        "targetstring": "TraceEnable.*Off",
+                                                        "failmsg": "The TraceEnable directive is not set of Off. You probably forgot to edit the config file and return it to its original state. Please get this done in order to advance.",
+                                                        "successmsg": "Apache webserver accesses successfully."
+                                                }
 					]
 				},
 				{
 					"step": "step-8",
 					"items" : [
-						{
-							"operator": "folder-exists",
-							"target": "/opt",
-							"failmsg": "Folder $TARGET does not exist. Please create it.",
-							"successmsg": "Folder $TARGET exists."
-						}
 					]
 				}
 			]

@@ -165,6 +165,17 @@ for STEP in $(seq $MINSTEP 1 $MAXSTEP); do
 				vprint " $SUCCESSMSG"
 			fi
 			;;
+		"file-contains-regexp")
+			TARGETSTRING=$(jq '.[].scenario1[][] | select(.step == "step-'$STEP'").items['$N'].targetstring' $JSON| tr -d \") 
+			grep -q -e "$TARGETSTRING" $TARGET
+			if [ ! $? -eq 0 ]; then
+				echo "FAIL"
+				echo " $FAILMSG"
+				exit 1
+			else
+				vprint " $SUCCESSMSG"
+			fi
+			;;
 		"pkg-installed")
 			pkg -l $TARGET &> /dev/null
 			if [ $? -eq 1 ]; then

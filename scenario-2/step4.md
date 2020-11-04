@@ -8,6 +8,6 @@ Returns the following:
 
 ```
 <html><body><h1>It works!</h1></body></html>
-```{{execute}}
+```
 
 We have thus sent an HTTP request and have received a response from our minimally configured server, meeting our expectations.
