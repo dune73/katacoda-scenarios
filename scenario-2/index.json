@@ -9,7 +9,15 @@
         "title": "Step 1 - Preparing the directory tree for the source code",
         "text": "step1.md",
         "answer": "step1-answer.md",
-        "verify": "step1-verify.sh"
+        "verify": "step1-verify.sh",
+        "code": "step1-set-counter.sh"
+      },
+      {
+        "title": "Step 2 - "Understanding the configuration",
+        "text": "step2.md",
+        "answer": "step2-answer.md",
+        "verify": "step2-verify.sh",
+        "code": "step2-set-counter.sh"
       }
     ],
     "intro": {
