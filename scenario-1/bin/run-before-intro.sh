@@ -6,7 +6,8 @@ chmod +x /usr/local/bin/counter.sh
 
 apt-get update
 
-apt-get --assume-yes install bzip2 wget jq
+# Most of these packages are installed, but sometimes, they are not
+apt-get --assume-yes install bzip2 wget jq sudo
 
 curl -X HEAD https://netnea.com/ping/katacoda-tutorial-1-intro -o /dev/null 2>/tmp/tmp.log
 
