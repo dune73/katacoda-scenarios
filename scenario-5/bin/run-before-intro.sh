@@ -3,6 +3,7 @@
 # chmod +x when copying assets does not work. Doing this by hand.
 chmod +x /usr/local/bin/scenario-status
 
+
 apt-get update
 
 # Most of these packages are installed, but sometimes, they are not
@@ -19,6 +20,9 @@ chown -R root:root /usr/local/apr
 chown -R root:root /opt
 chown root:root /apache
 #FIXME: sudo chown
+
+mv /tmp/tutorial-5-example-access.log.bz2 /apache/logs
+bunzip2 /apache/logs/tutorial-5-example-access.log.bz2
 
 echo "Env downloaded and installed" >> /tmp/tmp.log
 
