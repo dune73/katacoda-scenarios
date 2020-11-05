@@ -222,8 +222,8 @@
 						{
 							"operator": "file-exists",
 							"target": "/apache/logs/error_log",
-							"failmsg": "File $TARGET not found. This indicates that Apache has not been launched. Please start it.",
-							"successmsg": "File $TARGET found. Apache thus started."
+							"failmsg": "File $TARGET not found. This indicates that Apache has not been started. Please start it.",
+							"successmsg": "File $TARGET found."
 						}
 					]
 				},
@@ -240,9 +240,14 @@
 							"operator": "file-contains",
 							"target": "/apache/logs/access_log",
 							"targetstring": "GET /index.html HTTP/1.1",
-							"failmsg": "Apache webserver access failed (or did not happen yet). This is fatal. Please make sure you access the link to your server and that you get a successful response.",
+							"failmsg": "Apache webserver access failed. This is fatal. Please make sure this works.",
 							"successmsg": "Apache webserver accesses successfully."
 						}
+					]
+				},
+				{
+					"step": "step-9",
+					"items" : [
 					]
 				}
 			]
