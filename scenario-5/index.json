@@ -85,11 +85,11 @@
     },
     "assets": {
       "host01": [
-	            {"file": "small-file.txt", "target": "/tmp/"},
 	            {"file": "scenario-status", "target": "/usr/local/bin/", "chmod": "+x"},
 	            {"file": "scenario-status.json", "target": "/usr/local/etc/"},
 	            {"file": "httpd.conf", "target": "/usr/local/etc/"},
-	            {"file": "tutorial-5-example-access.log.bz2", "target": "/tmp/"}
+	            {"file": "tutorial-5-example-access.log.bz2", "target": "/tmp/"},
+	            {"file": "small-file.txt", "target": "/tmp/"}
       ]
     }
   },
