@@ -87,6 +87,7 @@
       "host01": [
 	            {"file": "scenario-status", "target": "/usr/local/bin/", "chmod": "+x"},
 	            {"file": "scenario-status.json", "target": "/usr/local/etc/"},
+	            {"file": "httpd.conf", "target": "/usr/local/etc/"},
 	            {"file": "tutorial-5-example-access.log.bz2", "target": "/tmp/"}
       ]
     }

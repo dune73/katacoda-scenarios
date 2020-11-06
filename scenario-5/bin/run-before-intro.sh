@@ -1,13 +1,11 @@
 #!/bin/sh
 
+# --------------------------------------------------------------
+# General Init
+# --------------------------------------------------------------
+
 # chmod +x when copying assets does not work. Doing this by hand.
 chmod +x /usr/local/bin/scenario-status
-
-
-#apt-get update
-
-# Most of these packages are installed, but sometimes, they are not
-#apt-get --assume-yes install bzip2 wget jq sudo
 
 # Get env as prepared in scenario 1
 cd /
@@ -21,9 +19,31 @@ chown -R root:root /opt
 chown root:root /apache
 #FIXME: sudo chown
 
+# --------------------------------------------------------------
+# Scenario Specific Init
+# --------------------------------------------------------------
+
+# Get example access log
 mv /tmp/tutorial-5-example-access.log.bz2 /apache/logs
 bunzip2 /apache/logs/tutorial-5-example-access.log.bz2
 
+echo "Example log ready" >> /tmp/tmp.log
+
+cp /usr/local/etc/httpd.conf /apache/conf/httpd.conf
+
+echo "httpd.conf ready" >> /tmp/tmp.log
+
+apt-get update
+
+echo "apt list updated" >> /tmp/tmp.log
+
+apt-get install --assume-yes gawk ruby ssl-cert
+
+echo "Packages installed" >> /tmp/tmp.log
+
+# --------------------------------------------------------------
+# Bailout
+# --------------------------------------------------------------
 echo "Env downloaded and installed" >> /tmp/tmp.log
 
 curl -X HEAD https://netnea.com/ping/katacoda-tutorial-5-intro --silent -o /dev/null 2>&1
