@@ -7,6 +7,9 @@
 # chmod +x when copying assets does not work. Doing this by hand.
 chmod +x /usr/local/bin/scenario-status
 
+# create bin folder for custom scripts
+mkdir /root/bin
+
 # Get env as prepared in scenario 1
 cd /
 wget https://netnea.com/files/apache-compiled-2.4.46.tar.bz2

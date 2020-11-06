@@ -1,15 +1,20 @@
 This is a Katacoda scenario based on a tutorial that has been published as part of a larger series of Apache / ModSecurity / OWASP Core Rule Set tutorials at [netnea](https://netnea.com/apache-tutorials).
 
-This tutorial is also available as a [video walk through](https://www.youtube.com/watch?v=JdsWhVlU8i0).
+### What are we doing?
 
-## What are we doing?
+We are defining a greatly extended log format in order to better monitor traffic.
 
-We're compiling an Apache web server for a test system.
 
-## Why are we doing this?
+### Why are we doing this?
 
-In professional use of the web server it’s very often the case that special requirements (security, additional debugging messages, special features from a new patch, etc.) force you to leave behind the distribution packages and quickly create some binaries on your own. In this case it’s important for the infrastructure to be prepared and to already have experience compiling and running your own binaries on production systems. It’s also easier to work with self-compiled Apache in a laboratory-like setup, which is also beneficial in terms of debugging.
+In the usual configuration of the Apache web server a log format is used that logs only the most necessary information about access from different clients. In practice, additional information is often required, which can easily be recorded in the server's access log.
 
-## New to Katacoda?
 
-Katacoda is an interactive learning system that lets you train on virtual machines right into your browser. For the scenario here, you will be presented with a shell terminal and a separate text screen that explains the steps at hand. The commands will be presented to you along the description. You can click on the commands to execute them in the shell window.
+### Requirements
+
+**The requirements are already met here on Katacoda. So nothing to do for you and you can start immediately.**
+
+* An Apache web server, ideally one created using the file structure shown in [Tutorial 1 (Compiling Apache)](https://www.netnea.com/cms/apache-tutorial-1_compiling-apache/).
+* Understanding of the minimal configuration in [Tutorial 2 (Configuring a Minimal Apache Web Server)](https://www.netnea.com/cms/apache-tutorial-2_minimal-apache-configuration/).
+* An Apache web server with SSL/TLS support as in [Tutorial 4 (Enabling Encryption with SSL/TLS)](https://www.netnea.com/cms/apache-tutorial-4_configuring-ssl-tls/).
+

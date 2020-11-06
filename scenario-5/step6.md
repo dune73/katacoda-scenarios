@@ -1,43 +1,26 @@
-During communication it is possible to get a somewhat more detailed view in _curl_. We use the _--trace-ascii_ command line parameter to do this:
+In day-to-day work you are often looking for specific requests or you are unsure of which requests are causing an error. It has often been shown to be useful to have specific additional values written to the log file. Any request and response headers or environment variables can be easily written. Our log format makes extensive use of it.
 
+The _\"%{Referer}i\"_ and _\"%{User-Agent}i\"_ values are request header fields. The balancer route in *%{BALANCER_WORKER_ROUTE}e* is an environment variable. The pattern is clear: _%{Header/Variable}<Domain>_. Request headers are assigned to the _i_ domain. Environment variables to domain _e_, the response headers to domain _o_ and the variables of the _SSL_ modules to the _x_ domain.
+
+So, for debugging purposes we will be writing an additional log file. We will no longer be using the _LogFormat_ directive, but instead defining the format together with the file on one line. This is a shortcut, if you want to use a specific format one time only.
+
+```bash
+CustomLog logs/access-debug.log "[%{%Y-%m-%d %H:%M:%S}t.%{usec_frac}t] %{UNIQUE_ID}e \
+\"%r\" %{Accept}i %{Content-Type}o"
 ```
-curl  http://localhost/index.html --trace-ascii -
-```{{execute}}
 
+With this additional log file we see the wishes expressed by the client in terms of the content type and what the server actually delivered. Normally this interplay between client and server works very well. But in practice there are sometimes inconsistencies, which is why an additional log file of this kind can be useful for debugging.
+The result could then look something like this:
+
+```bash
+$> cat logs/access-debug.log
+2015-09-02 11:58:35.654011 VebITcCoAwcAADRophsAAAAX "GET / HTTP/1.1" */* text/html
+2015-09-02 11:58:37.486603 VebIT8CoAwcAADRophwAAAAX "GET /cms/feed/ HTTP/1.1" text/html,application/xhtml+xml… 
+2015-09-02 11:58:39.253209 VebIUMCoAwcAADRoph0AAAAX "GET /cms/2014/04/17/ubuntu-14-04/ HTTP/1.1" */* text/html
+2015-09-02 11:58:40.893992 VebIU8CoAwcAADRbdGkAAAAD "GET /cms/2014/05/13/download-softfiles HTTP/1.1" */* … 
+2015-09-02 11:58:43.558478 VebIVcCoAwcAADRbdGoAAAAD "GET /cms/2014/08/25/netcapture-sshargs HTTP/1.1" */* … 
+...
 ```
-== Info: Hostname was NOT found in DNS cache
-== Info:   Trying 127.0.0.1...
-== Info: Connected to localhost (127.0.0.1) port 80 (#0)
-=> Send header, 83 bytes (0x53)
-0000: GET /index.html HTTP/1.1
-001a: User-Agent: curl/7.35.0
-0033: Host: localhost
-0044: Accept: */*
-0051: 
-<= Recv header, 17 bytes (0x11)
-0000: HTTP/1.1 200 OK
-<= Recv header, 37 bytes (0x25)
-0000: Date: Thu, 24 Sep 2015 11:46:17 GMT
-== Info: Server Apache is not blacklisted
-<= Recv header, 16 bytes (0x10)
-0000: Server: Apache
-<= Recv header, 46 bytes (0x2e)
-0000: Last-Modified: Mon, 11 Jun 2007 18:53:14 GMT
-<= Recv header, 26 bytes (0x1a)
-0000: ETag: "2d-432a5e4a73a80"
-<= Recv header, 22 bytes (0x16)
-0000: Accept-Ranges: bytes
-<= Recv header, 20 bytes (0x14)
-0000: Content-Length: 45
-<= Recv header, 2 bytes (0x2)
-0000: 
-<= Recv data, 45 bytes (0x2d)
-0000: <html><body><h1>It works!</h1></body></html>.
-<html><body><h1>It works!</h1></body></html>
-== Info: Connection #0 to host localhost left intact
-```{{execute}}
 
-_--trace-ascii_ requires a file as a parameter in order to make an _ASCII dump_ of communication in it. "-" works as a shortcut for _STDOUT_, enabling us to easily see what is being logged.
-
-Compared to _verbose_, _trace-ascii_ provides more details about the number of transferred bytes in the _request_ and _response_ phase. The request headers in the example above are thus 83 bytes. The bytes are then listed for each header in the response and overall for the body in the response: 45 bytes. This may seem like we are splitting hairs. But in fact, it can be crucial when something is missing and it is not quite certain what or where in the sequence it was delivered. Thus, it’s worth noting that 2 bytes are added to each header line. These are the CR (carriage returns) and NL (new lines) in the header lines included in the HTTP protocol. In the response body, on the other hand, only the actual content of the file is returned. This is obviously only one NL without CR here. On the third to last line (_000: <html ..._) a point comes after the greater than character This is code for the NL character in the response, which like other escape sequences is output in the form of a point.
+This is how log files can be very freely defined in Apache. What’s more interesting is analyzing the data. But we’ll need some data first.
 

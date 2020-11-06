@@ -1,42 +1,85 @@
-The _TraceEnable_ directive was described above. We have turned it _off_ as a precaution. It can however be very useful in debugging. So, let’s give it a try. Let’s set the option to on in the configuration file (`/apache/conf/httpd.conf`).
+Let’s configure the extended access log in the _extended_ format as described above and work a bit with the server.
+
+From now on, we will need two terminals open. One for the server (running in the foreground) and one terminal to run commands from. On top of the Katacoda Terminal window, there is a large plus-sign that let's you add another terminal tab. Choose "Open New Terminal" when the menu pops up.
+
+The new terminal tab opens, and you can now type there and launch the server in the foreground (not as a daemon!) just the way we did in the Scenario / Tutorial 1:
 
 ```
-TraceEnable On
-```
-
-After you have edited the file, you have to stop and start the server anew in the separate terminal tab. Then let's make the following curl request:
-
-```
-curl -v --request TRACE http://localhost/index.html
+cd /apache
 ```{{execute}}
 
-We are thus accessing the known _URL_ using the _HTTP TRACE method_ (in place of _GET_). We expect the following as the result:
+```
+sudo ./bin/httpd -X
+```{{execute}}
+
+Ready? Good!
+
+We could use _ApacheBench_ as described in the second tutorial for this, but that would result in a very uniform log file. We can change things up a bit with the following two one-liners (note the _insecure_ flag, that does away with certificate warnings in curl).
 
 ```
-* Hostname was NOT found in DNS cache
-*  Trying 127.0.0.1...
-* Connected to localhost (127.0.0.1) port 80 (#0)
-> TRACE /index.html HTTP/1.1
-> User-Agent: curl/7.35.0
-> Host: localhost
-> Accept: */*
-> 
-< HTTP/1.1 200 OK
-< Date: Thu, 24 Sep 2015 09:38:01 GMT
-* Server Apache is not blacklisted
-< Server: Apache
-< Transfer-Encoding: chunked
-< Content-Type: message/http
-< 
-TRACE /index.html HTTP/1.1
-User-Agent: curl/7.35.0
-Host: localhost
-Accept: */*
+for N in {1..100}; do curl --silent --insecure https://localhost/index.html?n=${N}a >/dev/null; done
+for N in {1..100}; do PAYLOAD=$(uuid -n $N | xargs); \
+   curl --silent --data "payload=$PAYLOAD" --insecure https://localhost/index.html?n=${N}b >/dev/null; \
+   done
+```{{execute}}
 
-* Connection #0 to host localhost left intact
+On the first line we simply make one hundred requests, numbered in the _query string_. Then comes the interesting idea on the second line: We again make one hundred requests. But this time we want to send the data using a POST request in the body of the request. We are dynamically creating this payload in such a way that it gets bigger every time it is called. We use _uuidgen_ to generate the data we need. This is a command that generates an _ascii ID_.
+Stringed together, we get a lot of data. (If there is an error message, this could be because the _uuidgen_ command is not present. In this case, the _uuid_ package should be installed).
+
+It may take a moment to process this line. As a result we see the following entries in the log file:
+
+```
+127.0.0.1 - - [2019-01-31 05:59:35.594159] "GET /index.html?n=1a HTTP/1.1" 200 45 "-" "curl/7.58.0" … 
+"-" 53252 localhost 127.0.0.1 443 - - + "-" XFKAt7evwRxnTvzP--AjEAAAAAI TLSv1.2 … 
+ECDHE-RSA-AES256-GCM-SHA384 422 1463 -% 97 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:35.612331] "GET /index.html?n=2a HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"-" 53254 localhost 127.0.0.1 443 - - + "-" XFKAt7evwRxnTvzP--AjEQAAAAg TLSv1.2 …
+ECDHE-RSA-AES256-GCM-SHA384 422 1463 -% 123 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:35.634044] "GET /index.html?n=3a HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"-" 53256 localhost 127.0.0.1 443 - - + "-" XFKAt7evwRxnTvzP--AjEgAAAAc TLSv1.2 …
+ECDHE-RSA-AES256-GCM-SHA384 422 1463 -% 136 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:35.652333] "GET /index.html?n=4a HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"-" 53258 localhost 127.0.0.1 443 - - + "-" XFKAt7evwRxnTvzP--AjEwAAAAs TLSv1.2 …
+ECDHE-RSA-AES256-GCM-SHA384 422 1463 -% 100 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:35.669342] "GET /index.html?n=5a HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"-" 53260 localhost 127.0.0.1 443 - - + "-" XFKAt7evwRxnTvzP--AjFAAAAA4 TLSv1.2 …
+ECDHE-RSA-AES256-GCM-SHA384 422 1463 -% 101 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:35.686449] "GET /index.html?n=6a HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"-" 53262 localhost 127.0.0.1 443 - - + "-" XFKAt7evwRxnTvzP--AjFQAAABA TLSv1.2 …
+ECDHE-RSA-AES256-GCM-SHA384 422 1463 -% 102 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:35.703428] "GET /index.html?n=7a HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"-" 53264 localhost 127.0.0.1 443 - - + "-" XFKAt7evwRxnTvzP--AjFgAAABQ TLSv1.2 …
+ECDHE-RSA-AES256-GCM-SHA384 422 1463 -% 101 - - - - - - -
+...
+127.0.0.1 - - [2019-01-31 05:59:48.060573] "POST /index.html?n=1b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53452 localhost 127.0.0.1 443 - - + "-" XFKAxLevwRxnTvzP--AjdAAAAAE …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 536 1463 -% 97 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:48.080029] "POST /index.html?n=2b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53454 localhost 127.0.0.1 443 - - + "-" XFKAxLevwRxnTvzP--AjdQAAAAU …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 573 1463 -% 113 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:48.100103] "POST /index.html?n=3b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53456 localhost 127.0.0.1 443 - - + "-" XFKAxLevwRxnTvzP--AjdgAAAAQ …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 611 1463 -% 105 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:48.119907] "POST /index.html?n=4b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53458 localhost 127.0.0.1 443 - - + "-" XFKAxLevwRxnTvzP--AjdwAAAAo …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 648 1463 -% 93 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:48.137620] "POST /index.html?n=5b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53460 localhost 127.0.0.1 443 - - + "-" XFKAxLevwRxnTvzP--AjeAAAAA0 …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 685 1463 -% 98 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:48.155453] "POST /index.html?n=6b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53462 localhost 127.0.0.1 443 - - + "-" XFKAxLevwRxnTvzP--AjeQAAABE …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 722 1463 -% 97 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:48.174826] "POST /index.html?n=7b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53464 localhost 127.0.0.1 443 - - + "-" XFKAxLevwRxnTvzP--AjegAAABM …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 759 1463 -% 95 - - - - - - -
+...
+127.0.0.1 - - [2019-01-31 05:59:50.533651] "POST /index.html?n=99b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53648 localhost 127.0.0.1 443 - - + "-" XFKAxrevwRxnTvzP--Aj1gAAABM …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 4216 1517 -% 1740 - - - - - - -
+127.0.0.1 - - [2019-01-31 05:59:50.555242] "POST /index.html?n=100b HTTP/1.1" 200 45 "-" "curl/7.58.0" …
+"application/x-www-form-urlencoded" 53650 localhost 127.0.0.1 443 - - + "-" XFKAxrevwRxnTvzP--Aj1wAAABc …
+TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 4254 1517 -% 264 - - - - - - -
 ```
 
-In the _body_ the server repeats the information about the request sent to it as intended. In fact, the lines are identical here. We are thus able to confirm that nothing has happened to the request in transit. If however we had passed through one or more interposed proxy servers, then there would be additional _header_ lines that we would also be able to see as a _client_. At a later point we will become familiar with more powerful tools for debugging. Nevertheless, we don’t want to completely ignore the _TRACE_ method.
-
-Don’t forget to turn _TraceEnable_ off again.
+As predicted above, a lot of values are still empty or indicated by _-_. But we see that we talked to server _www.example.com_ on port 443 and that the size of the request increased with every _POST_ request, with it being almost 4K, or 4096 bytes, in the end. Simple analyses can already be performed with this simple log file.
 

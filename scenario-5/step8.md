@@ -1,65 +1,54 @@
-So much for the simple server. But just for fun we can put it to the test. We’ll perform a small performance test using ab, short for ApacheBench. This is a very simple benchmarking program that is always at hand and able to quickly give you initial performance results. I like to run it before and after a configuration change to get an idea about whether anything in terms of performance has changed. ab is very powerful and calling it locally does not give you clean results. But you can get an initial impression using this tool.
+If you take a close look at the example log output above you will see that the duration of the requests are not evenly distributed and that there is a single outlier. We can identify the outlier as follows:
 
 ```
-/apache/bin/ab -c 1 -n 1000 http://localhost/index.html
+egrep -o "\% [0-9]+ " logs/access.log | cut -b3- | tr -d " " | sort -n
 ```{{execute}}
 
-We are starting ab using concurrency 1. The means that we are executing only one request at a time. In total, we will be executing 1,000 requests from the known URL. This is the output from ab:
+Using this one-liner we cut out the value that specifies the duration of a request from the log file. We use the percent sign of the Deflate value as an anchor for a simple regular expression and take the number following it. _egrep_ makes sense here, because we want to work with regex, the _-o_ option results in only the match itself being output, not the entire line. This is very helpful.
+One detail that will help us to avoid errors in the future is the space following the plus sign. It only accepts values that have a space following the number. The problem is the user agent that also appears in our log format and which has up to now also included percent signs. We assume here that percent signs can be followed by a space and a whole number. But this is not followed by another space and this combination only appears at the end of the log file line after the _Deflate space savings_ percent sign. We then use _cut_ so that only the third and subsequent characters are output and finally we use _tr_ to separate the closing space (see regex). We are then ready for numerical sorting. This delivers the following result:
 
 ```
-This is ApacheBench, Version 2.3 <$Revision: 1663405 $>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
+...
+354
+355
+357
+363
+363
+363
+1740
+```
 
-Benchmarking localhost (be patient)
-Completed 100 requests
-Completed 200 requests
-Completed 300 requests
-Completed 400 requests
-Completed 500 requests
-Completed 600 requests
-Completed 700 requests
-Completed 800 requests
-Completed 900 requests
-Completed 1000 requests
-Finished 1000 requests
+In our example, almost all of the requests have been handled very fast. Yet, there is a single one with a duration of over 1,000 microseconds, or more than one millisecond. This is still within reason, but interesting to see how this request is setting itself apart from the other values as a statistical outlier.
 
+We know that we made 100 GET and 100 POST requests. But for the sake of practice, let’s count them again:
 
-Server Software:        Apache
-Server Hostname:        localhost
-Server Port:            80
-
-Document Path:          /index.html
-Document Length:        45 bytes
-
-Concurrency Level:      1
-Time taken for tests:   0.676 seconds
-Complete requests:      1000
-Failed requests:        0
-Total transferred:      250000 bytes
-HTML transferred:       45000 bytes
-Requests per second:    1480.14 [#/sec] (mean)
-Time per request:       0.676 [ms] (mean)
-Time per request:       0.676 [ms] (mean, across all concurrent requests)
-Transfer rate:          361.36 [Kbytes/sec] received
-
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0    0   0.0      0       0
-Processing:     0    1   0.2      1       3
-Waiting:        0    0   0.1      0       2
-Total:          0    1   0.2      1       3
-
-Percentage of the requests served within a certain time (ms)
-  50%      1
-  66%      1
-  75%      1
-  80%      1
-  90%      1
-  95%      1
-  98%      1
-  99%      1
- 100%      3 (longest request)
+```
+egrep -c "\"GET " logs/access.log 
 ```{{execute}}
 
-What’s of primary interest to us is the number of errors (Failed requests) and the number of requests per second (Requests per second). A value above one thousand is a good start. Especially considering that we are still working with a single process and not a parallelized daemon (which is also why the concurrency level is set to 1).
+This should result in 100 GET requests:
+
+```
+100
+```
+
+We can also compare GET and POST with one another. We do this as follows:
+
+```
+egrep -o '"(GET|POST)' logs/access.log | cut -b2- | sort | uniq -c
+```{{execute}}
+
+Here, we filter out the GET and the POST requests using the method that follows a quote mark. We then cut out the quote mark, sort and count grouped:
+
+```
+    100 GET 
+    100 POST 
+```
+
+So much for these first finger exercises. On the basis of this self-filled log file this is unfortunately not yet very exciting. So let’s try it with a real log file from a production server.
+
+
+Before we advance to the next step, let's see if you can answer this quiz question on your own:
+
+>>Quiz: What is the response size (HTTP response body size) of the POST requests you executed?
+=== 45

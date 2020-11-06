@@ -1,15 +1,21 @@
-Our minimal server has thus been described. It would be possible to define a server that is even more bare bones. It would however not be as comfortable to work with as ours and it wouldn’t be any more secure. A certain amount of basic security is however advisable. This is because in the lab we are building a service which should then with specific adjustments be able to be put into a production environment. Wanting to secure a service from top to bottom right before entering a production environment is illusory.
+We have become familiar with the _combined_ format, the most widespread Apache log format. However, 
+to simplify day-to-day work, the information shown is just not enough. Additional useful information
+ has to be included in the log file.
 
-From now on, we will need two terminals open. One for the server (running in the foreground) and one terminal to run commands from. On top of the Katacoda Terminal window, there is a large plus-sign that let's you add another terminal tab. Choose "Open New Terminal" when the menu pops up.
+It is advisable to use the same log format on all servers. Now, instead of just propagating one or t
+wo additional values, these instructions describe a comprehensive log format that has proven useful 
+in a variety of scenarios.
 
-The new terminal tab opens, and you can now type there and launch the server in the foreground (not as a daemon!) just the way we did in the Scenario / Tutorial 1:
+However, in order to be able to configure the log format below, we first have to enable the _Logio_ 
+module. And on top if the the Unique-ID module, which useful from the start.
+
+If the server has been compiled as described in Tutorial 1, then these modules are already present a
+nd only have to be added to the list of modules being loaded in the server’s configuration file.
 
 ```
-cd /apache
-```{{execute}}
-
+LoadModule              logio_module            modules/mod_logio.so
+LoadModule              unique_id_module        modules/mod_unique_id.so
 ```
-sudo ./bin/httpd -X
-```{{execute}}
 
- 
+We need this module to be able to write two values. _IO In_ and _IO Out_. This means the total number of bytes of the HTTP request including header lines and the total number of bytes in the response, also including header lines. The Unique-ID module is calculating a unique identifier for every request. We'll return to this later on.
+
