@@ -1,15 +1,17 @@
 This is a Katacoda scenario based on a tutorial that has been published as part of a larger series of Apache / ModSecurity / OWASP Core Rule Set tutorials at [netnea](https://netnea.com/apache-tutorials).
 
-This tutorial is also available as a [video walk through](https://www.youtube.com/watch?v=JdsWhVlU8i0).
+### What are we doing?
 
-## What are we doing?
+We are configuring a minimal Apache web server and will occasionally be talking to it with curl, the TRACE method and ab.
 
-We're compiling an Apache web server for a test system.
+### Why are we doing this?
 
-## Why are we doing this?
+A secure server is one that permits only as much as what is really needed. Ideally, you would build a server based on a minimal system by enabling additional features individually. This is also preferable in terms of understanding what’s going on, because this is the only way of knowing what is really configured.
+Starting with a minimal system is also helpful in debugging. If the error is not present in the minimal system, features are added individually and the search for the error goes on. When the error occurs, it is identified to be related to the last configuration directive added.
 
-In professional use of the web server it’s very often the case that special requirements (security, additional debugging messages, special features from a new patch, etc.) force you to leave behind the distribution packages and quickly create some binaries on your own. In this case it’s important for the infrastructure to be prepared and to already have experience compiling and running your own binaries on production systems. It’s also easier to work with self-compiled Apache in a laboratory-like setup, which is also beneficial in terms of debugging.
+### Requirements
 
-## New to Katacoda?
+**The requirements are already met here on Katacoda. So nothing to do for you and you can start immediately.**
 
-Katacoda is an interactive learning system that lets you train on virtual machines right into your browser. For the scenario here, you will be presented with a shell terminal and a separate text screen that explains the steps at hand. The commands will be presented to you along the description. You can click on the commands to execute them in the shell window.
+* An Apache web server, ideally one created using the file structure shown in [Tutorial 1 (Compiling an Apache web server)](https://www.netnea.com/cms/apache-tutorial-1_compiling-apache).
+
