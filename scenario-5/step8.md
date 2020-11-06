@@ -1,7 +1,7 @@
 If you take a close look at the example log output above you will see that the duration of the requests are not evenly distributed and that there is a single outlier. We can identify the outlier as follows:
 
 ```
-egrep -o "\% [0-9]+ " logs/access.log | cut -b3- | tr -d " " | sort -n
+egrep -o "\% [0-9]+ " /apache/logs/access.log | cut -b3- | tr -d " " | sort -n
 ```{{execute}}
 
 Using this one-liner we cut out the value that specifies the duration of a request from the log file. We use the percent sign of the Deflate value as an anchor for a simple regular expression and take the number following it. _egrep_ makes sense here, because we want to work with regex, the _-o_ option results in only the match itself being output, not the entire line. This is very helpful.
@@ -23,7 +23,7 @@ In our example, almost all of the requests have been handled very fast. Yet, the
 We know that we made 100 GET and 100 POST requests. But for the sake of practice, let’s count them again:
 
 ```
-egrep -c "\"GET " logs/access.log 
+egrep -c "\"GET " /apache/logs/access.log 
 ```{{execute}}
 
 This should result in 100 GET requests:
@@ -35,7 +35,7 @@ This should result in 100 GET requests:
 We can also compare GET and POST with one another. We do this as follows:
 
 ```
-egrep -o '"(GET|POST)' logs/access.log | cut -b2- | sort | uniq -c
+egrep -o '"(GET|POST)' /apache/logs/access.log | cut -b2- | sort | uniq -c
 ```{{execute}}
 
 Here, we filter out the GET and the POST requests using the method that follows a quote mark. We then cut out the quote mark, sort and count grouped:
@@ -50,5 +50,5 @@ So much for these first finger exercises. On the basis of this self-filled log f
 
 Before we advance to the next step, let's see if you can answer this quiz question on your own:
 
->>Quiz: What is the response size (HTTP response body size) of the POST requests you executed?
+>>Quiz: What is the response size (HTTP response body size) of the POST requests you executed?<<
 === 45

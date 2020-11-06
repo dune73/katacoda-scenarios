@@ -40,7 +40,7 @@ apt-get update
 
 echo "apt list updated" >> /tmp/tmp.log
 
-apt-get install --assume-yes gawk ruby ssl-cert
+apt-get install --assume-yes gawk ruby ssl-cert uuid
 
 echo "Packages installed" >> /tmp/tmp.log
 

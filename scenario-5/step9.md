@@ -1,8 +1,13 @@
 Analyses using a real log file from a production server are much more exciting. You have one
-ready for your inspection in `/apache/logs/tutorial-5-example-access.log` (You can also fetch it from [netnea.com](https://www.netnea.com/files/tutorial-5-example-access.log).
+ready for your inspection in `/apache/logs/tutorial-5-example-access.log`.
+
+If you want, you can also fetch it from [netnea.com](https://www.netnea.com/files/tutorial-5-example-access.log).
 
 ```
-$> head tutorial-5-example-access.log
+cd /apache/logs
+head tutorial-5-example-access.log
+```{{execute}}
+```
 192.31.242.0 US - [2019-01-21 23:51:44.365656] "GET …
 /cds/2016/10/16/using-ansible-to-fetch-information-from-ios-devices/ HTTP/1.1" 200 10273 …
 "https://www.google.com/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, …
@@ -141,7 +146,7 @@ test -e $HOME/.apache-modsec.alias && . $HOME/.apache-modsec.alias
 [[ ":$PATH:" != *":$HOME/bin:"* ]] && PATH="$HOME/bin:${PATH}"
 ```
 
-Please download the alias file to your `$HOME` folder with `wget` and enable it for your shell as described above.
+Please download the alias file to your `$HOME` folder with `wget` and enable it for your shell as described above. You can then start a new shell by typing `bash` and the new environment is immediately available. Please do that!
 
 Let’s use the new alias right away:
 ```
@@ -176,9 +181,8 @@ This is now a simple command that is easy to remember and easy to write. We now 
 
 And another quiz question for you:
 
->>Quiz: How many requests with the legacy AES256-SHA cipher are there in the example log?
+>>Quiz: How many requests with the legacy AES256-SHA cipher are there in the example log?<<
 ( ) 7
 (*) 23
 ( ) 65
 ( ) 134
-

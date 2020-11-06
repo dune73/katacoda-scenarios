@@ -91,7 +91,7 @@ These numbers give a clear picture of the service. With a mean response size of 
 How does the duration of the requests look? Do we have a similar homogeneous picture?
 
 ```
-$> cat tutorial-5-example-access.log | alduration | basicstats.awk
+cat tutorial-5-example-access.log | alduration | basicstats.awk
 ```{{execute}}
 ```
 Num of values:          10,000.00
@@ -132,12 +132,12 @@ This brings us to the end of this tutorial. The goal was to introduce an expande
 
 Almost done. Here are some final quiz questions.
 
->>Quiz question 1: How many requests to the file `style.css` do you count in the example access log (Hint: Use `wc -l` to count lines)?
+>>Quiz question 1: How many requests to the file `style.css` do you count in the example access log (Hint: Use `wc -l` to count lines)?<<
 === 368
 
 
->>Quiz question 2: How many microseconds did the fastest request in the example access log take (enter only the number)?
+>>Quiz question 2: How many microseconds did the fastest request in the example access log take (enter only the number)?<<
 === 641
 
->>Quiz question 3: How many successful POST requests do you count in the example access log?
+>>Quiz question 3: How many successful POST requests do you count in the example access log?<<
 === 70
