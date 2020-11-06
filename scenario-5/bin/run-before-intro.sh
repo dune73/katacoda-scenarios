@@ -4,10 +4,10 @@
 chmod +x /usr/local/bin/scenario-status
 
 
-apt-get update
+#apt-get update
 
 # Most of these packages are installed, but sometimes, they are not
-apt-get --assume-yes install bzip2 wget jq sudo
+#apt-get --assume-yes install bzip2 wget jq sudo
 
 # Get env as prepared in scenario 1
 cd /
