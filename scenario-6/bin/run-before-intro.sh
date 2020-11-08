@@ -40,7 +40,7 @@ apt-get update
 
 echo "apt list updated" >> /tmp/tmp.log
 
-apt-get install --assume-yes gawk libxml2-dev libexpat1-dev libpcre3-dev libyajl-dev ssl-cert 
+apt-get install --assume-yes build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby gawk uuid libxml2-dev libexpat1-dev libyajl-dev
 
 echo "Packages installed" >> /tmp/tmp.log
 

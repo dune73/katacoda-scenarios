@@ -2,8 +2,17 @@ We previously downloaded the source code for the web server to <i>/usr/src/apach
 
 ```
 sudo mkdir /usr/src/modsecurity
+```{{execute}}
+
+```
 sudo chown `whoami` /usr/src/modsecurity
+```{{execute}}
+
+```
 cd /usr/src/modsecurity
+```{{execute}}
+
+```
 wget https://www.modsecurity.org/tarball/2.9.3/modsecurity-2.9.3.tar.gz
 ```{{execute}}
 

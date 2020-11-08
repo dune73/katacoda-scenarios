@@ -1,5 +1,5 @@
 {
-  "title": "Scenario / Tutorial 5 - Extending and Analyzing the Access Log",
+  "title": "Scenario / Tutorial 6 - Embedding ModSecurity",
   "description": "We are defining a greatly extended log format in order to better monitor traffic.",
   "difficulty": "Intermediate",
   "time": "1 hour",

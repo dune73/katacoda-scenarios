@@ -6,7 +6,7 @@
 					"step": "step-1",
 					"items" : [
 						{
-                                                        "operator": "folder-contains",
+                                                        "operator": "folder-exists",
                                                         "target": "/usr/src/modsecurity",
                                                         "failmsg": "Folder $TARGET does not exist. Please create it.",
                                                         "successmsg": "Folder $TARGET exists."

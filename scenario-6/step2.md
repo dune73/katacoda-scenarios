@@ -11,7 +11,13 @@ The stage is thus set and we are ready for ModSecurity.
 
 ```
 tar -xvzf modsecurity-2.9.3.tar.gz
+```{{execute}}
+
+```
 cd modsecurity-2.9.3
+```{{execute}}
+
+```
 ./configure --with-apxs=/apache/bin/apxs \
 --with-apr=/usr/local/apr/bin/apr-1-config \
 --with-pcre=/usr/bin/pcre-config
