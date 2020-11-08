@@ -44,6 +44,13 @@ apt-get install --assume-yes build-essential binutils gcc libpcre3-dev libssl-de
 
 echo "Packages installed" >> /tmp/tmp.log
 
+mkdir /usr/src/apache
+cd /usr/src/apache
+wget https://www-eu.apache.org/dist/httpd/httpd-2.4.46.tar.bz2
+tar xjf httpd-2.4.46.tar.bz2
+
+echo "Packages installed" >> /tmp/tmp.log
+
 # --------------------------------------------------------------
 # Bailout
 # --------------------------------------------------------------
