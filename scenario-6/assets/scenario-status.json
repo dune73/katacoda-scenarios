@@ -1,0 +1,207 @@
+[
+	{
+		"scenario1": {
+			"steps": [
+				{
+					"step": "step-1",
+					"items" : [
+						{
+                                                        "operator": "folder-contains",
+                                                        "target": "/usr/src/modsecurity",
+                                                        "failmsg": "Folder $TARGET does not exist. Please create it.",
+                                                        "successmsg": "Folder $TARGET exists."
+                                                },
+						{
+                                                        "operator": "file-exists",
+                                                        "target": "/usr/src/modsecurity/modsecurity-2.9.3.tar.gz",
+                                                        "failmsg": "Source code file \"modsecurity-2.9.3.tar.gz\" not downloaded properly. This is fatal. Please fix it.",
+                                                        "successmsg": "Source code file \"modsecurity-2.9.3.tar.gz\" downloaded properly."
+                                                }
+					]
+				},
+
+				{
+					"step": "step-2",
+					"items" : [
+						{
+                                                        "operator": "folder-exists",
+                                                        "target": "/usr/src/modsecurity/modsecurity-2.9.3",
+							"failmsg": "Folder $TARGET not found. This is fatal. Please create it.",
+							"successmsg": "Folder $TARGET found."
+                                                },
+						{
+                                                        "operator": "tail1-contains",
+                                                        "target": "/usr/src/modsecurity/modsecurity-2.9.3/config.log",
+                                                        "targetstring": "configure: exit 0",
+							"failmsg": "Configure for \"ModSecurity\" compilation did not run properly. This is fatal. Please fix it.",
+							"successmsg": "Configure for \"ModSecurity\" compilation ran properly."
+                                                }
+					]
+				},		
+				{
+					"step": "step-3",
+					"items" : [
+						{
+                                                        "operator": "file-exists",
+                                                        "target": "/usr/src/modsecurity/modsecurity-2.9.3/apache2/.libs/mod_security2.so",
+							"failmsg": "Compilation for \"ModSecurity\" failed. This is fatal. Please fix.",
+							"successmsg": "Compilation of \"ModSecurity\" successful."
+                                                }
+					]
+				},
+				{
+					"step": "step-4",
+					"items" : [
+						{
+                                                        "operator": "file-exists",
+                                                        "target": "/apache/modules/mod_security2.so",
+							"failmsg": "Installation of compiled \"ModSecurity\" failed. This is fatal. Please fix it.",
+							"successmsg": "Installation of \"ModSecurity\" successful."
+                                                }
+					]
+				},
+				{
+					"step": "step-5",
+					"items" : [
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "LoadModule.*security2_module",
+							"failmsg": "The ModSecurity module is not loaded in the Apache configuration. This is fatal. Please fix it.",
+							"successmsg": "ModSecurity module loaded properly in the Apache configuration."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "SecRuleEngine.*On",
+							"failmsg": "The ModSecurity engine is not enabled in the Apache configuration. This is fatal. Please fix it.",
+							"successmsg": "ModSecurity engine enabled properly in the Apache configuration."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "SecAction.*id:90000",
+							"failmsg": "The ModSecurity rule 90000 configured properly. This is fatal. Please fix it.",
+							"successmsg": "ModSecurity rule 90000 loaded properly in the Apache configuration. Looks like everything is OK."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "SecAction.*id:90100",
+							"failmsg": "The ModSecurity rule 90100 configured properly. This is fatal. Please fix it.",
+							"successmsg": "ModSecurity rule 90100 loaded properly in the Apache configuration. Looks like everything is OK."
+                                                },
+						{
+                                                        "operator": "folder-exists",
+                                                        "target": "/apache/logs/audit",
+							"failmsg": "Folder $TARGET not found. This is fatal. Please create it.",
+							"successmsg": "Folder $TARGET found."
+                                                }
+					]
+				},
+				{
+					"step": "step-6",
+					"items" : [
+						{
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "SecRule.*id:10000",
+							"failmsg": "The ModSecurity rule 10000 configured properly. This is fatal. Please fix it.",
+							"successmsg": "ModSecurity rule 10000 loaded properly in the Apache configuration. Looks like everything is OK."
+                                                }
+					]
+				},
+				{
+					"step": "step-7",
+					"items" : [
+						{
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/access.log",
+                                                        "targetstring": "GET /phpmyadmin HTTP/1.1",
+                                                        "failmsg": "It looks like you did not try out the call to phpmyadmin. Please get this done in order to advance.",
+                                                        "successmsg": "Attempted to access Phpmyadmin. This is fine."							
+                                                },
+						{
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/error.log",
+                                                        "targetstring": "Blocking access to /phpmyadmin.",
+                                                        "failmsg": "It looks like the call to /phpmyadmin was not properly blocked. Something is wrong with your configuration. Please get this done in order to advance.",
+                                                        "successmsg": "Access to Phpmyadmin blocked as designed. This is fine."							
+                                                }
+					]
+				},
+				{
+					"step": "step-8",
+					"items" : [
+						{
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "SecRule.*id:11000",
+							"failmsg": "The ModSecurity rule 11000 configured properly. This is fatal. Please fix it.",
+							"successmsg": "ModSecurity rule 11000 loaded properly in the Apache configuration. Looks like everything is OK."
+                                                },
+						{
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "SecMarker END_WHITELIST_login",
+							"failmsg": "Looks like not the entire ModSecurity whitelist was configured properly. This is fatal. Please fix it.",
+							"successmsg": "Looks like the entire ModSecurity whitelist was configured properly."
+                                                }
+					]
+				},
+				{
+					"step": "step-9",
+					"items" : [
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/error.log",
+                                                        "targetstring": "Unknown parameter: ARGS_NAMES:debug",
+                                                        "failmsg": "Call with unknown parameter 'debug' was not blocked properly. Please fix your configuration and try it out again.",
+                                                        "successmsg": "Call with unknown parameter 'debug' was blocked properly."
+                                                },
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/error.log",
+                                                        "targetstring": "Unknown URI /login/admin.html",
+                                                        "failmsg": "Call to unknown URI '/login/admin.html' was not blocked properly. Please fix your configuration and try it out again.",
+                                                        "successmsg": "Call to unknown URI '/login/admin.html' was blocked properly."
+                                                },
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/error.log",
+                                                        "targetstring": "Unknown parameter: ARGS_NAMES:backdoor",
+                                                        "failmsg": "Call with unknown parameter 'backdoor' was not blocked properly. Please fix your configuration and try it out again.",
+                                                        "successmsg": "Call with unknown parameter 'backdoor' was blocked properly."
+                                                },
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/error.log",
+                                                        "targetstring": "Invalid parameter format: ARGS:username",
+                                                        "failmsg": "Call with bad parameter format of arg 'username' was not blocked properly. Please fix your configuration and try it out again.",
+                                                        "successmsg": "Call with bad parameter format of arg 'username' was blocked properly."
+                                                },
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/error.log",
+                                                        "targetstring": "ARGS occurring more than once",
+                                                        "failmsg": "Call with multiple instances of a parameter was not blocked properly. Please fix your configuration and try it out again.",
+                                                        "successmsg": "Call with multiple instances of a parameter was blocked properly."
+                                                }
+					]
+				},
+				{
+					"step": "step-10",
+					"items" : [
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "SecRule.*id:12000",
+							"failmsg": "The ModSecurity rule 12000 configured properly. This is fatal. Please fix it.",
+							"successmsg": "ModSecurity rule 12000 loaded properly in the Apache configuration. Looks like everything is OK."
+                                                }
+					]
+				}
+			]
+		}
+	}
+]

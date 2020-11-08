@@ -111,8 +111,8 @@
 							"operator": "tail1-contains",
 							"target": "/usr/src/apache/apr-1.7.0/config.log",
 							"targetstring": "configure: exit 0",
-							"failmsg": "Configure for \"apr\" did not run properly. This is fatal. Please fix it.",
-							"successmsg": "Configure for \"apr\" ran properly."
+							"failmsg": "Configure for \"apr\" compilation did not run properly. This is fatal. Please fix it.",
+							"successmsg": "Configure for \"apr\" compilation ran properly."
 						},
 						{
 							"operator": "file-exists",
@@ -142,14 +142,14 @@
 							"operator": "tail1-contains",
 							"target": "/usr/src/apache/apr-util-1.6.1/config.log",
 							"targetstring": "configure: exit 0",
-							"failmsg": "Configure for \"apr-util\" did not run properly. This is fatal. Please fix it.",
-							"successmsg": "Configure for \"apr-util\" ran properly."
+							"failmsg": "Configure for \"apr-util\" compilation did not run properly. This is fatal. Please fix it.",
+							"successmsg": "Configure for \"apr-util\" compilation ran properly."
 						},
 						{
 							"operator": "file-exists",
 							"target": "/usr/src/apache/apr-util-1.6.1/libaprutil-1.la",
-							"failmsg": "Compilation for \"apr-util\" failed. This is fatal. Please fix.",
-							"successmsg": "Compilation of \"apr-util\" successful."
+							"failmsg": "Compilation for \"apr-util\" compilation failed. This is fatal. Please fix.",
+							"successmsg": "Compilation of \"apr-util\" compilation successful."
 						},
 						{
 							"operator": "file-exists",
@@ -183,8 +183,8 @@
 							"operator": "tail1-contains",
 							"target": "/usr/src/apache/httpd-2.4.46/config.log",
 							"targetstring": "configure: exit 0",
-							"failmsg": "Configure for \"apache\" did not run properly. This is fatal. Please fix it.",
-							"successmsg": "Configure for \"apache\" ran properly."
+							"failmsg": "Configure for \"apache\" compilation did not run properly. This is fatal. Please fix it.",
+							"successmsg": "Configure for \"apache\" compilation ran properly."
 						}
 					]
 				},
