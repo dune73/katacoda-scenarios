@@ -45,10 +45,41 @@ apt-get install --assume-yes build-essential binutils gcc libpcre3-dev libssl-de
 echo "Packages installed" >> /tmp/tmp.log
 
 cd /
-wget https://www.netnea.com/files/apache-compiled-src-2.4.46.tar.bz2
-tar xjf apache-compiled-src-2.4.46.tar.bz2
 
-echo "Apache compiled src code downloaded" >> /tmp/tmp.log
+mkdir /usr/src/apache
+cd /usr/src/apache
+wget https://www-eu.apache.org/dist/apr/apr-1.7.0.tar.bz2
+tar -xvjf apr-1.7.0.tar.bz2
+cd apr-1.7.0
+./configure --prefix=/usr/local/apr/
+make
+make install
+cd /usr/src/apache
+wget https://www-eu.apache.org/dist/apr/apr-util-1.6.1.tar.bz2
+tar -xvjf apr-util-1.6.1.tar.bz2
+cd apr-util-1.6.1
+./configure --prefix=/usr/local/apr/ --with-apr=/usr/local/apr/
+make
+make install
+cd /usr/src/apache
+wget https://www-eu.apache.org/dist//httpd/httpd-2.4.46.tar.bz2
+tar -xvjf httpd-2.4.46.tar.bz2
+cd httpd-2.4.46
+./configure --prefix=/opt/apache-2.4.46  --with-apr=/usr/local/apr/bin/apr-1-config \
+   --with-apr-util=/usr/local/apr/bin/apu-1-config \
+   --enable-mpms-shared=event \
+   --enable-mods-shared=all \
+   --enable-nonportable-atomics=yes
+make
+make install
+
+echo "Apache compiled " >> /tmp/tmp.log
+
+
+#wget https://www.netnea.com/files/apache-compiled-src-2.4.46.tar.bz2
+#tar xjf apache-compiled-src-2.4.46.tar.bz2
+
+#echo "Apache compiled src code downloaded" >> /tmp/tmp.log
 
 # --------------------------------------------------------------
 # Bailout
