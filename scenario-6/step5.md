@@ -233,6 +233,9 @@ DocumentRoot            /apache/htdocs
       </Directory>
 
 </VirtualHost>
+
+EOF
+
 echo "$CONFIG" > /apache/conf/httpd.conf
 ```{{execute}}
 
@@ -279,6 +282,8 @@ The parts described divide the file into sections. What follows is part _--5a70c
 
 ```
 sudo mkdir /apache/logs/audit
+```{{execute}}
+```
 sudo chown www-data:www-data /apache/logs/audit
 ```{{execute}}
 

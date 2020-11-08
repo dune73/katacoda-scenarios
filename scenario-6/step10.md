@@ -1,13 +1,13 @@
 Before coming to the end of this tutorial here’s one more tip that often proves useful in practice: _ModSecurity_ is not just a _Web Application Firewall_. It is also a very precise debugging tool. The entire traffic between client and server can be logged. This is done as follows:
 
 ```
-SecRule REMOTE_ADDR  "@streq 127.0.0.1"   "id:12000,phase:1,pass,log,auditlog,\
+SecRule REMOTE_ADDR  "@pm 127.0.0.1 ::1"   "id:12000,phase:1,pass,log,auditlog,\
 	msg:'Initializing full traffic log'"
 ```
-We then find the traffic for the client 127.0.0.1 specified in the rule in the audit log.
+We then find the traffic for the client `127.0.0.1` or `::1` (in ipv6 notation) specified in the rule in the audit log.
 
 ```
-curl localhost
+curl localhost/index.html
 ```{{execute}}
 
 ```
@@ -17,7 +17,7 @@ sudo tail -1 /apache/logs/modsec_audit.log
 This should look similar to the following:
 
 ```
-localhost 127.0.0.1 - - [17/Oct/2015:06:17:08 +0200] "GET /index.html HTTP/1.1" 404 214 "-" "-" …
+localhost ::1 - - [17/Oct/2020:06:17:08 +0200] "GET /index.html HTTP/1.1" 404 214 "-" "-" …
 UcAmDH8AAQEAAGUjAMoAAAAA "-" /20151017/20151017-0617/20151017-061708-UcAmDH8AAQEAAGUjAMoAAAAA …
 0 15146 md5:e2537a9239cbbe185116f744bba0ad97 
 ```
