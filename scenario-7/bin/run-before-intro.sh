@@ -25,7 +25,6 @@ chown root:root /apache
 # Move aliases and scripts from where the asset mechanism in index.json placed them
 mv /usr/local/etc/.apache-modsec.alias /root
 mv /usr/local/etc/basicstats.awk /root/bin
-mv /usr/local/etc/httpd.conf /root/bin
 mv /usr/local/etc/modsec-positive-stats.rb /root/bin
 mv /usr/local/etc/modsec-rulereport.rb /root/bin
 mv /usr/local/etc/percent.awk /root/bin
@@ -39,6 +38,7 @@ test -e $HOME/.apache-modsec.alias && . $HOME/.apache-modsec.alias
 EOF
 echo "$BASHRC" >> /root/.bashrc
 
+cat /root/.bashrc >> /tmp/tmp.log
 echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 
 
