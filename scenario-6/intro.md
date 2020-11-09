@@ -19,3 +19,7 @@ ModSecurity is a security module for the web server. The tool enables the inspec
 * An Apache web server with SSL/TLS support as in [Tutorial 4 (Enabling Encryption with SSL/TLS)](https://www.netnea.com/cms/apache-tutorial-4_configuring-ssl-tls/).
 * An expanded access log and a set of shell aliases as discussed in [Tutorial 5 (Extending and analyzing the access log)](https://www.netnea.com/cms/apache-tutorial-5/apache-tutorial-5_extending-access-log/)
 
+
+## License / Copying / Further use
+
+This Katacoda scenario is licensed under a **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License**.

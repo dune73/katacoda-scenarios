@@ -15,3 +15,7 @@ Starting with a minimal system is also helpful in debugging. If the error is not
 
 * An Apache web server, ideally one created using the file structure shown in [Tutorial 1 (Compiling an Apache web server)](https://www.netnea.com/cms/apache-tutorial-1_compiling-apache).
 
+
+## License / Copying / Further use
+
+This Katacoda scenario is licensed under a **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License**.

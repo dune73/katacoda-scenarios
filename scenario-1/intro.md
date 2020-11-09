@@ -13,3 +13,7 @@ In professional use of the web server it’s very often the case that special re
 ## New to Katacoda?
 
 Katacoda is an interactive learning system that lets you train on virtual machines right into your browser. For the scenario here, you will be presented with a shell terminal and a separate text screen that explains the steps at hand. The commands will be presented to you along the description. You can click on the commands to execute them in the shell window.
+
+## License / Copying / Further use
+
+This Katacoda scenario is licensed under a **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License**.
