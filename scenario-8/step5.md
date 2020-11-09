@@ -1,177 +1,250 @@
-So we are looking at 13,000 alerts. And even if the format of the entries in the error log may be clear, without a tool they are very hard to read, let alone analyze. A simple remedy is to use a few *shell aliases*, which extract individual pieces of information from the entries. They are stored in the alias file we discussed in the log format in Tutorial 5.
+After the first batch of rule exclusions, we would observe the service and end up with the following new logs:
+
+* [tutorial-8-example-access-round-2.log](https://www.netnea.com/files/tutorial-8-example-access-round-2.log)
+* [tutorial-8-example-error-round-2.log](https://www.netnea.com/files/tutorial-8-example-error-round-2.log)
+
+We start again with a look at the score distribution:
 
 ```
-cat ~/.apache-modsec.alias
+cat tutorial-8-example-access-round-2.log | alscores | modsec-positive-stats.rb
+```{{execute}}
+
+```
+INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
+Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
+
+Empty or miss. incoming score   |      0 |   0.0000% |   0.0000% | 100.0000%
+Reqs with incoming score of   0 |   8944 |  89.4400% |  89.4400% |  10.5600%
+Reqs with incoming score of   1 |      0 |   0.0000% |  89.4400% |  10.5600%
+Reqs with incoming score of   2 |      0 |   0.0000% |  89.4400% |  10.5600%
+Reqs with incoming score of   3 |      0 |   0.0000% |  89.4400% |  10.5600%
+Reqs with incoming score of   4 |     20 |   0.2000% |  89.6400% |  10.3600%
+Reqs with incoming score of   5 |    439 |   4.3900% |  94.0300% |   5.9700%
+Reqs with incoming score of   6 |      0 |   0.0000% |  94.0300% |   5.9700%
+Reqs with incoming score of   7 |      0 |   0.0000% |  94.0300% |   5.9700%
+Reqs with incoming score of   8 |    368 |   3.6800% |  97.7100% |   2.2900%
+Reqs with incoming score of   9 |      0 |   0.0000% |  97.7100% |   2.2900%
+Reqs with incoming score of  10 |      1 |   0.0100% |  97.7200% |   2.2800%
+Reqs with incoming score of  11 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  12 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  13 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  14 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  15 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  16 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  17 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  18 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  19 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  20 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  21 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  22 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  23 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  24 |      0 |   0.0000% |  97.7200% |   2.2800%
+Reqs with incoming score of  25 |     76 |   0.7600% |  98.4800% |   1.5200%
+Reqs with incoming score of  26 |      0 |   0.0000% |  98.4800% |   1.5200%
+Reqs with incoming score of  27 |      0 |   0.0000% |  98.4800% |   1.5200%
+Reqs with incoming score of  28 |      0 |   0.0000% |  98.4800% |   1.5200%
+Reqs with incoming score of  29 |      0 |   0.0000% |  98.4800% |   1.5200%
+Reqs with incoming score of  30 |     76 |   0.7600% |  99.2400% |   0.7600%
+Reqs with incoming score of  31 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  32 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  33 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  34 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  35 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  36 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  37 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  38 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  39 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  40 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  41 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  42 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  43 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  44 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  45 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  46 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  47 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  48 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  49 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  50 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  51 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  52 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  53 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  54 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  55 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  56 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  57 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  58 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  59 |      0 |   0.0000% |  99.2400% |   0.7600%
+Reqs with incoming score of  60 |     76 |   0.7600% | 100.0000% |   0.0000%
+
+Incoming average:   1.3969    Median   0.0000    Standard deviation   6.3634
+
+
+OUTGOING                     Num of req. | % of req. |  Sum of % | Missing %
+Number of outgoing req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
+
+Empty or miss. outgoing score   |      0 |   0.0000% |   0.0000% | 100.0000%
+Reqs with outgoing score of   0 |   9980 |  99.8000% |  99.8000% |   0.2000%
+Reqs with outgoing score of   1 |      0 |   0.0000% |  99.8000% |   0.2000%
+Reqs with outgoing score of   2 |      0 |   0.0000% |  99.8000% |   0.2000%
+Reqs with outgoing score of   3 |      0 |   0.0000% |  99.8000% |   0.2000%
+Reqs with outgoing score of   4 |     20 |   0.2000% | 100.0000% |   0.0000%
+
+Outgoing average:   0.0080    Median   0.0000    Standard deviation   0.1787
+```
+
+If we compare this to the first run of the statistic script, we reduced the average score from 12.5 to 1.4. This is very impressive. So by focusing on a handful of high scoring requests, we improved the whole service by a lot.
+
+We could expect the high scoring requests of 231 and 189 to be gone, but funnily enough, the cluster at 98 and the one at 10 have also disappeared. We only covered 7 requests in the initial tuning, but two clusters with alerts from over 400 repectively over 3,000 requests are gone, too. And this is not an exceptional effect. It is the standard behaviour if we work with this tuning method: a few rule exclusions that we derieved from the highest scoring requests does away with most of the false alarms.
+
+Our next goal is the group of requests with a score of 60. Let's extract the rule IDs and then examine the alerts a bit.
+
+```
+egrep " 60 [0-9-]+$" tutorial-8-example-access-round-2.log | alreqid > ids
+```{{execute}}
+
+```
+grep -F -f ids tutorial-8-example-error-round-2.log | melidmsg | sucs
+     76 921180 HTTP Parameter Pollution (ARGS_NAMES:keys)
+     76 942100 SQL Injection Attack Detected via libinjection
+    152 942190 Detects MSSQL code execution and information gathering attempts
+    152 942200 Detects MySQL comment-/space-obfuscated injections and backtick …
+    152 942260 Detects basic SQL authentication bypass attempts 2/3
+    152 942270 Looking for basic sql injection. Common attack string for mysql, …
+    152 942410 SQL Injection Attack
+grep -F -f ids tutorial-8-example-error-round-2.log | meluri | sucs
+    912 /drupal/index.php/search/node
+```
+
+So this points to a search form and payloads resembling SQL injections (outside of the first rule 921180, which we have seen before). It's obvious that a search form will attract SQL injection attacks. But then I know this was legitimate traffic (I filled in the forms personally when I searched for SQL statements in the Drupal articles I had posted as an exercise) and we are now facing a dilemma: If we suppress the rules, we open a door for SQL injections. If we leave the rules intact and reduce the limit, we will block legitimate traffic. I think it is OK to say that nobody should be using the search form to look for sql statements in our articles. But I could also say that Drupal is smart enough to fight off SQL attacks via the search form. As this is an exercise, this is our position for the moment: Let's exclude these rules. Let's feed it all into our helper script:
+
+```
+grep -F -f ids tutorial-8-example-error-round-2.log | modsec-rulereport.rb -m combined
+```{{execute}}
+
+```
+76 x 921180 HTTP Parameter Pollution (ARGS_NAMES:keys)
+------------------------------------------------------
+      # ModSec Rule Exclusion: 921180 : HTTP Parameter Pollution (ARGS_NAMES:keys)
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10000,ctl:ruleRemoveTargetById=921180;TX:paramcounter_ARGS_NAMES:keys"
+
+76 x 942100 SQL Injection Attack Detected via libinjection
+----------------------------------------------------------
+      # ModSec Rule Exclusion: 942100 : SQL Injection Attack Detected via libinjection
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10000,ctl:ruleRemoveTargetById=942100;ARGS:keys"
+
+152 x 942190 Detects MSSQL code execution and information gathering attempts
+----------------------------------------------------------------------------
+      # ModSec Rule Exclusion: 942190 : Detects MSSQL code execution and information gathering attempts
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10001,ctl:ruleRemoveTargetById=942190;ARGS:keys"
+
+152 x 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
+----------------------------------------------------------------------------------------
+      # ModSec Rule Exclusion: 942200 : Detects MySQL comment-/space-obfuscated injections and backtick …
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10002,ctl:ruleRemoveTargetById=942200;ARGS:keys"
+
+152 x 942260 Detects basic SQL authentication bypass attempts 2/3
+-----------------------------------------------------------------
+      # ModSec Rule Exclusion: 942260 : Detects basic SQL authentication bypass attempts 2/3
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10003,ctl:ruleRemoveTargetById=942260;ARGS:keys"
+
+152 x 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
+------------------------------------------------------------------------------------------------
+      # ModSec Rule Exclusion: 942270 : Looking for basic sql injection. Common attack string for mysql, …
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10004,ctl:ruleRemoveTargetById=942270;ARGS:keys"
+
+152 x 942410 SQL Injection Attack
+---------------------------------
+      # ModSec Rule Exclusion: 942410 : SQL Injection Attack
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10005,ctl:ruleRemoveTargetById=942410;ARGS:keys"
+```
+
+We had separated a spot for 921180 exclusions before. We put the first rule into that position and end up with the following:
+
+```
+# ModSec Rule Exclusion: 921180 : HTTP Parameter Pollution (multiple variables)
+SecRule REQUEST_URI "@beginsWith /drupal/index.php/contextual/render" \
+    "phase:2,nolog,pass,id:10001,ctl:ruleRemoveTargetById=921180;TX:paramcounter_ARGS_NAMES:ids[]"
+SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+    "phase:2,nolog,pass,id:10002,ctl:ruleRemoveTargetById=921180;TX:paramcounter_ARGS_NAMES:keys"
+```
+
+With 942100, the case is quite clear. But let's look at the alert message itself. There we see that ModSecurity used a special library to identify what it thought an SQL injection attempt. So instead of a regular expression, a dedicated injection parser was used.
+
+```
+grep -F -f ids tutorial-8-example-error-round-2.log | grep 942100 | head -1
+```{{execute}}
+
+```
+[2016-11-05 09:47:18.423889] [-:error] - - [client 127.0.0.1] ModSecurity: Warning. detected SQLi …
+using libinjection with fingerprint 'UEkn' [file …
+"/apache/conf/owasp-modsecurity-crs-3.0.0-rc1/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf"] …
+[line "67"] [id "942100"] [rev "1"] [msg "SQL Injection Attack Detected via libinjection"] [data …
+"Matched Data: UEkn found within ARGS:keys: union select from users"] [ver "OWASP_CRS/3.0.0"] …
+[maturity "1"] [accuracy "8"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] …
+[tag "attack-sqli"] [tag "OWASP_CRS/WEB_ATTACK/SQL_INJECTION"] [tag "WASCTC/WASC-19"] [tag …
+"OWASP_TOP_10/A1"] [tag "OWASP_AppSensor/CIE1"] [tag "PCI/6.5.2"] [hostname "localhost"] …
+[uri "/drupal/index.php/search/node"] [unique_id "WB2cln8AAQEAAAehPc8AAADK"]
+```
+
+For the treatment of the false positive, this does not matter though, and we take the proposal by the script:
+
+```
+# ModSec Rule Exclusion: 942100 : SQL Injection Attack Detected via libinjection
+SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+    "phase:2,nolog,pass,id:10003,ctl:ruleRemoveTargetById=942100;ARGS:keys"
+```
+
+With the remaining ones, we use a shortcut:
+
+```
+grep -F -f ids tutorial-8-example-error-round-2.log | grep -v "942100\|921180" | \
+modsec-rulereport.rb -m combined | sort
 ```{{execute}}
 
 ```
 ...
-alias meldata='grep -o "\[data [^]]*" | cut -d\" -f2'
-alias melfile='grep -o "\[file [^]]*" | cut -d\" -f2'
-alias melhostname='grep -o "\[hostname [^]]*" | cut -d\" -f2'
-alias melid='grep -o "\[id [^]]*" | cut -d\" -f2'
-alias melip='grep -o "\[client [^]]*" | cut -b9-'
-alias melidmsg='sed -e "s/.*\[id \"//" -e "s/\([0-9]*\).*\[msg \"/\1 /" -e "s/\"\].*//" -e "s/(Total .*/(Total ...) .../" -e "s/Incoming and Outgoing Score: [0-9]* [0-9]*/Incoming and Outgoing Score: .../"
-alias melline='grep -o "\[line [^]]*" | cut -d\" -f2'
-alias melmatch='grep -o " at [^\ ]*\. \[file" | sed -e "s/\. \[file//" | cut -b5-'
-alias melmsg='grep -o "\[msg [^]]*" | cut -d\" -f2'
-alias meltimestamp='cut -b2-25'
-alias melunique_id='grep -o "\[unique_id [^]]*" | cut -d\" -f2'
-alias meluri='grep -o "\[uri [^]]*" | cut -d\" -f2'
-...
-```
-
-These abbreviations all start with the prefix *mel*, short for *ModSecurity error log*, followed by the field name. Let’s try it out to output the rule IDs from the messages:
-
-```
-cat logs/error.log | melid | tail
-```{{execute}}
+      # ModSec Rule Exclusion: 942190 : Detects MSSQL code execution and information gathering attempts
+      # ModSec Rule Exclusion: 942200 : Detects MySQL comment-/space-obfuscated injections and backtick …
+      # ModSec Rule Exclusion: 942260 : Detects basic SQL authentication bypass attempts 2/3
+      # ModSec Rule Exclusion: 942270 : Looking for basic sql injection. Common attack string for mysql, …
+      # ModSec Rule Exclusion: 942410 : SQL Injection Attack
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10000,ctl:ruleRemoveTargetById=942190;ARGS:keys"
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10001,ctl:ruleRemoveTargetById=942200;ARGS:keys"
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10002,ctl:ruleRemoveTargetById=942260;ARGS:keys"
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10003,ctl:ruleRemoveTargetById=942270;ARGS:keys"
+      SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
+              "phase:2,nolog,pass,id:10004,ctl:ruleRemoveTargetById=942410;ARGS:keys"
 
 ```
-920440
-913100
-913100
-913100
-913100
-913100
-913100
-913100
-913100
-920440
-```
 
-This seems to do the job. So let’s extend the example a few steps:
+We can simplify this into the following rule, which is then appended to the previous run-time exclusion rule for 942100:
+
 
 ```
-cat logs/error.log | melid | sort | uniq -c | sort -n
-```{{execute}}
-```
-      1 920220
-      1 932115
-      2 920280
-      2 941140
-      3 942270
-      4 933150
-      5 942100
-      6 932110
-      7 911100
-      8 932105
-     13 932100
-     15 941170
-     15 941210
-     17 920170
-     29 930130
-     35 932150
-     67 933130
-     70 933160
-    111 932160
-    113 941180
-    114 920270
-    140 931110
-    166 930120
-    172 930100
-    224 920440
-    245 941110
-    247 941100
-    247 941160
-    448 930110
-   2262 931120
-   2328 913120
-   6168 913100
+# ModSec Rule Exclusion: 942100 : SQL Injection Attack Detected via libinjection
+# ModSec Rule Exclusion: 942190 : Detects MSSQL code execution and information gathering attempts
+# ModSec Rule Exclusion: 942200 : Detects MySQL comment-/space-obfuscated injections and backtick …
+# ModSec Rule Exclusion: 942260 : Detects basic SQL authentication bypass attempts 2/3
+# ModSec Rule Exclusion: 942270 : Looking for basic sql injection. Common attack string for mysql, …
+# ModSec Rule Exclusion: 942410 : SQL Injection Attack
+SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" "phase:2,nolog,pass,id:10004,\
+    ctl:ruleRemoveTargetById=942100;ARGS:keys,\
+    ctl:ruleRemoveTargetById=942190;ARGS:keys,\
+    ctl:ruleRemoveTargetById=942200;ARGS:keys,\
+    ctl:ruleRemoveTargetById=942260;ARGS:keys,\
+    ctl:ruleRemoveTargetById=942270;ARGS:keys,\
+    ctl:ruleRemoveTargetById=942410;ARGS:keys"
 ```
 
-```
-cat logs/error.log | melid | sort | uniq -c | sort -n | while read STR; do echo -n "$STR "; \
-ID=$(echo "$STR" | sed -e "s/.*\ //"); grep $ID logs/error.log | head -1 | melmsg; done
-```{{execute}}
-
-```
-1 920220 URL Encoding Abuse Attack Attempt
-1 932115 Remote Command Execution: Windows Command Injection
-2 920280 Request Missing a Host Header
-2 941140 XSS Filter - Category 4: Javascript URI Vector
-3 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
-4 933150 PHP Injection Attack: High-Risk PHP Function Name Found
-5 942100 SQL Injection Attack Detected via libinjection
-6 932110 Remote Command Execution: Windows Command Injection
-7 911100 Method is not allowed by policy
-8 932105 Remote Command Execution: Unix Command Injection
-13 932100 Remote Command Execution: Unix Command Injection
-15 941170 NoScript XSS InjectionChecker: Attribute Injection
-15 941210 IE XSS Filters - Attack Detected.
-17 920170 GET or HEAD Request with Body Content.
-29 930130 Restricted File Access Attempt
-35 932150 Remote Command Execution: Direct Unix Command Execution
-67 933130 PHP Injection Attack: Variables Found
-70 933160 PHP Injection Attack: High-Risk PHP Function Call Found
-111 932160 Remote Command Execution: Unix Shell Code Found
-113 941180 Node-Validator Blacklist Keywords
-114 920270 Invalid character in request (null character)
-140 931110 Possible Remote File Inclusion (RFI) Attack: Common RFI Vulnerable Parameter Name …
-166 930120 OS File Access Attempt
-172 930100 Path Traversal Attack (/../)
-224 920440 URL file extension is restricted by policy
-245 941110 XSS Filter - Category 1: Script Tag Vector
-247 941100 XSS Attack Detected via libinjection
-247 941160 NoScript XSS InjectionChecker: HTML Injection
-448 930110 Path Traversal Attack (/../)
-2262 931120 Possible Remote File Inclusion (RFI) Attack: URL Payload Used w/Trailing Question …
-2328 913120 Found request filename/argument associated with security scanner
-6168 913100 Found User-Agent associated with security scanner
-```
-
-This, we can work with. But it’s perhaps necessary to explain the *one-liners*. We extract the rule IDs from the *error log*, then *sort* them, sum them together in a list of found IDs (*uniq -c*) and sort again by the numbers found. That’s the first *one-liner*. A relationship between the individual rules is still lacking, because there’s not much we can do with the ID number yet. We get the names from the *error log* again by looking through the previously run test line-by-line in a loop. We out the ID that we have into this loop (`$STR`). Then we have to separate the number of found items and the IDs again. This is done using an embedded sub-command (`ID=$(echo "$STR" | sed -e "s/.*\ //")`). We then use the IDs we just found to search the *error log* once more for an entry, but take only the first one, extract the *msg* part and display it. Done.
-
-You might now think that it would be better to define an additional alias to determine the ID and description of the rule in a single step. This puts us on the wrong path, though, because there are rules that contain dynamic parts in and following the brackets (anomaly scores in the rules checking the threshold with rule ID 949110 and 980130!). We, of course, want to combine these rules, putting them together in order to map the rule only once. So, to really simplify analysis, we have to get rid of the dynamic items. Here’s an additional *alias*, that is also part of the *.apache-modsec.alias* file, that implements this idea: 
-
-```
-alias melidmsg='sed -e "s/.*\[id \"//" -e "s/\([0-9]*\).*\[msg \"/\1 /" -e "s/\"\].*//" \
--e "s/(Total .*/(Total ...) .../" \
--e "s/Incoming and Outgoing Score: [0-9]* [0-9]*/Incoming and Outgoing Score: .../"'
-```
-
-```
-cat logs/error.log | melidmsg | sucs
-```{{execute}}
-
-```
-      1 920220 URL Encoding Abuse Attack Attempt
-      1 932115 Remote Command Execution: Windows Command Injection
-      2 920280 Request Missing a Host Header
-      2 941140 XSS Filter - Category 4: Javascript URI Vector
-      3 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
-      4 933150 PHP Injection Attack: High-Risk PHP Function Name Found
-      5 942100 SQL Injection Attack Detected via libinjection
-      6 932110 Remote Command Execution: Windows Command Injection
-      7 911100 Method is not allowed by policy
-      8 932105 Remote Command Execution: Unix Command Injection
-     13 932100 Remote Command Execution: Unix Command Injection
-     15 941170 NoScript XSS InjectionChecker: Attribute Injection
-     15 941210 IE XSS Filters - Attack Detected.
-     17 920170 GET or HEAD Request with Body Content.
-     29 930130 Restricted File Access Attempt
-     35 932150 Remote Command Execution: Direct Unix Command Execution
-     67 933130 PHP Injection Attack: Variables Found
-     70 933160 PHP Injection Attack: High-Risk PHP Function Call Found
-    111 932160 Remote Command Execution: Unix Shell Code Found
-    113 941180 Node-Validator Blacklist Keywords
-    114 920270 Invalid character in request (null character)
-    140 931110 Possible Remote File Inclusion (RFI) Attack: Common RFI Vulnerable Parameter Name used w/URL Payload
-    166 930120 OS File Access Attempt
-    172 930100 Path Traversal Attack (/../)
-    224 920440 URL file extension is restricted by policy
-    245 941110 XSS Filter - Category 1: Script Tag Vector
-    247 941100 XSS Attack Detected via libinjection
-    247 941160 NoScript XSS InjectionChecker: HTML Injection
-    448 930110 Path Traversal Attack (/../)
-   2262 931120 Possible Remote File Inclusion (RFI) Attack: URL Payload Used w/Trailing Question Mark Character (?)
-   2328 913120 Found request filename/argument associated with security scanner
-   6168 913100 Found User-Agent associated with security scanner
-```
-
-So that's something we can work with. It shows that the Core Rules detected a lot of malicious requests and we now have an idea which rules played a role in this. The rule triggered most frequently, 913120, is no surprise, and when you look upwards in the output, this all makes a lot of sense.
-
-Let's do a quiz question to see if you are getting proficient looking at the log files.
-
->>Quiz: Please execute the following curl call. Then look at the log files and try to the rule id of the rule blocking the request: `curl localhost/index.html -d "a=' or 1=1;"`{{execute}}<<
-=== 942100
+And done. This time, we cleaned out all the scores above 50. Time to reduce the anomaly threshold to 50, let it rest a bit and then examine the logs for the third batch.

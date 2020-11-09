@@ -1,62 +1,104 @@
-Handling false positives is tedious at times. However, with the goal of protecting the application, it is most certainly worthwhile. When we introduced the statistic script I stated that we should make sure that at least 99.99% of requests pass through the rule set without any false positives. The remaining positives, the ones caused by attackers, should be blocked. But we are still running with an anomaly limit of 10,000. We need to reduce this to a decent level. Any limit above 30 or 40 is unlikely to stop anything serious. With a threshold of 20, you start to see an effect and then with 10 you get fairly good protection from standard attackers. Even if an individual rule only scores 5 points, some attack classes like SQL injections typically trigger multiple alarms, so a limit of 10 catches quite a few attack requests. In other categories, the coverage with rules is less extensive. This means, the accumulation of multiple rules is less intense. So it is perfectly possible to stay beneath a score of 10 with a certain attack payload. That's why a limit of 5 for the inbound score and 4 for the outbound score gives you a good level security. These are the default values of the CRS.
-
-But how to lower the limit from 10,000 to 5 without harming production? It takes a certain trust in your tuning skills to perform this step. A more natural approach is to go over multiple iterations: An initial tuning round is performed with a limit of 10,000. When the most blatant sources of false positives are eliminated this way, you wait for a given amount of time and then lower the limit to 50 and examine the logs again. Tune and reduce to 30, then 20, 10 and finally 5. After every reduction, you need to check the new log files and run the statistic script. By looking at the statistics, you see what you can expect from a reduction of the limit. Let's look once more at the stats we examined before:
+If you do this the first time, it all looks a bit overwhelming. But then it's only been an hour of work or so, which seems reasonable - even more so if you stretch it out over multiple iterations. One thing to help you get up to speed is getting an overview of all the alerts standing behind the scores. It’s a good idea to have a look at the distribution of the scores as described above. A good next step is to get a report of how exactly the *anomaly scores* occurred, such as an overview of the rule violations for each anomaly score. The following construct generates a report like this. On the first line, we extract a list of anomaly scores from the incoming requests which actually appear in the log file. We then build a loop around these *scores*, read the *request ID* for each *score*, save it in the file `ids` and perform a short analysis for these *IDs* in the *error log*.
 
 ```
-INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
-Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
+cat tutorial-8-example-access.log | alscorein | sort -n | uniq | egrep -v -E "^0" > scores
+```{{execute}}
 
-Empty or miss. incoming score   |     41 |   0.4100% |   0.4100% |  99.5900%
-Reqs with incoming score of   0 |   9920 |  99.2000% |  99.6100% |   0.3900%
-Reqs with incoming score of   1 |      0 |   0.0000% |  99.6100% |   0.3900%
-Reqs with incoming score of   2 |     11 |   0.1100% |  99.7200% |   0.2800%
-Reqs with incoming score of   3 |     17 |   0.1699% |  99.8900% |   0.1100%
-Reqs with incoming score of   4 |      0 |   0.0000% |  99.8900% |   0.1100%
-Reqs with incoming score of   5 |      8 |   0.0800% |  99.9700% |   0.0300%
-Reqs with incoming score of   6 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of   7 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of   8 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of   9 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  10 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  11 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  12 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  13 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  14 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  15 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  16 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  17 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  18 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  19 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  20 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  21 |      1 |   0.0100% |  99.9800% |   0.0200%
-Reqs with incoming score of  22 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  23 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  24 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  25 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  26 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  27 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  28 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  29 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  30 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  31 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  32 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  33 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  34 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  35 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  36 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  37 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  38 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  39 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  40 |      0 |   0.0000% |  99.9800% |   0.0200%
-Reqs with incoming score of  41 |      2 |   0.0200% | 100.0000% |   0.0000%
+```
+cat scores | while read S; do echo "INCOMING SCORE $S";\
+```{{execute}}
+
+```
+grep -E " $S [0-9-]+$" tutorial-8-example-access.log \
+| alreqid > ids; grep -F -f ids tutorial-8-example-error.log | melidmsg | sucs; echo ; done 
+```{{execute}}
+
+```
+INCOMING SCORE 5
+     30 921180 HTTP Parameter Pollution (ARGS_NAMES:op)
+
+INCOMING SCORE 8
+      1 920273 Invalid character in request (outside of very strict set)
+      1 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+
+INCOMING SCORE 10
+      4 920273 Invalid character in request (outside of very strict set)
+   6384 942450 SQL Hex Encoding Identified
+
+INCOMING SCORE 20
+     56 932160 Remote Command Execution: Unix Shell Code Found
+    168 920273 Invalid character in request (outside of very strict set)
+
+INCOMING SCORE 30
+     77 920273 Invalid character in request (outside of very strict set)
+     77 942190 Detects MSSQL code execution and information gathering attempts
+     77 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
+     77 942260 Detects basic SQL authentication bypass attempts 2/3
+     77 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
+     77 942410 SQL Injection Attack
+
+INCOMING SCORE 35
+     77 920273 Invalid character in request (outside of very strict set)
+     77 942100 SQL Injection Attack Detected via libinjection
+     77 942190 Detects MSSQL code execution and information gathering attempts
+     77 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
+     77 942260 Detects basic SQL authentication bypass attempts 2/3
+     77 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
+     77 942410 SQL Injection Attack
+
+INCOMING SCORE 78
+     77 921180 HTTP Parameter Pollution (ARGS_NAMES:keys)
+     77 942100 SQL Injection Attack Detected via libinjection
+     77 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+    154 942190 Detects MSSQL code execution and information gathering attempts
+    154 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
+    154 942260 Detects basic SQL authentication bypass attempts 2/3
+    154 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
+    154 942410 SQL Injection Attack
+    231 920273 Invalid character in request (outside of very strict set)
+
+INCOMING SCORE 79
+    448 921180 HTTP Parameter Pollution (ARGS_NAMES:editors[])
+    448 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
+    896 942450 SQL Hex Encoding Identified
+   3144 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+   3595 920273 Invalid character in request (outside of very strict set)
+
+INCOMING SCORE 93
+      2 932160 Remote Command Execution: Unix Shell Code Found
+      6 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+     13 920273 Invalid character in request (outside of very strict set)
+
+INCOMING SCORE 98
+    448 921180 HTTP Parameter Pollution (ARGS_NAMES:fields[])
+    896 942450 SQL Hex Encoding Identified
+   2688 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+   5824 920273 Invalid character in request (outside of very strict set)
+
+INCOMING SCORE 189
+      1 921180 HTTP Parameter Pollution (ARGS_NAMES:ids[])
+      5 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
+      9 942130 SQL Injection Attack: SQL Tautology Detected.
+     14 920273 Invalid character in request (outside of very strict set)
+     18 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+
+INCOMING SCORE 231
+      6 921180 HTTP Parameter Pollution (ARGS_NAMES:ids[])
+     12 942450 SQL Hex Encoding Identified
+     30 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
+     66 942130 SQL Injection Attack: SQL Tautology Detected.
+     96 920273 Invalid character in request (outside of very strict set)
+    132 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
 ```
 
-10,000 requests is not really a big log file, but it will do for our purposes. Based on the data, we can immediately decide to reduce the limit to 50. It is unlikely that a request will hit that threshold - and if it does, it is an isolated transaction which is very rare.
+A similar script that has been slightly extended is part of my private toolbox.
 
-Reducing the limit to 30 would probably be a bit overzealous, because the column on the right states that 0.02% of the requests scored higher than 30. We should get rid of the false positives at 41 before we should reduce the limit to 30. 
+Before we finish with this tutorial, let me present my tuning policy again:
 
-With this statistical data, the iterative tuning process becomes quite clear: The *modsec-positive-stats.rb* script brings sense and reason to the process.
+* Always work in blocking mode
+* Highest scoring requests go first
+* Work in several iterations
 
-For the outbound responses, the situation is a bit simpler as you will hardly see any scores above 5. There simply are not enough rules to have any cumulative effect; probably because there is not much you can check in a response. So, I reduce the response threshold down to 5 or 4 rather quickly (which happens to be the default value of the Core Rule Set outbound request threshold).
+When you grow more proficient, you can reduce the number of iterations and tackle more false alarms in a single batch. Or you can concentrate on the rules that are triggered most often. That may work as well and in the end, when all rule exclusions are in place, you should end up with the same configuration. But in my experience, this policy with three simple guiding rules is the one with the highest chance of success and the lowest drop out rate. This is how you end up with a tight ModSecurity CRS setup in blocking mode with a low anomaly scoring limit.
 
-I think the tuning concept and the theory are now quite clear. In the next tutorial, we will continue with tuning false positives to gain some practice with the methods demonstrated here. And I will also introduce a script which helps with the construction of the more complicated exclusion rules.
+We have now reached the end of the block consisting of three *ModSecurity tutorials*. The next one will look into setting up a *reverse proxy*.
