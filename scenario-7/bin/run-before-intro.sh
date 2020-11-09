@@ -22,17 +22,15 @@ chown -R root:root /opt
 chown root:root /apache
 #FIXME: sudo chown
 
+echo "Apache downloaded and installed" >> /tmp/tmp.log
+
 # Move aliases and scripts from where the asset mechanism in index.json placed them
 mv /usr/local/etc/.apache-modsec.alias /root
 mv /usr/local/etc/basicstats.awk /root/bin
 mv /usr/local/etc/modsec-positive-stats.rb /root/bin
 mv /usr/local/etc/modsec-rulereport.rb /root/bin
 mv /usr/local/etc/percent.awk /root/bin
-
-read -r -d '' XXX << 'EOF'
-# 111
-EOF
-echo "$XXX" >> /tmp/tmp.log
+cat /usr/local/etc/.bashrc_snippet >> /root/.bashrc
 
 echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 

@@ -94,6 +94,7 @@
 	            {"file": "modsec-rulereport.rb", "target": "/usr/local/etc/", "chmod": "+x"},
 	            {"file": "percent.awk", "target": "/usr/local/etc/", "chmod": "+x"},
 	            {"file": ".apache-modsec.alias", "target": "/usr/local/etc/"}
+	            {"file": ".bashrc_snippet", "target": "/usr/local/etc/"}
       ]
     }
   },
