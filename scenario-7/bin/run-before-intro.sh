@@ -37,6 +37,7 @@ test -e $HOME/.apache-modsec.alias && . $HOME/.apache-modsec.alias
 [[ ":$PATH:" != *":$HOME/bin:"* ]] && PATH="$HOME/bin:${PATH}"
 EOF
 echo "$BASHRC" >> /root/.bashrc
+echo "#XXX" >> /root/.bashrc
 
 cat /root/.bashrc >> /tmp/tmp.log
 echo "Aliases and custom scripts ready" >> /tmp/tmp.log
