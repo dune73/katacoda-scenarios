@@ -1,7 +1,7 @@
 So we are looking at 13,000 alerts. And even if the format of the entries in the error log may be clear, without a tool they are very hard to read, let alone analyze. A simple remedy is to use a few *shell aliases*, which extract individual pieces of information from the entries. They are stored in the alias file we discussed in the log format in Tutorial 5.
 
 ```
-$> cat ~/.apache-modsec.alias
+cat ~/.apache-modsec.alias
 ```{{execute}}
 
 ```
@@ -24,7 +24,7 @@ alias meluri='grep -o "\[uri [^]]*" | cut -d\" -f2'
 These abbreviations all start with the prefix *mel*, short for *ModSecurity error log*, followed by the field name. Let’s try it out to output the rule IDs from the messages:
 
 ```
-$> cat logs/error.log | melid | tail
+cat logs/error.log | melid | tail
 ```{{execute}}
 
 ```
@@ -43,7 +43,7 @@ $> cat logs/error.log | melid | tail
 This seems to do the job. So let’s extend the example a few steps:
 
 ```
-$> cat logs/error.log | melid | sort | uniq -c | sort -n
+cat logs/error.log | melid | sort | uniq -c | sort -n
 ```{{execute}}
 ```
       1 920220
@@ -81,7 +81,7 @@ $> cat logs/error.log | melid | sort | uniq -c | sort -n
 ```
 
 ```
-$> cat logs/error.log | melid | sort | uniq -c | sort -n | while read STR; do echo -n "$STR "; \
+cat logs/error.log | melid | sort | uniq -c | sort -n | while read STR; do echo -n "$STR "; \
 ID=$(echo "$STR" | sed -e "s/.*\ //"); grep $ID logs/error.log | head -1 | melmsg; done
 ```{{execute}}
 
@@ -131,7 +131,7 @@ alias melidmsg='sed -e "s/.*\[id \"//" -e "s/\([0-9]*\).*\[msg \"/\1 /" -e "s/\"
 ```
 
 ```
-$> cat logs/error.log | melidmsg | sucs
+cat logs/error.log | melidmsg | sucs
 ```{{execute}}
 
 ```

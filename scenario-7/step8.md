@@ -5,7 +5,7 @@ Let's assume we have a password field in an authentication scheme like we used i
 Here is an artificial example triggering the rule 942100, which leverages the libinjection library to detect SQL injections. Execute this command and you get an alert:
 
 ```
-$> curl --data "password=' or f7x=gZs" localhost/login/login.do
+curl --data "password=' or f7x=gZs" localhost/login/login.do
 ```{{execute}}
 
 There is little wrong with this password from a security perspective. In fact, we should just disable this rule. But of course, it would be wrong to disable this rule completely. It serves a very important purpose with many other parameters. Ideally, we want to exclude the parameter password from being examined by this rule. Here is the startup time rule exclusion performing this task:

@@ -11,7 +11,7 @@ To reach such a goal, we will need one or two tools to help us get a good footin
 In Tutorial 5 we worked with a sample log file containing 10,000 entries. We’ll be using this log file again here: [tutorial-5-example-access.log](https://www.netnea.com/apache-tutorials/git/laboratory/tutorial-5/tutorial-5-example-access.log). The file comes from a real server, but the IP addresses, server names and paths have been simplified or rewritten. However, the information we need for our analysis is still there. Let’s have a look at the distribution of *anomaly scores*:
 
 ```
-$> egrep -o "[0-9-]+ [0-9-]+$" tutorial-5-example-access.log | cut -d\  -f1 | sucs
+egrep -o "[0-9-]+ [0-9-]+$" tutorial-5-example-access.log | cut -d\  -f1 | sucs
 ```{{execute}}
 ```
       3 10
@@ -22,7 +22,7 @@ $> egrep -o "[0-9-]+ [0-9-]+$" tutorial-5-example-access.log | cut -d\  -f1 | su
 ```
 
 ```
-$> egrep -o "[0-9-]+$" tutorial-5-example-access.log | sucs
+egrep -o "[0-9-]+$" tutorial-5-example-access.log | sucs
 ```{{execute}}
 ```
   10000 0
@@ -37,7 +37,7 @@ A score of 10 appears three times, corresponding to two violations in the same r
 But this still doesn’t give us the right idea about the *tuning steps* that would be needed to run this install smoothly. To present this information in a suitable form, I have prepared a ruby script that analyzes *anomaly scores*. You can download the script here: [modsec-positive-stats.rb](https://www.netnea.com/files/modsec-positive-stats.rb) and place it in your private _bin_ directory (You might have to install the _ruby_ package to get it working). It takes the two anomaly scores as input and we need to separate them with a semicolon in order to pipe them into the script. We can do this like this:
 
 ```
-$> cat tutorial-5-example-access.log  | egrep -o "[0-9-]+ [0-9-]+$" | tr " " ";" | modsec-positive-stats.rb
+cat tutorial-5-example-access.log  | egrep -o "[0-9-]+ [0-9-]+$" | tr " " ";" | modsec-positive-stats.rb
 ```{{execute}}
 
 ```

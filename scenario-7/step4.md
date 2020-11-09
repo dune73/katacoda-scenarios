@@ -1,7 +1,7 @@
 For starters, we will do something easy. It is a request that will trigger exactly one rule by attempting to execute a bash shell. We know that our simple lab server is not vulnerable to such a blatant attack, but ModSecurity does not know this and will still try to protect us:
 
 ```
-$> curl localhost/index.html?exec=/bin/bash
+curl localhost/index.html?exec=/bin/bash
 ```{{execute}}
 
 ```
@@ -10,7 +10,7 @@ $> curl localhost/index.html?exec=/bin/bash
 As predicted, we have not been blocked, but let's check the logs to see if anything happened:
 
 ```
-$> tail -1 /apache/logs/access.log
+tail -1 /apache/logs/access.log
 ```{{execute}}
 
 ```
@@ -51,7 +51,7 @@ What follows is a series of *tags* assigned to the rule. They are included along
 With this, we have covered the full alert message that led to the inbound anomaly score of 5. That was only a single request with a single alert. Let's generate more alerts. *Nikto* is a simple tool that can help us in this situation. It's a security scanner that has been around for ages. It's not very proficient, but it is fast and easy to use. Just the right tool to generate alerts for us. *Nikto* may still have to be installed. The scanner is, however, included in most distributions.
 
 ```
-$> nikto -h localhost
+nikto -h localhost
 ```{{execute}}
 
 ```
