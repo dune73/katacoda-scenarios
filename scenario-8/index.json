@@ -93,13 +93,12 @@
 	            {"file": "modsec-rulereport.rb", "target": "/usr/local/etc/", "chmod": "+x"},
 	            {"file": "percent.awk", "target": "/usr/local/etc/", "chmod": "+x"},
 	            {"file": ".apache-modsec.alias", "target": "/usr/local/etc/"},
-	            {"file": ".bashrc_snippet", "target": "/usr/local/etc/"}
-	            {"file": ".bashrc_snippet", "target": "/usr/local/etc/"}
-	            {"file": "tutorial-8-example-access.log.bz2", "target": "/usr/local/etc/"}
+	            {"file": ".bashrc_snippet", "target": "/usr/local/etc/"},
+	            {"file": "tutorial-8-example-access.log.bz2", "target": "/usr/local/etc/"},
 	            {"file": "tutorial-8-example-access-round-2.log.bz2", "target": "/usr/local/etc/"},
 	            {"file": "tutorial-8-example-access-round-3.log.bz2", "target": "/usr/local/etc/"},
 	            {"file": "tutorial-8-example-access-round-4.log.bz2", "target": "/usr/local/etc/"},
-	            {"file": "tutorial-8-example-error.log.bz2", "target": "/usr/local/etc/"}
+	            {"file": "tutorial-8-example-error.log.bz2", "target": "/usr/local/etc/"},
 	            {"file": "tutorial-8-example-error-round-2.log.bz2", "target": "/usr/local/etc/"},
 	            {"file": "tutorial-8-example-error-round-3.log.bz2", "target": "/usr/local/etc/"},
 	            {"file": "tutorial-8-example-error-round-4.log.bz2", "target": "/usr/local/etc/"}
