@@ -39,6 +39,10 @@ mkdir /apache/logs/audit
 
 echo "Apache downloaded and installed" >> /tmp/tmp.log
 
+cd /usr/local/etc
+mv tutorial-8-example-access.log.bz2 tutorial-8-example-access-round-2.log.bz2 tutorial-8-example-access-round-3.log.bz2 tutorial-8-example-access-round-4.log.bz2 tutorial-8-example-error.log.bz2 tutorial-8-example-error-round-2.log.bz2 tutorial-8-example-error-round-3.log.bz2 tutorial-8-example-error-round-4.log.bz2 /apache/logs
+bunzip2 /apache/logs/*.bz2
+echo "Example log files prepared" >> /tmp/tmp.log
 
 
 # --------------------------------------------------------------
