@@ -170,3 +170,8 @@ $> cat logs/error.log | melidmsg | sucs
 ```
 
 So that's something we can work with. It shows that the Core Rules detected a lot of malicious requests and we now have an idea which rules played a role in this. The rule triggered most frequently, 913120, is no surprise, and when you look upwards in the output, this all makes a lot of sense.
+
+Let's do a quiz question to see if you are getting proficient looking at the log files.
+
+>>Quiz: Please execute the following curl call. Then look at the log files and try to the rule id of the rule blocking the request: `curl localhost/index.html -d "a=' or 1=1;"`{{execute}}
+=== 942100
