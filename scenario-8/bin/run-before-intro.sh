@@ -41,6 +41,7 @@ echo "Apache downloaded and installed" >> /tmp/tmp.log
 
 cd /apache/conf
 wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz
+tar xzf v3.3.0.tar.gz
 sudo ln -s coreruleset-3.3.0 /apache/conf/crs
 cp crs/crs-setup.conf.example crs/crs-setup.conf
 rm v3.3.0.tar.gz
