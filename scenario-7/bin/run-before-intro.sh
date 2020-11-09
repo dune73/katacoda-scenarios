@@ -29,15 +29,10 @@ mv /usr/local/etc/modsec-positive-stats.rb /root/bin
 mv /usr/local/etc/modsec-rulereport.rb /root/bin
 mv /usr/local/etc/percent.awk /root/bin
 
-read -r -d '' BASHRC << 'EOF'
-# Load apache / modsecurity aliases if file exists
-test -e $HOME/.apache-modsec.alias && . $HOME/.apache-modsec.alias
-
-# Add $HOME/bin to PATH
-[[ ":$PATH:" != *":$HOME/bin:"* ]] && PATH="$HOME/bin:${PATH}"
+read -r -d '' XXX << 'EOF'
+# 111
 EOF
-echo "$BASHRC" >> /root/.bashrc
-echo "$BASHRC" >> /tmp/tmp.log
+echo "$XXX" >> /tmp/tmp.log
 
 echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 
