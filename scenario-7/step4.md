@@ -1,3 +1,6 @@
+
+From now on, we will need a 2nd terminal open. See the plus symbol above the terminal window. Use the 2nd terminal to start and stop the webserver (-> Hint: (/apache/bin/httpd -X`).
+
 For starters, we will do something easy. It is a request that will trigger exactly one rule by attempting to execute a bash shell. We know that our simple lab server is not vulnerable to such a blatant attack, but ModSecurity does not know this and will still try to protect us:
 
 ```

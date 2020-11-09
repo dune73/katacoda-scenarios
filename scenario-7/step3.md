@@ -1,7 +1,7 @@
 The center of the previous config snippet follows the include statement, which loads all files with suffix `.conf` from the rules sub folder in the CRS directory. This is where all the rules are being loaded. Let's take a look at them:
 
 ```
-ls -1 conf/crs/rules/*.conf
+ls -1 crs/rules/*.conf
 ```{{execute}}
 
 

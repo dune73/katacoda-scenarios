@@ -33,6 +33,9 @@ chown -R root:root /opt
 chown root:root /apache
 #FIXME: sudo chown
 
+cd /apache/modules
+wget https://netnea.com/files/mod_modsecurity2.so
+
 echo "Apache downloaded and installed" >> /tmp/tmp.log
 
 
