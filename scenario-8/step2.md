@@ -5,7 +5,10 @@ One would think that the error log with the alerts is the place to go. But, we a
 In the previous tutorial, we used the script [modsec-positive-stats.rb](https://www.netnea.com/files/modsec-positive-stats.rb). We return to this script with the example access log as the target:
 
 ```
-$> cat tutorial-8-example-access.log | alscores | modsec-positive-stats.rb
+cat tutorial-8-example-access.log | alscores | modsec-positive-stats.rb
+```{{execute}}
+
+```
 INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
 Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
 
@@ -276,7 +279,7 @@ We start with the request returning the highest anomaly score, we start on the r
 In order to find out what rules stand behind the anomaly scores 231 and 189, we need to link the access log to the error log. The unique request ID is this link:
 
 ```bash
-$> egrep " (231|189) [0-9-]+$" tutorial-8-example-access.log | alreqid | tee ids
+egrep " (231|189) [0-9-]+$" tutorial-8-example-access.log | alreqid | tee ids
 WBuxz38AAQEAAEdWQ5UAAACH
 WBux0H8AAQEAAEdWQ7QAAACT
 WBux0H8AAQEAAEdS9vYAAAAW
@@ -291,7 +294,7 @@ With this one-liner, we *grep* for the requests with score 231 or 189. We know i
 We can then take the IDs in this file and use them to extract the alerts belonging to the requests we're focused on. We use `grep -f` to perform this step. The `-F` flag tells *grep* that our pattern file is actually a list of fixed strings separated by newlines. Thus equipped, *grep* is a lot more efficient than without the flag.  The *melidmsg* alias extracts the ID and the message explaining the alert. Combining both is very helpful. The already familiar *sucs* alias is then used to sum it all up:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log  | melidmsg | sucs
+grep -F -f ids tutorial-8-example-error.log  | melidmsg | sucs
       7 921180 HTTP Parameter Pollution (ARGS_NAMES:ids[])
      12 942450 SQL Hex Encoding Identified
      35 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
@@ -324,7 +327,7 @@ SecRuleRemoveById 920273
 Next are the alerts for 942432:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log  | grep 942432 | melmatch | sucs
+grep -F -f ids tutorial-8-example-error.log  | grep 942432 | melmatch | sucs
      75 ARGS:ids[]
      75 ARGS_NAMES:ids[]
 ``` 
@@ -341,7 +344,7 @@ The next one is 942450. This is the rule looking for traces of hex encoding. Thi
 
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log  | grep 942450 | melmatch | sucs
+grep -F -f ids tutorial-8-example-error.log  | grep 942450 | melmatch | sucs
       6 REQUEST_COOKIES:98febd3dhf84de73ab2e32889dc5f0x032a9
       6 REQUEST_COOKIES_NAMES:SESS29af1facda0a866a687d5055f0x034ca
 ```
@@ -357,14 +360,14 @@ SecRuleUpdateTargetById 942450 "!REQUEST_COOKIES_NAMES"
 Three more to go: 921180, 942431 and 942130. We start with the latter:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log | grep 942130 | melmatch | sucs
+grep -F -f ids tutorial-8-example-error.log | grep 942130 | melmatch | sucs
      75 ARGS:ids[]
 ```
 
 So this is always the same parameter *ids[]*, which is already familiar to us. Maybe it's worth looking at the URI to understand how this is happening:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log  | grep 942130 | meluri | sucs
+grep -F -f ids tutorial-8-example-error.log  | grep 942130 | meluri | sucs
      75 /drupal/index.php/contextual/render
 ```
 
@@ -372,7 +375,7 @@ So this is always the same URI. Let's exclude the parameter `ids[]` from being e
 
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log  | grep 942130 | modsec-rulereport.rb --mode combined
+grep -F -f ids tutorial-8-example-error.log  | grep 942130 | modsec-rulereport.rb --mode combined
 
 75 x 942130 SQL Injection Attack: SQL Tautology Detected.
 --------------------------------------------------------------------------------
@@ -398,7 +401,7 @@ This is script is very handy. Let's throw in 942431 and see what happens:
 
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log  | grep 942431 | modsec-rulereport.rb --mode combined
+grep -F -f ids tutorial-8-example-error.log  | grep 942431 | modsec-rulereport.rb --mode combined
 35 x 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
 ---------------------------------------------------------------------------------------------------
       # ModSec Rule Exclusion: 942431 : Restricted SQL Character Anomaly Detection (args): …
@@ -423,7 +426,7 @@ SecRule REQUEST_URI "@beginsWith /drupal/index.php/contextual/render" \
 And now 921180:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error.log  | grep 921180 | modsec-rulereport.rb --mode combined
+grep -F -f ids tutorial-8-example-error.log  | grep 921180 | modsec-rulereport.rb --mode combined
 
 7 x 921180 HTTP Parameter Pollution (ARGS_NAMES:ids[])
 ------------------------------------------------------
@@ -465,7 +468,7 @@ After the first batch of rule exclusions, we would observe the service and end u
 We start again with a look at the score distribution:
 
 ```bash
-$> cat tutorial-8-example-access-round-2.log | alscores | modsec-positive-stats.rb
+cat tutorial-8-example-access-round-2.log | alscores | modsec-positive-stats.rb
 
 INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
 Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
@@ -556,8 +559,8 @@ We could expect the high scoring requests of 231 and 189 to be gone, but funnily
 Our next goal is the group of requests with a score of 60. Let's extract the rule IDs and then examine the alerts a bit.
 
 ```bash
-$> egrep " 60 [0-9-]+$" tutorial-8-example-access-round-2.log | alreqid > ids
-$> grep -F -f ids tutorial-8-example-error-round-2.log | melidmsg | sucs
+egrep " 60 [0-9-]+$" tutorial-8-example-access-round-2.log | alreqid > ids
+grep -F -f ids tutorial-8-example-error-round-2.log | melidmsg | sucs
      76 921180 HTTP Parameter Pollution (ARGS_NAMES:keys)
      76 942100 SQL Injection Attack Detected via libinjection
     152 942190 Detects MSSQL code execution and information gathering attempts
@@ -565,14 +568,14 @@ $> grep -F -f ids tutorial-8-example-error-round-2.log | melidmsg | sucs
     152 942260 Detects basic SQL authentication bypass attempts 2/3
     152 942270 Looking for basic sql injection. Common attack string for mysql, …
     152 942410 SQL Injection Attack
-$> grep -F -f ids tutorial-8-example-error-round-2.log | meluri | sucs
+grep -F -f ids tutorial-8-example-error-round-2.log | meluri | sucs
     912 /drupal/index.php/search/node
 ```
 
 So this points to a search form and payloads resembling SQL injections (outside of the first rule 921180, which we have seen before). It's obvious that a search form will attract SQL injection attacks. But then I know this was legitimate traffic (I filled in the forms personally when I searched for SQL statements in the Drupal articles I had posted as an exercise) and we are now facing a dilemma: If we suppress the rules, we open a door for SQL injections. If we leave the rules intact and reduce the limit, we will block legitimate traffic. I think it is OK to say that nobody should be using the search form to look for sql statements in our articles. But I could also say that Drupal is smart enough to fight off SQL attacks via the search form. As this is an exercise, this is our position for the moment: Let's exclude these rules. Let's feed it all into our helper script:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error-round-2.log | modsec-rulereport.rb -m combined
+grep -F -f ids tutorial-8-example-error-round-2.log | modsec-rulereport.rb -m combined
 
 76 x 921180 HTTP Parameter Pollution (ARGS_NAMES:keys)
 ------------------------------------------------------
@@ -630,7 +633,7 @@ SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
 With 942100, the case is quite clear. But let's look at the alert message itself. There we see that ModSecurity used a special library to identify what it thought an SQL injection attempt. So instead of a regular expression, a dedicated injection parser was used.
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error-round-2.log | grep 942100 | head -1
+grep -F -f ids tutorial-8-example-error-round-2.log | grep 942100 | head -1
 [2016-11-05 09:47:18.423889] [-:error] - - [client 127.0.0.1] ModSecurity: Warning. detected SQLi …
 using libinjection with fingerprint 'UEkn' [file …
 "/apache/conf/owasp-modsecurity-crs-3.0.0-rc1/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf"] …
@@ -653,7 +656,7 @@ SecRule REQUEST_URI "@beginsWith /drupal/index.php/search/node" \
 With the remaining ones, we use a shortcut:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error-round-2.log | grep -v "942100\|921180" | \
+grep -F -f ids tutorial-8-example-error-round-2.log | grep -v "942100\|921180" | \
 modsec-rulereport.rb -m combined | sort
 ...
       # ModSec Rule Exclusion: 942190 : Detects MSSQL code execution and information gathering attempts
@@ -707,7 +710,7 @@ Here are the new exercise files. It's still the same traffic, but with fewer ale
 This brings us to the following statistics (this time only printing numbers for the incoming requests):
 
 ```bash
-$> cat tutorial-8-example-access-round-3.log | alscores | modsec-positive-stats.rb --incoming
+cat tutorial-8-example-access-round-3.log | alscores | modsec-positive-stats.rb --incoming
 INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
 Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
 
@@ -731,8 +734,8 @@ So again, a great deal of the false positives disappeared because of a bunch of 
 
 
 ```bash
-$> egrep " (10|8) [0-9-]+$" tutorial-8-example-access-round-3.log | alreqid > ids
-$> grep -F -f ids tutorial-8-example-error-round-3.log | melidmsg | sucs
+egrep " (10|8) [0-9-]+$" tutorial-8-example-access-round-3.log | alreqid > ids
+grep -F -f ids tutorial-8-example-error-round-3.log | melidmsg | sucs
       2 932160 Remote Command Execution: Unix Shell Code Found
     368 921180 HTTP Parameter Pollution (ARGS_NAMES:editors[])
     368 942431 Restricted SQL Character Anomaly Detection (args): # of special characters …
@@ -742,10 +745,10 @@ The first alert is funny: "Remote command execution." What's this?
 
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error-round-3.log | grep 932160 | melmatch
+grep -F -f ids tutorial-8-example-error-round-3.log | grep 932160 | melmatch
 ARGS:account[pass][pass1]
 ARGS:account[pass][pass2]
-$> grep -F -f ids tutorial-8-example-error-round-3.log | grep 932160 | meldata
+grep -F -f ids tutorial-8-example-error-round-3.log | grep 932160 | meldata
 Matched Data: /bin/bash found within ARGS:account[pass
 Matched Data: /bin/bash found within ARGS:account[pass
 ```
@@ -791,7 +794,7 @@ SecRuleUpdateTargetById 930000-943999 "!ARGS:account[pass][pass2]"
 We are left with another instance of 921180, plus the 942431 which we have seen before too. Here is what the script proposes:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error-round-3.log | grep "921180\|942431" | \
+grep -F -f ids tutorial-8-example-error-round-3.log | grep "921180\|942431" | \
 modsec-rulereport.rb -m combined 
 
 448 x 921180 HTTP Parameter Pollution (ARGS_NAMES:editors[])
@@ -829,7 +832,7 @@ We have a new pair of logs:
 These are the statistics:
 
 ```bash
-$> cat tutorial-8-example-access-round-4.log | alscores | modsec-positive-stats.rb --incoming
+cat tutorial-8-example-access-round-4.log | alscores | modsec-positive-stats.rb --incoming
 INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
 Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
 
@@ -848,8 +851,8 @@ It seems that we are almost done. What rules are behind these remaining alerts?
 
 
 ```bash
-$> cat tutorial-8-example-access-round-4.log | egrep " 5 [0-9-]+$"  | alreqid > ids
-$> grep -F -f ids tutorial-8-example-error-round-4.log  | melidmsg | sucs
+cat tutorial-8-example-access-round-4.log | egrep " 5 [0-9-]+$"  | alreqid > ids
+grep -F -f ids tutorial-8-example-error-round-4.log  | melidmsg | sucs
      30 921180 HTTP Parameter Pollution (ARGS_NAMES:op)
      41 932160 Remote Command Execution: Unix Shell Code Found
     368 921180 HTTP Parameter Pollution (ARGS_NAMES:fields[])
@@ -858,7 +861,7 @@ $> grep -F -f ids tutorial-8-example-error-round-4.log  | melidmsg | sucs
 So our friend 921180 is back again for two parameters and another shell execution. Probably another occurrence of the password parameter. Let's check this:
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error-round-4.log  | grep 921180 | modsec-rulereport.rb -m combined
+grep -F -f ids tutorial-8-example-error-round-4.log  | grep 921180 | modsec-rulereport.rb -m combined
 
 398 x 921180 HTTP Parameter Pollution (ARGS_NAMES:op)
 -----------------------------------------------------
@@ -874,7 +877,7 @@ It's simple enough to add this in the usual place with new rule IDs. And then th
 
 
 ```bash
-$> grep -F -f ids tutorial-8-example-error-round-4.log  | grep 932160 | modsec-rulereport.rb -m combined
+grep -F -f ids tutorial-8-example-error-round-4.log  | grep 932160 | modsec-rulereport.rb -m combined
 
 41 x 932160 Remote Command Execution: Unix Shell Code Found
 -----------------------------------------------------------
@@ -967,8 +970,8 @@ SecRuleUpdateTargetById 930000-943999 "!ARGS:pass"
 If you do this the first time, it all looks a bit overwhelming. But then it's only been an hour of work or so, which seems reasonable - even more so if you stretch it out over multiple iterations. One thing to help you get up to speed is getting an overview of all the alerts standing behind the scores. It’s a good idea to have a look at the distribution of the scores as described above. A good next step is to get a report of how exactly the *anomaly scores* occurred, such as an overview of the rule violations for each anomaly score. The following construct generates a report like this. On the first line, we extract a list of anomaly scores from the incoming requests which actually appear in the log file. We then build a loop around these *scores*, read the *request ID* for each *score*, save it in the file `ids` and perform a short analysis for these *IDs* in the *error log*.
 
 ```bash
-$> cat tutorial-8-example-access.log | alscorein | sort -n | uniq | egrep -v -E "^0" > scores
-$> cat scores | while read S; do echo "INCOMING SCORE $S";\
+cat tutorial-8-example-access.log | alscorein | sort -n | uniq | egrep -v -E "^0" > scores
+cat scores | while read S; do echo "INCOMING SCORE $S";\
 grep -E " $S [0-9-]+$" tutorial-8-example-access.log \
 | alreqid > ids; grep -F -f ids tutorial-8-example-error.log | melidmsg | sucs; echo ; done 
 INCOMING SCORE 5
