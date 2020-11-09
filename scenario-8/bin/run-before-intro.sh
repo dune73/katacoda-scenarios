@@ -39,6 +39,14 @@ mkdir /apache/logs/audit
 
 echo "Apache downloaded and installed" >> /tmp/tmp.log
 
+cd /apache/conf
+wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz
+sudo ln -s coreruleset-3.3.0 /apache/conf/crs
+cp crs/crs-setup.conf.example crs/crs-setup.conf
+rm v3.3.0.tar.gz
+
+echo "CRS downloaded and installed" >> /tmp/tmp.log
+
 cd /usr/local/etc
 mv tutorial-8-example-access.log.bz2 tutorial-8-example-access-round-2.log.bz2 tutorial-8-example-access-round-3.log.bz2 tutorial-8-example-access-round-4.log.bz2 tutorial-8-example-error.log.bz2 tutorial-8-example-error-round-2.log.bz2 tutorial-8-example-error-round-3.log.bz2 tutorial-8-example-error-round-4.log.bz2 /apache/logs
 bunzip2 /apache/logs/*.bz2
