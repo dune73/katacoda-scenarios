@@ -6,9 +6,6 @@ cat tutorial-8-example-access.log | alscorein | sort -n | uniq | egrep -v -E "^0
 
 ```
 cat scores | while read S; do echo "INCOMING SCORE $S";\
-```{{execute}}
-
-```
 grep -E " $S [0-9-]+$" tutorial-8-example-access.log \
 | alreqid > ids; grep -F -f ids tutorial-8-example-error.log | melidmsg | sucs; echo ; done 
 ```{{execute}}

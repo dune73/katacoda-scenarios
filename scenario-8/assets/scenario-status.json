@@ -5,51 +5,12 @@
 				{
 					"step": "step-1",
 					"items" : [
-						{
-                                                        "operator": "folder-exists",
-                                                        "target": "/apache/conf/coreruleset-3.3.0",
-                                                        "failmsg": "Folder $TARGET does not exist. Please create it.",
-                                                        "successmsg": "Folder $TARGET exists."
-                                                },
-						{
-                                                        "operator": "softlink-exists",
-                                                        "target": "/apache/conf/crs",
-                                                        "failmsg": "The softlink at $TARGET does not exist. Please create it.",
-                                                        "successmsg": "The softlink at $TARGET exists."
-                                                },
-						{
-                                                        "operator": "file-exists",
-                                                        "target": "/apache/conf/crs/crs-setup.conf",
-							"failmsg": "The CRS configuration file at $TARGET does not exist. Please create it.",
-							"successmsg": "The CRS configuration file exists."
-                                                }
 					]
 				},
 
 				{
 					"step": "step-2",
 					"items" : [
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "id:900110",
-							"failmsg": "The CRS anomaly limits are not properly configured in the Apache configuration. This is fatal. Please fix it.",
-							"successmsg": "The CRS anomaly limits are properly configured."
-                                                },
-						{
-                                                        "operator": "file-contains-regexp",
-                                                        "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "Include.*\/apache\/conf\/crs\/crs-setup.conf",
-							"failmsg": "The CRS config inclusion is not properly configured in the Apache configuration. This is fatal. Please fix it.",
-							"successmsg": "The CRS config inclusion is properly configured in the Apache configuration."
-                                                },
-						{
-                                                        "operator": "file-contains-regexp",
-                                                        "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "Include.*\/apache\/conf\/crs\/rules\/.*conf",
-							"failmsg": "The CRS rules inclusion is not properly configured in the Apache configuration. This is fatal. Please fix it.",
-							"successmsg": "The CRS rules inclusion is properly configured in the Apache configuration."
-                                                }
 					]
 				},		
 				{
@@ -60,27 +21,6 @@
 				{
 					"step": "step-4",
 					"items" : [
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/logs/access.log",
-                                                        "targetstring": "exec=/bin/bash",
-							"failmsg": "It looks like you did not execute the call with the shell command exploit. Please execute this in order to advance.",
-							"successmsg": "Shell exploit executed just fine."
-                                                },
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/logs/error.log",
-                                                        "targetstring": "[id \"932160\"]",
-							"failmsg": "It looks like the shell exploit has not been blocked properly by your CRS installation. Please check your configuration and try again.",
-							"successmsg": "Shell exploit blocked just fine."
-                                                },
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/logs/access.log",
-                                                        "targetstring": "Nikto",
-							"failmsg": "It looks like you did not execute the Nikto security scan. Please exucute this step.",
-							"successmsg": "Nikto executed just fine."
-                                                }
 					]
 				},
 				{
@@ -96,25 +36,11 @@
 				{
 					"step": "step-7",
 					"items" : [
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "SecRuleRemoveById 920300",
-                                                        "failmsg": "Your Apache config lacks the SecRuleRemoveById command used to whitelist the false positive in this step. Please enter it into the access configuration.",
-                                                        "successmsg": "SecRuleRemoveById found in Apache configuration just fine."
-                                                }
 					]
 				},
 				{
 					"step": "step-8",
 					"items" : [
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "SecRuleUpdateTargetById 942100 !ARGS:password",
-                                                        "failmsg": "Your Apache config lacks the SecRuleUpdateTargetById command used to whitelist the false positive in this step. Please enter it into the access configuration.",
-                                                        "successmsg": "SecRuleUpdateTargetById found in Apache configuration just fine."
-                                                }
 					]
 				},
 				{
@@ -125,13 +51,6 @@
 				{
 					"step": "step-10",
 					"items" : [
-                                                {
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "SecRule.*id:12000",
-							"failmsg": "The ModSecurity rule 12000 configured properly. This is fatal. Please fix it.",
-							"successmsg": "ModSecurity rule 12000 loaded properly in the Apache configuration. Looks like everything is OK."
-                                                }
 					]
 				}
 			]
