@@ -1,57 +1,31 @@
-_There is an issue with the way Katacoda configures the bash shell. Please execute the following command to launch a new shell that is properly configured._
+The purpose of a reverse proxy is to shield an application server from direct internet access. As somewhat of a prerequisite for this tutorial, we’ll be needing a backend server like this.
+In principle, any HTTP application can be used for such an installation and we could very well use the application server from the third tutorial. However, it seems appropriate for me to demonstrate a very simple approach. We’ll be using the tool `socat` short for SOcket CAt.
 
 ```
-bash
+socat -v -v TCP-LISTEN:8000,bind=127.0.0.1,crlf,reuseaddr,fork SYSTEM:"echo HTTP/1.0 200;\
+echo Content-Type\: text/plain; echo; echo 'Server response, port 8000.'"
 ```{{execute}}
-
-Now we are ready.
-
-
-The ModSecurity Core Rule Set are being developed under the umbrella of *OWASP*, the Open Web Application Security Project. The rules themselves are available on *GitHub* and can be downloaded via *git* or with the following *wget* command:
+ Using this complex command we instruct socat to bind a listener to local port 8000 and to use several echoes to return an HTTP response when a connection occurs. The additional parameters make sure that the listener stays permanently open and error output works.
 
 ```
-cd /apache/conf
-```{{execute}}
-
-```
-wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz
-```{{execute}}
-```
-tar -xvzf v3.3.0.tar.gz
-```{{execute}}
-```
-coreruleset-3.3.0
-coreruleset-3.3.0/
-coreruleset-3.3.0/.github/
-coreruleset-3.3.0/.github/ISSUE_TEMPLATE.md
-coreruleset-3.3.0/.gitignore
-coreruleset-3.3.0/.gitmodules
-coreruleset-3.3.0/.travis.yml
-coreruleset-3.3.0/CHANGES
-coreruleset-3.3.0/IDNUMBERING
-coreruleset-3.3.0/INSTALL
-coreruleset-3.3.0/KNOWN_BUGS
-coreruleset-3.3.0/LICENSE
-coreruleset-3.3.0/README.md
-coreruleset-3.3.0/crs-setup.conf.example
-coreruleset-3.3.0/documentation/
-coreruleset-3.3.0/documentation/OWASP-CRS-Documentation/
-coreruleset-3.3.0/documentation/README
-...
-```
-
-```
-sudo ln -s coreruleset-3.3.0 /apache/conf/crs
+curl -v http://localhost:8000/
 ```{{execute}}
 
 ```
-cp crs/crs-setup.conf.example crs/crs-setup.conf
-```{{execute}}
-
+* Hostname was NOT found in DNS cache
+*  Trying 127.0.0.1...
+* Connected to localhost (127.0.0.1) port 8000 (#0)
+> GET / HTTP/1.1
+> User-Agent: curl/7.35.0
+> Host: localhost:8000
+> Accept: */*
+> 
+* HTTP 1.0, assume close after body
+< HTTP/1.0 200
+< Content-Type: text/plain
+< 
+Server response, port 8000
+* Closing connection 0
 ```
-rm v3.3.0.tar.gz
-```{{execute}}
 
-This unpacks the base part of the Core Rule Set in the directory `/apache/conf/coreruleset-3.3.0`. We create a link from `/apache/conf/crs` to this folder. Then we copy a file named `crs-setup.conf.example` to a new file `crs-setup.conf` and finally, we delete the Core Rule Set tar file.
-
-The setup file allows us to tweak many different settings. It is worth a look - if only to see what is included. However, we are OK with the default settings and will not touch the file: We just make sure it is available under the new filename `crs-setup.conf`. Then we can continue to update the configuration to include the rules files.
+We have set up a backend system with the simplest of means. So easy, that in the future we might come back to this method to verify that a proxy server is working before the real application server is running.

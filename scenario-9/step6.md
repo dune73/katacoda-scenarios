@@ -1,81 +1,70 @@
-So the *Nikto* scan set off thousands of alarms. They were likely justified. In the normal use of *ModSecurity*, things are a bit different. The Core Rule Set is designed and optimized to have as few false alarms as possible in paranoia level 1. But in production use, there are going to be false positives sooner or later. Depending on the application, a normal installation will also see alarms and a lot of them will be false. And when you raise the paranoia level to become more vigilant towards attacks, the number of false positives will also rise. Actually, it will rise steeply when you move to PL 3 or 4; so steeply, some would call it exploding.
+In addition to the `ProxyPass` directive, the Rewrite module can be used to enable reverse proxy features. Compared to ProxyPass, it enables more flexible configuration. We have not seen ModRewrite up to this point. Since this is a very important module, we should take a good look at it.
 
-In order to run smoothly, the configuration has to be fine tuned first. Legitimate requests and exploitation attempts need to be distinct. We want to achieve a high degree of separation between the two. We wish to configure *ModSecurity* and the CRS so the engine knows exactly how to distinguish between legitimate requests and attacks.
-
-We differentiate between two categories of errors when examining requests. We already discussed false positives (or false alarms) above. The other category of errors is called *false negatives* and they consist of attacks that are not detected. The Core Rules are strict and careful to keep the number of *false negatives* low. An attacker needs to possess a great deal of savvy to circumvent the system of rules, especially at higher paranoia levels. Unfortunately, this strictness also results in alarms being triggered for normal requests. It is commonly the case that at a low degree of separation, you either get a lot of *false negatives* or a lot of *false positives*. Reducing the number of *false negatives* leads to an increase in *false positives* and vice versa. Both correlate highly with one another.
-
-We have to overcome this link: We want to increase the degree of separation in order to reduce the number of *false positives* without increasing the number of *false negatives*. We can do this by fine tuning the system of rules in a few places. We have to exclude certain rules from being executed for certain requests or parameters. But first we need to have a clear picture of the current situation: How many *false positives* are there and which of the rules are being violated in a particular context? How many *false positives* are we willing to allow on the system? Reducing them to zero will be extremely difficult to do, but percentages are something we can work with. A possible target would be: 99.99% of legitimate requests should pass without being blocked by the web application firewall. This is realistic, but involves a bit of work depending on the application. 99.99% of requests without a false alarm is also a number where professional use starts. But I have setups where we are not willing to accept more than 1 false alarm in 1 million of requests. That's 99.9999%.
-
-To reach such a goal, we will need one or two tools to help us get a good footing. Specifically, we need to find out about these numbers. Then, in a second step, we look at the error log to understand the rules that led to these alerts. We have seen that the access log reports the anomaly scores of the requests. Let's try to extract these scores and to present them in a suitable form.
-
-In Tutorial 5 we worked with a sample log file containing 10,000 entries. We’ll be using this log file again here: [tutorial-5-example-access.log](https://www.netnea.com/apache-tutorials/git/laboratory/tutorial-5/tutorial-5-example-access.log). The file comes from a real server, but the IP addresses, server names and paths have been simplified or rewritten. However, the information we need for our analysis is still there. Let’s have a look at the distribution of *anomaly scores*:
-
-(The example log file is ready for you in your `/apache/logs` folder.)
+ModRewrite defines its own rewrite engine used to manipulate, or change, HTTP requests; This rewrite engine can run in the server or VirtualHost context. Strictly speaking, we are using two separate rewrite engines. The rewrite engine in the VirtualHost context can also be configured from the Proxy container that we learned about above. If we define a rewrite engine in the server context, then it could be shortcut if there is an engine in the VirtualHost context. In this case we have to manually ensure that the rewrite rules are being inherited. We are therefore setting up a rewrite engine in the server context, configuring an example rule and initiating the inheritance.
 
 ```
-egrep -o "[0-9-]+ [0-9-]+$" tutorial-5-example-access.log | cut -d\  -f1 | sucs
-```{{execute}}
-```
-      3 10
-      5 3
-      6 2
-     55 5
-   9931 0
-```
+LoadModule              rewrite_module          modules/mod_rewrite.so
 
-```
-egrep -o "[0-9-]+$" tutorial-5-example-access.log | sucs
-```{{execute}}
-```
-  10000 0
+...
+
+RewriteEngine           On
+RewriteOptions          InheritDownBefore
+
+RewriteRule             ^/$     %{REQUEST_SCHEME}://%{HTTP_HOST}/index.html  [redirect,last]
 ```
 
-The first command line reads the inbound *anomaly score*. It’s the second-to-last value in the *access log line*. We take the two last values (*egrep*) and then *cut* the first one out. We then sort the results using the familiar *sucs* alias. The outbound *anomaly score* is the last value in the *log line*. This is why there is no *cut* command on the second command line.
+We initialize the engine on the server level. We then instruct the engine to pass on our rules to other rewrite engines. Specifically, so that our rules are performed before the rules further down. Then comes the actual rule. We tell the server to instruct the client to send a new request to `/index.html` for a request without a path or a request for "/" respectively. This is a redirect. What’s important is for the redirect to indicate the schema of the request, http or https as well as the host name. Relatives paths won’t work. But because we are outside the VirtualHost, we don’t see the type. And we don’t want to hard code the host name, but prefer to take the host names from client requests. Both of these values are available as variables as you can see in the example above.
 
-The results give us an idea of the situation: The vast majority of requests pass the *ModSecurity module* with no rule violation: 9931 requests with score 0. 69 requests violated one or more rules. This is not a standard situation for the Core Rules. In fact, I provoked additional false alarms to give us something to look at. The Core Rule Set is so optimized these days that you need a lot of traffic to get a reasonable amount of alerts - or you need to raise the paranoia level very high on a non-tuned system.
+Then appearing within square brackets come the flags influencing the behavior of the rewrite rule. As previously mentioned, we want a redirect and tell the engine that this is the last rule to process (`last`).
 
-A score of 10 appears three times, corresponding to two violations in the same request (most rules score 5 points when violated), which is fairly standard in practice. In all likelihood, we will be seeing a fair number of violations from the requests and very few alarms from the responses; 0 in our example above.
-
-But this still doesn’t give us the right idea about the *tuning steps* that would be needed to run this install smoothly. To present this information in a suitable form, I have prepared a ruby script that analyzes *anomaly scores* and made it available in this Katacoda scenario. You can download the script here: [modsec-positive-stats.rb](https://www.netnea.com/files/modsec-positive-stats.rb) and place it in your private _bin_ directory (You might have to install the _ruby_ package to get it working). It takes the two anomaly scores as input and we need to separate them with a semicolon in order to pipe them into the script. We can do this like this:
+Let’s have a look at a request like this and the redirect returned:
 
 ```
-cat tutorial-5-example-access.log  | egrep -o "[0-9-]+ [0-9-]+$" | tr " " ";" | modsec-positive-stats.rb
-```{{execute}}
-
-```
-INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
-Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
-
-Empty or miss. incoming score   |      0 |   0.0000% |   0.0000% | 100.0000%
-Reqs with incoming score of   0 |   9931 |  99.3100% |  99.3100% |   0.6900%
-Reqs with incoming score of   1 |      0 |   0.0000% |  99.3100% |   0.6900%
-Reqs with incoming score of   2 |      6 |   0.0600% |  99.3700% |   0.6300%
-Reqs with incoming score of   3 |      5 |   0.0500% |  99.4200% |   0.5800%
-Reqs with incoming score of   4 |      0 |   0.0000% |  99.4200% |   0.5800%
-Reqs with incoming score of   5 |     55 |   0.5499% |  99.9700% |   0.0300%
-Reqs with incoming score of   6 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of   7 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of   8 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of   9 |      0 |   0.0000% |  99.9700% |   0.0300%
-Reqs with incoming score of  10 |      3 |   0.0300% | 100.0000% |   0.0000%
-
-Incoming average:   0.0332    Median   0.0000    Standard deviation   0.4163
-
-
-OUTGOING                     Num of req. | % of req. |  Sum of % | Missing %
-Number of outgoing req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
-
-Empty or miss. outgoing score   |      0 |   0.0000% |   0.0000% | 100.0000%
-Reqs with outgoing score of   0 |  10000 | 100.0000% | 100.0000% |   0.0000%
-
-Outgoing average:   0.0000    Median   0.0000    Standard deviation   0.0000
+curl -v http://localhost/
+* Hostname was NOT found in DNS cache
+*  Trying 127.0.0.1...
+* Connected to localhost (127.0.0.1) port 80 (#0)
+> GET / HTTP/1.1
+> User-Agent: curl/7.35.0
+> Host: localhost
+> Accept: */*
+> 
+< HTTP/1.1 302 Found
+< Date: Thu, 10 Dec 2015 05:24:42 GMT
+* Server Apache is not blacklisted
+< Server: Apache
+< Location: http://localhost/index.html
+< Content-Length: 211
+< Content-Type: text/html; charset=iso-8859-1
+< 
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href="http://localhost/index.html">here</a>.</p>
+</body></html>
+* Connection #0 to host localhost left intact
 ```
 
-The script divides the inbound from the outbound *anomaly scores*. The incoming ones are handled first. Before the script can handle the scores, it describes how often an empty *anomaly score* has been found (*empty incoming score*). In our case, this was 41 times, as we saw before. Then comes the statement about *score 0*: 9920 requests. This is covering 99.2% of the requests. Together with the empty scores, this is already covering 99.61% (*Sum of %*). 0.39% had a higher *anomaly score* (*Missing %*). Above, we set out to have 99.99% of requests able to pass the server. We are about 0.38% or 38 requests away from this target. The next *anomaly score* is 2. It appears 11 times or 0.11%. The *anomaly score* 3 appears 17 times and a score of 5 can be seen 8 times. All in all, we are at 99.97%. Then there is one request with a score of 21 and finally 2 requests with with a score of 41. To achieve 99.99% coverage we have get to this limit (and, based on the log file, thus achieve 100% coverage).
+The server now responds with HTTP status code `302 Found`, corresponding to the typical redirect status code. Alternatively, 301, 303, 307 or very rarely 308 also appear. The differences are subtle, but influence the behavior of the browser. What's important then is the location header. It tells the client to make a new request, specifically for the fully qualified URL with a schema specified here. This is required for the location header. Only returning the path here, assuming that the client would then correctly conclude that it’s the same server name, would be incorrect and prohibited according to the specification (even if it works with most browsers).
 
-There are probably some *false positives*. In practice, we have to make certain of this before we start fine tuning the rules. It would be totally wrong to assume a false positive based on a justified alarm and suppress the alarm in the future. Before tuning, we must ensure that no attacks are present in the log file. This is not always easy. Manual review helps, restricting to known IP addresses, pre-authentication, testing/tuning on a test system separated from the internet, filtering the access log by country of origin for the IP address, etc... It's a big topic and making general recommendations is difficult. But please do take this seriously.
+In the body part of the response the redirect is included as a link in HTML text. This is provided for users to click manually, if the browser does not initiate the redirect. However, this is very unlikely and is probably only included for historical reasons.
 
-Before we move to the next step, here is a quiz question for you:
+You could now ask yourself why we are opening a rewrite engine in the server context and not dealing with everything on the VirtualHost level. In the example I chose you see that this would result in redundancy, because the redirect from "/" to "index.html" should take place on port 80 and also on encrypted port 443. This is the rule of thumb: It’s best for us to define and inherit everything being used on all VirtualHosts in the server context. We also deal with individual rules for a single VirtualHost on this level. Typically, the following rule is used to redirect all requests from port 80 to port 443, where encryption is enabled:
 
->>Quiz: What was IP address of the requests with an anomaly score of "2"<<
-=== 192.168.3.0
+```
+<VirtualHost 127.0.0.1:80>
+      
+      RewriteEngine   On
+
+      RewriteRule     ^/(.*)$   https://%{HTTP_HOST}/$1  [redirect,last]
+
+      ...
+
+</VirtualHost>
+```
+
+The schema we want is now clear. But to the left of it comes a new item. We don’t suppress the path as quickly as above. We instead put it in parenthesis and use `$1` to reference the content of the parenthesis again in the redirect. This means that we are forwarding the request on port 80 using the same URL on port 443.
+
+ModRewrite has been introduced. For further examples refer to the documentation or the sections of this tutorial below where it will become familiar with yet more recipes.

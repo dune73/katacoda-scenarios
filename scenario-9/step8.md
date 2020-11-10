@@ -1,48 +1,115 @@
-Next we look at excluding an individual parameter from being evaluated by a specific rule. So unlike our example 920300, which looked at the specific Accept header, we are now targeting rules examining the ARGS group of variables.
-
-Let's assume we have a password field in an authentication scheme like we used in the previous tutorial. Users are advised to use hard to guess passwords with lots of special characters which leads to the Core Rule Set sending a steady stream of alerts because of the strange passwords in this parameter field.
-
-Here is an artificial example triggering the rule 942100, which leverages the libinjection library to detect SQL injections. Execute this command and you get an alert:
+We first have to load the Apache load balancer module:
 
 ```
-curl --data "password=' or f7x=gZs" localhost/login/login.do
+LoadModule        proxy_balancer_module           modules/mod_proxy_balancer.so
+LoadModule        lbmethod_byrequests_module      modules/mod_lbmethod_byrequests.so
+LoadModule        slotmem_shm_module              modules/mod_slotmem_shm.so
+```
+
+Besides the load balancer module itself we also need a module that can help us distribute the requests to the different backends. We’ll take the easiest route and load the lbmethod_byrequests module.
+It’s the oldest module from a series of four modules and distributes requests evenly across backends by counting them sequentially. Once to the left and once to the right for two backends.
+
+Here is a list of all four available algorithms:
+
+* mod_lbmethod_byrequests (counts requests)
+* mod_lbmethod_bytraffic (totals sizes of requests and responses)
+* mod_lbmethod_bybusyness (Load balancing based on active threads in an connection established with the backend. The backend with the lowest number of threads is given the next request)
+* mod_lbmethod_heartbeat (the backend can even communicate via a heartbeat on th network and use it to inform the reverse proxy whether it has any free capacity).
+
+The different modules are well documented online so this brief description will have to suffice for now.
+
+Finally, we still need a module to help us manage shared segments of memory. These features are required by the proxy balancer module and provided by `mod_slotmem_shm.so`.
+
+We are now ready to configure the load balancer. We can set it up via the RewriteRule. This modification also affects the proxy stanza, where the balancer just defined must be referenced and resolved:
+
+```
+    RewriteRule         ^/service1/(.*)       balancer://backend/service1/$1   [proxy,last]
+    ProxyPassReverse    /                     balancer://backend/
+
+    <Proxy balancer://backend>
+        BalancerMember http://localhost:8000 route=backend-port-8000
+        BalancerMember http://localhost:8001 route=backend-port-8001
+
+        Require all granted
+
+        Options None
+
+        ProxySet enablereuse=on
+
+    </Proxy>
+```
+
+We are also defining two backends, one on the previously configured port 8000 and a second on port 8001. I recommend using `socat` to quickly set up this service on a second port and then to try it out. I have defined a number of different responses so we will be able to see from the HTTP response which backend has processed the request. This then looks like this:
+
+```
+curl -v -k https://localhost/service1/index.html https://localhost/service1/index.html
 ```{{execute}}
 
-There is little wrong with this password from a security perspective. In fact, we should just disable this rule. But of course, it would be wrong to disable this rule completely. It serves a very important purpose with many other parameters. Ideally, we want to exclude the parameter password from being examined by this rule. Here is the startup time rule exclusion performing this task:
+```
+* Rebuilt URL to: https://localhost:40443/
+*   Trying 127.0.0.1...
+* Connected to localhost (127.0.0.1) port 40443 (#0)
+* found 173 certificates in /etc/ssl/certs/ca-certificates.crt
+* found 697 certificates in /etc/ssl/certs
+* ALPN, offering http/1.1
+* SSL connection using TLS1.2 / ECDHE_RSA_AES_256_GCM_SHA384
+*        server certificate verification SKIPPED
+*        server certificate status verification SKIPPED
+*        common name: ubuntu (does not match 'localhost')
+*        server certificate expiration date OK
+*        server certificate activation date OK
+*        certificate public key: RSA
+*        certificate version: #3
+*        subject: CN=ubuntu
+*        start date: Mon, 27 Feb 2017 20:46:21 GMT
+*        expire date: Thu, 25 Feb 2027 20:46:21 GMT
+*        issuer: CN=ubuntu
+*        compression: NULL
+* ALPN, server accepted to use http/1.1
+> GET /service1/index.html HTTP/1.1
+> User-Agent: curl/7.35.0
+> Host: localhost
+> Accept: */*
+> 
+< HTTP/1.1 200 
+< Date: Thu, 10 Dec 2015 05:42:14 GMT
+* Server Apache is not blacklisted
+< Server: Apache
+< Content-Type: text/plain
+< Content-Length: 28
+< 
+Server response, port 8000
+* Connection #0 to host localhost left intact
+* Found bundle for host localhost: 0x24e3660
+* Re-using existing connection! (#0) with host localhost
+* Connected to localhost (127.0.0.1) port 443 (#0)
+> GET /service1/index.html HTTP/1.1
+> User-Agent: curl/7.35.0
+> Host: localhost
+> Accept: */*
+> 
+< HTTP/1.1 200 
+< Date: Thu, 10 Dec 2015 05:42:14 GMT
+* Server Apache is not blacklisted
+< Server: Apache
+< Content-Type: text/plain
+< Content-Length: 28
+< 
+Server response, port 8001
+* Connection #0 to host localhost left intact
+```
+
+In this somewhat unusual curl call two identical request are being initiated via a single curl command. What’s also interesting is the fact that with this method curl can use HTTP keep-alive. The first request lands on the first backend, and the second one on the second backend. Let’s have a look at the entries for this in the reverse proxy’s access log:
 
 ```
-# ModSec Exclusion Rule: 942100 SQL Injection Attack Detected via libinjection
-SecRuleUpdateTargetById 942100 !ARGS:password
+127.0.0.1 - - [2015-12-10 06:42:14.390998] "GET /service1/index.html HTTP/1.1" 200 28 "-" "curl/7.35.0"\
+localhost 127.0.0.1 443 proxy-server backend-port-8000 + "-" VmkQtn8AAQEAAH@M3zAAAAAN TLSv1.2 \
+ECDHE-RSA-AES256-GCM-SHA384 538 1402 -% 7856 1216 3708 381 0 0
+127.0.0.1 - - [2015-12-10 06:42:14.398995] "GET /service1/index.html HTTP/1.1" 200 28 "-" "curl/7.35.0"\
+localhost 127.0.0.1 443 proxy-server backend-port-8001 + "-" VmkQtn8AAQEAAH@M3zEAAAAN TLSv1.2 \
+ECDHE-RSA-AES256-GCM-SHA384 121 202 -% 7035 1121 3752 354 0 0
 ```
 
-This directive adds "not ARGS:password" to the list of parameters to be examined by rule 942100. This effectively excludes the parameter from the evaluation. This directive also accepts rule ranges as parameters. Of course, this directive also exists in a variant where we select the rule via its tag:
+Besides the keep-alive header, the request handler is also of interest. The request was thus processed by the `proxy server handler`. We also see entries for the route, specifically the values defined as `backend-port-8000` and `backend-port-8001`. This makes it possible to determine from the server's access log the exact route a request took.
 
-
-```
-# ModSec Exclusion Rule: 942100 SQL Injection Attack Detected via libinjection
-SecRuleUpdateTargetByTag "attack-sqli" !ARGS:password
-```
-
-The tag we are using in this example, *attack-sqli*, points to a wide range of SQL injection rules. So it will prevent a whole class of rules from looking at the password parameter. This makes sense for this password parameter, but it might go too far for other parameters. So it really depends on the application and the parameter in question.
-
-A password parameter is generally only used on the login request, so we can work with the `SecRuleUpdateTargetById` directive in practice, so that all occurrences of said parameter are exempt from examination by rule 942100. But let me stress, that this directive is server-wide. If you have multiple services with multiple Apache virtual hosts each running a different application, then `SecRuleUpdateTargetById` and `SecRuleUpdateTargetByTag` will disable the said rule or rules respectively for all occurrences of the password parameter on the whole server.
-
-So let's assume you want to exclude *password* only under certain conditions. For example the rule should still be active when a scanner is submitting the request. One fairly good way to detect scanners is by looking at the *Referer* request header. So the idea is to check the correct header and then exclude the parameter from examination by 942100. This runtime rule exclusion works with a control action, similar to the ones we have seen before:
-
-```
-SecRule REQUEST_HEADERS:Referer "@streq http://localhost/login/displayLogin.do" \
-    "phase:1,nolog,pass,id:10000,ctl:ruleRemoveTargetById=942100;ARGS:password"
-```
-
-The format of the control action is really difficult to grasp now: In addition to the rule ID, we add a semicolon and then the password parameter as part of the ARGS group of variables. In ModSecurity, this is called the ARGS collection with the colon as separator. Try to memorize this! 
-
-In professional use, this is likely the exclusion rule construct that is used the most (not with the Referer header, though, but with the *REQUEST_FILENAME* variable). This exclusion construct is very granular on the parameter level and it can be constructed to have only minimal impact on the requests thanks to the power of *SecRule*. If you would rather go with a tag than with an ID, here is your example: 
-
-```
-SecRule REQUEST_HEADERS:Referer "@streq http://localhost/login/displayLogin.do" \
-    "phase:1,nolog,pass,id:10000,ctl:ruleRemoveTargetByTag=attack-sqli;ARGS:password"
-```
-
-This section was very important. Therefore, to summarize once again: We define a rule to suppress another rule. We use a pattern for this which lets us define a path as a condition. This enables us to disable rules for individual parts of an application but only in places where false alarms occur. And at the same time, it prevents us from disabling rules on the entire server.
-
-With this, we have seen all basic methods to handle false positives via rule exclusions. You now use the patterns for *exclusion rules* described above to work through the various *false positives*. 
+In a subsequent tutorial we will be seeing that the proxy balancer can also be used in other situations. For the moment we will however be content with what is happening and will now be turning to RewriteMaps. A RewriteMap is an auxiliary structure which again increases the power of ModRewrite. Combined with the proxy server, flexibility rises substantially.
