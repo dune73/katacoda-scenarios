@@ -5,103 +5,140 @@
 				{
 					"step": "step-1",
 					"items" : [
-						{
-                                                        "operator": "folder-exists",
-                                                        "target": "/apache/conf/coreruleset-3.3.0",
-                                                        "failmsg": "Folder $TARGET does not exist. Please create it.",
-                                                        "successmsg": "Folder $TARGET exists."
-                                                },
-						{
-                                                        "operator": "softlink-exists",
-                                                        "target": "/apache/conf/crs",
-                                                        "failmsg": "The softlink at $TARGET does not exist. Please create it.",
-                                                        "successmsg": "The softlink at $TARGET exists."
-                                                },
-						{
-                                                        "operator": "file-exists",
-                                                        "target": "/apache/conf/crs/crs-setup.conf",
-							"failmsg": "The CRS configuration file at $TARGET does not exist. Please create it.",
-							"successmsg": "The CRS configuration file exists."
-                                                }
 					]
-				},
-
+				},		
 				{
 					"step": "step-2",
 					"items" : [
 						{
-                                                        "operator": "file-contains",
+                                                        "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "id:900110",
-							"failmsg": "The CRS anomaly limits are not properly configured in the Apache configuration. This is fatal. Please fix it.",
-							"successmsg": "The CRS anomaly limits are properly configured."
+							"targetstring": "LoadModule.*proxy_module.*mod_proxy.so",
+                                                        "failmsg": "LoadModule for proxy module can not be found in Apache config. Please add it.",
+                                                        "successmsg": "LoadModule proxy module is present in Apache config."
                                                 },
 						{
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "Include.*\/apache\/conf\/crs\/crs-setup.conf",
-							"failmsg": "The CRS config inclusion is not properly configured in the Apache configuration. This is fatal. Please fix it.",
-							"successmsg": "The CRS config inclusion is properly configured in the Apache configuration."
+							"targetstring": "LoadModule.*proxy_http_module.*mod_proxy_http.so",
+                                                        "failmsg": "LoadModule for proxy_http module can not be found in Apache config. Please add it.",
+                                                        "successmsg": "LoadModule proxy_http module is present in Apache config."
                                                 },
 						{
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "Include.*\/apache\/conf\/crs\/rules\/.*conf",
-							"failmsg": "The CRS rules inclusion is not properly configured in the Apache configuration. This is fatal. Please fix it.",
-							"successmsg": "The CRS rules inclusion is properly configured in the Apache configuration."
+							"targetstring": "ProxyRequests.*Off",
+                                                        "failmsg": "ProxyRequests Off directive not found in Apache config. Please add it.",
+                                                        "successmsg": "ProxyRequests Off directive is present in Apache config."
                                                 }
 					]
-				},		
+				},
 				{
 					"step": "step-3",
 					"items" : [
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "ProxyPass.*\/service1.*http:\/\/localhost",
+                                                        "failmsg": "ProxyPass directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "ProxyPass directive found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "ProxyPassReverse.*\/service1.*http:\/\/localhost",
+                                                        "failmsg": "ProxyPassReverse directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "ProxyPassReverse directive found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "<Proxy http:\/\/localhost:8000",
+                                                        "failmsg": "Proxy container can not be found in Apache config. Please add it.",
+                                                        "successmsg": "Proxy container found in Apache config."
+                                                }
 					]
 				},
 				{
 					"step": "step-4",
 					"items" : [
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/logs/access.log",
-                                                        "targetstring": "exec=/bin/bash",
-							"failmsg": "It looks like you did not execute the call with the shell command exploit. Please execute this in order to advance.",
-							"successmsg": "Shell exploit executed just fine."
-                                                },
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/logs/error.log",
-                                                        "targetstring": "[id \"932160\"]",
-							"failmsg": "It looks like the shell exploit has not been blocked properly by your CRS installation. Please check your configuration and try again.",
-							"successmsg": "Shell exploit blocked just fine."
-                                                },
-						{
-                                                        "operator": "file-contains",
-                                                        "target": "/apache/logs/access.log",
-                                                        "targetstring": "Nikto",
-							"failmsg": "It looks like you did not execute the Nikto security scan. Please exucute this step.",
-							"successmsg": "Nikto executed just fine."
-                                                }
 					]
 				},
 				{
 					"step": "step-5",
 					"items" : [
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "ProxyPass.*\/service1\/admin !",
+                                                        "failmsg": "ProxyPass exclusion for admin path can not be found in Apache config. Please add it.",
+                                                        "successmsg": "ProxyPass exclusion found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "ProxyTimeout.*60",
+                                                        "failmsg": "ProxyTimeout directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "ProxyTimeout directive found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "ProxyPreserveHost.*On",
+                                                        "failmsg": "ProxyPreserveHost directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "ProxyPreserverHost directive found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "ProxyErrorOverride.*60",
+                                                        "failmsg": "ProxyErrorOverride directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "ProxyErrorOverride directive found in Apache config."
+                                                }
 					]
 				},
 				{
 					"step": "step-6",
 					"items" : [
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "LoadModule.*rewrite_module.*mod_rewrite.so",
+                                                        "failmsg": "LoadModule for rewrite module can not be found in Apache config. Please add it.",
+                                                        "successmsg": "LoadModule for rewrite module is present in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "RewriteEngine.*On",
+                                                        "failmsg": "RewriteEngine directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "RewriteEngine directive found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "RewriteOptions.*InheritDownBefore",
+                                                        "failmsg": "RewriteOptions directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "RewriteOptions directive found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/logs/access.log",
+							"targetstring": "RewriteOptions.*InheritDownBefore",
+                                                        "failmsg": "GET \/ HTTP\/1.1\" 302",
+                                                        "successmsg": "RewriteOptions directive found in Apache config."
+                                                }
 					]
 				},
 				{
 					"step": "step-7",
 					"items" : [
 						{
-                                                        "operator": "file-contains",
+                                                        "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "SecRuleRemoveById 920300",
-                                                        "failmsg": "Your Apache config lacks the SecRuleRemoveById command used to whitelist the false positive in this step. Please enter it into the access configuration.",
-                                                        "successmsg": "SecRuleRemoveById found in Apache configuration just fine."
+							"targetstring": "ProxySet.*enablereuse=on",
+                                                        "failmsg": "ProxySet directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "ProxySet directive found in Apache config."
                                                 }
 					]
 				},
@@ -109,29 +146,61 @@
 					"step": "step-8",
 					"items" : [
 						{
-                                                        "operator": "file-contains",
+                                                        "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "SecRuleUpdateTargetById 942100 !ARGS:password",
-                                                        "failmsg": "Your Apache config lacks the SecRuleUpdateTargetById command used to whitelist the false positive in this step. Please enter it into the access configuration.",
-                                                        "successmsg": "SecRuleUpdateTargetById found in Apache configuration just fine."
+							"targetstring": "LoadModule.*proxy_balancer_module.*mod_proxy_balancer.so",
+                                                        "failmsg": "LoadModule for proxy balancer module can not be found in Apache config. Please add it.",
+                                                        "successmsg": "LoadModule for proxy balancer module is present in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "BalancerMember.*8000",
+                                                        "failmsg": "BalancerMember (port 8000) directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "BalancerMember (port 8000) directive found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "BalancerMember.*8000",
+                                                        "failmsg": "BalancerMember (port 8000) directive can not be found in Apache config. Please add it.",
+                                                        "successmsg": "BalancerMember (port 8000) directive found in Apache config."
                                                 }
 					]
 				},
 				{
 					"step": "step-9",
 					"items" : [
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+							"targetstring": "hashchar2backend",
+                                                        "failmsg": "Call to the rewrite map can not be found in Apache config. Please add it.",
+                                                        "successmsg": "Call to the rewrit map found in Apache config."
+                                                },
+						{
+                                                        "operator": "file-exists",
+                                                        "target": "/apache/conf/hashchar2backend.txt",
+                                                        "failmsg": "File hashchar2backend.txt does not exist. Please create it.",
+                                                        "successmsg": "File hashchar2backend.txt exists."
+                                                }
 					]
 				},
 				{
 					"step": "step-10",
 					"items" : [
-                                                {
-                                                        "operator": "file-contains",
+						{
+                                                        "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "SecRule.*id:12000",
-							"failmsg": "The ModSecurity rule 12000 configured properly. This is fatal. Please fix it.",
-							"successmsg": "ModSecurity rule 12000 loaded properly in the Apache configuration. Looks like everything is OK."
+							"targetstring": "RequestHeader.*X-RP-UNIQUE-ID",
+                                                        "failmsg": "Request header X-RP-UNIQUE-ID not set in Apache config. Please add it.",
+                                                        "successmsg": "Request header X-RP-UNIQUE-ID set in Apache config."
                                                 }
+					]
+				},
+				{
+					"step": "step-11",
+					"items" : [
 					]
 				}
 			]
