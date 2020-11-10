@@ -17,6 +17,13 @@ We initialize the engine on the server level. We then instruct the engine to pas
 
 Then appearing within square brackets come the flags influencing the behavior of the rewrite rule. As previously mentioned, we want a redirect and tell the engine that this is the last rule to process (`last`).
 
+Configuring this in the server context is not yet enough. We also need to enable the Rewrite Engine in every virtualhost where it is supposed to run:
+
+```
+RewriteEngine           On
+```
+
+
 Let’s have a look at a request like this and the redirect returned:
 
 ```
@@ -54,7 +61,7 @@ In the body part of the response the redirect is included as a link in HTML text
 You could now ask yourself why we are opening a rewrite engine in the server context and not dealing with everything on the VirtualHost level. In the example I chose you see that this would result in redundancy, because the redirect from "/" to "index.html" should take place on port 80 and also on encrypted port 443. This is the rule of thumb: It’s best for us to define and inherit everything being used on all VirtualHosts in the server context. We also deal with individual rules for a single VirtualHost on this level. Typically, the following rule is used to redirect all requests from port 80 to port 443, where encryption is enabled:
 
 ```
-<VirtualHost 127.0.0.1:80>
+<VirtualHost *:80>
       
       RewriteEngine   On
 

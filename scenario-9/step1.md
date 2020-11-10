@@ -1,3 +1,11 @@
+_There is an issue with the way Katacoda configures the bash shell. Please execute the following command to launch a new shell that is properly configured._
+
+```
+bash
+```{{execute}}
+
+Now we are ready.
+
 The purpose of a reverse proxy is to shield an application server from direct internet access. As somewhat of a prerequisite for this tutorial, we’ll be needing a backend server like this.
 In principle, any HTTP application can be used for such an installation and we could very well use the application server from the third tutorial. However, it seems appropriate for me to demonstrate a very simple approach. We’ll be using the tool `socat` short for SOcket CAt.
 
@@ -27,5 +35,7 @@ curl -v http://localhost:8000/
 Server response, port 8000
 * Closing connection 0
 ```
+
+__There is a bug in Katacoda that leads to a failure of this curl call to the local socat service in about 1 in 3 calls. The only workaround I have found so far is to repeat the calls.__
 
 We have set up a backend system with the simplest of means. So easy, that in the future we might come back to this method to verify that a proxy server is working before the real application server is running.

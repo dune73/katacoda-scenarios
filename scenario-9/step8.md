@@ -34,8 +34,6 @@ We are now ready to configure the load balancer. We can set it up via the Rewrit
 
         Options None
 
-        ProxySet enablereuse=on
-
     </Proxy>
 ```
 

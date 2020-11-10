@@ -17,8 +17,8 @@ TraceEnable       Off
 Timeout           10
 MaxRequestWorkers 100
 
-Listen            127.0.0.1:80
-Listen            127.0.0.1:443
+Listen            *:80
+Listen            *:443
 
 LoadModule        mpm_event_module        modules/mod_mpm_event.so
 LoadModule        unixd_module            modules/mod_unixd.so
@@ -247,7 +247,7 @@ DocumentRoot            /apache/htdocs
 
 </Directory>
 
-<VirtualHost 127.0.0.1:80>
+<VirtualHost *:80>
 
     RewriteEngine     On
 
@@ -263,7 +263,7 @@ DocumentRoot            /apache/htdocs
 
 </VirtualHost>
 
-<VirtualHost 127.0.0.1:443>
+<VirtualHost *:443>
     
     SSLEngine On
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS

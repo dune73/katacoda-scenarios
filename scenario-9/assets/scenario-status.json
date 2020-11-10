@@ -91,7 +91,7 @@
 						{
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-							"targetstring": "ProxyErrorOverride.*60",
+							"targetstring": "ProxyErrorOverride.*On",
                                                         "failmsg": "ProxyErrorOverride directive can not be found in Apache config. Please add it.",
                                                         "successmsg": "ProxyErrorOverride directive found in Apache config."
                                                 }
@@ -124,9 +124,9 @@
 						{
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/logs/access.log",
-							"targetstring": "RewriteOptions.*InheritDownBefore",
-                                                        "failmsg": "GET \/ HTTP\/1.1\" 302",
-                                                        "successmsg": "RewriteOptions directive found in Apache config."
+							"targetstring": "GET.*HTTP.* 302",
+                                                        "failmsg": "Redirect status code not found in access.log. Either your configuration is not working, or you did not try it out.",
+                                                        "successmsg": "Rewrite status code found in access.log."
                                                 }
 					]
 				},

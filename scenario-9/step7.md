@@ -2,7 +2,7 @@ Let's use ModRewrite to configure a reverse proxy. We do this as follows:
 
 ```
 
-<VirtualHost 127.0.0.1:443>
+<VirtualHost *:443>
 
     ...
 
