@@ -1,3 +1,9 @@
+_There is an issue with the way Katacoda configures the bash shell. Please execute the following command to launch a new shell that is properly configured._
+
+```
+bash
+```{{execute}}
+
 The _common_ log format is a very simple format that is hardly ever used any more. It has the advantage of being space-saving and hardly ever writing unnecessary information.
 
 ```
