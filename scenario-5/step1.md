@@ -1,7 +1,7 @@
 _There is an issue with the way Katacoda configures the bash shell. Please execute the following command to launch a new shell that is properly configured._
 
 ```
-while [ 1 ]; do grep -q "Env downloaded" /tmp/tmp.log && exit; sleep 1; done
+while [ 1 ]; do grep -q "Env downloaded" /tmp/tmp.log 2>/dev/null && exit; sleep 1; done
 ```{{execute}}
 
 The _common_ log format is a very simple format that is hardly ever used any more. It has the advantage of being space-saving and hardly ever writing unnecessary information.
