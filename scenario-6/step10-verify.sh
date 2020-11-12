@@ -1,1 +1,1 @@
-/usr/local/bin/scenario-status --minstep 9 --step 9 --automatic
+/usr/local/bin/scenario-status --minstep 10 --step 10 --automatic

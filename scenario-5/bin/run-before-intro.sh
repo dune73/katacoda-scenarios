@@ -10,6 +10,17 @@ chmod +x /usr/local/bin/scenario-status
 # create bin folder for custom scripts
 mkdir /root/bin
 
+# Move aliases and scripts from where the asset mechanism in index.json placed them
+mv /usr/local/etc/.apache-modsec.alias /root
+mv /usr/local/etc/basicstats.awk /root/bin
+mv /usr/local/etc/modsec-positive-stats.rb /root/bin
+mv /usr/local/etc/modsec-rulereport.rb /root/bin
+mv /usr/local/etc/percent.awk /root/bin
+cat /usr/local/etc/.bashrc_snippet >> /root/.bashrc
+cat /usr/local/etc/.bashrc_snippet
+
+echo "Aliases and custom scripts ready" >> /tmp/tmp.log
+
 # Get env as prepared in scenario 1
 cd /
 wget https://netnea.com/files/apache-compiled-2.4.46.tar.bz2
