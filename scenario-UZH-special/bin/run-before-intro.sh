@@ -36,6 +36,7 @@ chown root:root /apache
 cd /apache/modules
 wget https://netnea.com/files/mod_security2.so
 mkdir /apache/logs/audit
+chown www-data:www-data /apache/logs/audit
 
 echo "Apache downloaded and installed" >> /tmp/tmp.log
 
