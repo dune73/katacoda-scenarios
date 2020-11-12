@@ -1,12 +1,1 @@
-ModSecurity is set up and configured using the configuration above. It can diligently log performance data, but only the rudimentary basis is present on the security side. In a subsequent tutorial we will be embedding the _OWASP ModSecurity Core Rule Set_, a comprehensive collection of rules. But it’s important for us to first learn how to write rules ourselves. Some rules have already been explained in the base configuration. It's just another small step from here.
-
-Let’s take a simple case: We want to be sure that access to a specific URI on the server is blocked. We want to respond to such a request with _HTTP status 403_. We write the rule for this in the _ModSecurity rule_ section in the configuration and assign it ID 10000 (_service-specific before core-rules_).
-
-```
-SecRule  REQUEST_FILENAME "/phpmyadmin" "id:10000,phase:1,deny,log,t:lowercase,t:normalisePath,\
-  msg:'Blocking access to %{MATCHED_VAR}.',tag:'Blacklist Rules'"
-```
-
-We start off the rule using _SecRule_. Then we say that we want to inspect the path of the request using the *REQUEST_FILENAME* variable. If _/phpmyadmin_ appears anywhere in this path we want to block it right away in the first processing phase. The keyword _deny_ does this for us. Our path criterion is maintained in lowercase letters. Because we are using the _t:lowercase_ transformation, we catch all possible lower and uppercase combinations in the path. The path could now of course also point to a subdirectory or be obfuscated in other ways. We remedy this by enabling the _t:normalisePath_ transformation. The path is thus transformed before our rule is applied. We enter a message in the _msg part_, which will then show up in the server’s _error log_ if the rule is triggered. Finally, we assign a tag. We already did this using _SecDefaultAction_ in the base configuration. There is now another tag here that can be used to group different rules.
-
-We call this type of rules _blacklist rules_, because it describes what we want to block. In principle, we let everything pass, except for requests that violate the configured rules. The opposite approach of describing the requests we want and by doing so block all unknown requests is what we call _whitelist rules_. _Blacklist rules_ are easier to write, but often remain incomplete. _Whitelist rules_ are more comprehensive and when written correctly can be used to completely seal off a server. But they are difficult to write and in practice often lead to problems if they are not fully formulated. A _whitelist example_ follows below.
+This step can be skipped.
