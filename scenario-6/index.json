@@ -1,6 +1,6 @@
 {
   "title": "Scenario / Tutorial 6 - Embedding ModSecurity",
-  "description": "We are defining a greatly extended log format in order to better monitor traffic.",
+  "description": "We are compiling the ModSecurity module, embedding it in the Apache web server, creating a base configuration and dealing with false positives for the first time.",
   "difficulty": "Intermediate",
   "time": "1 hour",
   "details": {
