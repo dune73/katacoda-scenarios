@@ -5,7 +5,7 @@ Excluding a rule completely takes very little effort, but it is, of course, pote
 Especially at higher paranoia levels, there are rules that just fail to work with some applications and trigger false alarms in all sorts of situations. So there is a use for disabling a rule completely. One notable example is rule ID `920300`: *Request Missing an Accept Header*. There are just so many user agents that submit requests without an accept header, there is a rule dedicated to the problem. Let's raise the paranoia level to 2 by setting the `tx.paranoia_level` variable to 2 in rule ID 900,000.  Then we will send a request without an `Accept` header to trigger an alert as follows (I recommend returning the paranoia level to 1 again afterwards):
 
 ```
-curl -v -H "Accept;" http://localhost/index.html
+curl -v -H "Accept:" http://localhost/index.html
 ```{{execute}}
 
 ```

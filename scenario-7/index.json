@@ -22,8 +22,6 @@
       {
         "title": "Step 3: A closer look at the rules folder",
         "text": "step3.md",
-        "answer": "step3-answer.md",
-        "verify": "step3-verify.sh",
         "code": "step3-set-counter.sh"
       },
       {
@@ -36,15 +34,11 @@
       {
         "title": "Step 5: Analyzing the alert messages",
         "text": "step5.md",
-        "answer": "step5-answer.md",
-        "verify": "step5-verify.sh",
         "code": "step5-set-counter.sh"
       },
       {
         "title": "Step 6: Evaluating false alarms",
         "text": "step6.md",
-        "answer": "step6-answer.md",
-        "verify": "step6-verify.sh",
         "code": "step6-set-counter.sh"
       },
       {
