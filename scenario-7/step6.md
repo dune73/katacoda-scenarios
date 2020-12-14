@@ -77,5 +77,5 @@ There are probably some *false positives*. In practice, we have to make certain 
 
 Before we move to the next step, here is a quiz question for you:
 
->>Quiz: What was the IP address of the requests with an anomaly score of "2"<<
+>>Quiz: What was the IP address of the requests with an incoming anomaly score of "2"<<
 === 192.168.3.0

@@ -58,15 +58,11 @@
       {
         "title": "Step 9: Readjusting the anomaly threshold",
         "text": "step9.md",
-        "answer": "step9-answer.md",
-        "verify": "step9-verify.sh",
         "code": "step9-set-counter.sh"
       },
       {
         "title": "Step 10 (Goodie): Summary of the ways of combating false positives",
         "text": "step10.md",
-        "answer": "step10-answer.md",
-        "verify": "step10-verify.sh",
         "code": "step10-set-counter.sh"
       }
     ],
