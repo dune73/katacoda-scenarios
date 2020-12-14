@@ -35,10 +35,24 @@
 				{
 					"step": "step-4",
 					"items" : [
-						{
+                                                {
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "LogFormat.*BALANCER_WORKER_ROUTE.*ModSecAnomalyScoreOut",
+                                                        "targetstring": "LogFormat.*GEOIP_COUNTRY_CODE",
+                                                        "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "Extended log format defined correctly."
+                                                },
+                                                {
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "BALANCER_WORKER_ROUTE.*SSL_CIPHER",
+                                                        "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "Extended log format defined correctly."
+                                                },
+                                                {
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "ModSecAnomalyScoreIn.*extended",
                                                         "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please perform this step in order to advance.",
                                                         "successmsg": "Extended log format defined correctly."
                                                 },
@@ -46,7 +60,7 @@
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
                                                         "targetstring": "CustomLog.*logs\/access.log extended",
-                                                        "failmsg": "The extended log format is not configured correctly in the httpd.conf. Please perform this step in order to advance.",
+                                                        "failmsg": "The extended log format is not enabled correctly in the httpd.conf. Please perform this step in order to advance.",
                                                         "successmsg": "Extended log format configured correctly."
                                                 }
 					]
@@ -95,49 +109,11 @@
 				{
 					"step": "step-9",
 					"items" : [
-                                                {
-                                                        "operator": "file-exists",
-                                                        "target": "/root/.apache-modsec.alias",
-                                                        "failmsg": "The custom alias file is not present under $HOME/.apache-modsec.alias. Please install it.",
-                                                        "successmsg": "Custom alias file installed correctly."
-                                                },
-                                                {
-                                                        "operator": "folder-exists",
-                                                        "target": "/root/bin",
-                                                        "failmsg": "Folder $TARGET not found. This is fatal. Please fix.",
-                                                        "successmsg": "Folder $TARGET found."
-                                                },
-                                                {
-                                                        "operator": "file-contains-regexp",
-                                                        "target": "/root/.bashrc",
-                                                        "targetstring": "test.*HOME\/.apache-modsec.alias",
-                                                        "failmsg": "The custom alias file has not been enabled in .bashrc by adding the directive described in this step. Please add this to your $HOME/.bashrc.",
-                                                        "successmsg": "Custom alias file enabled correctly."
-                                                },
-                                                {
-                                                        "operator": "file-contains",
-                                                        "target": "/root/.bashrc",
-                                                        "targetstring": "HOME/bin",
-                                                        "failmsg": "$HOME/bin has not been added to the $PATH env variable. Please add it to $HOME/.bashrc as described.",
-                                                        "successmsg": "$HOME/bin added to the $PATH env variable just fine."
-                                                }
 					]
 				},
 				{
 					"step": "step-10",
 					"items" : [
-                                                {
-                                                        "operator": "file-exists",
-                                                        "target": "/root/bin/percent.awk",
-                                                        "failmsg": "The script percent.awk is missing from your bin folder. Please install it.",
-                                                        "successmsg": "Script percent.awk installed correctly."
-                                                },
-                                                {
-                                                        "operator": "file-exists",
-                                                        "target": "/root/bin/basicstats.awk",
-                                                        "failmsg": "The script basicstats.awk is missing from your bin folder. Please install it.",
-                                                        "successmsg": "Script basicstats.awk installed correctly."
-                                                }
 					]
 				}
 			]
