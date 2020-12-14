@@ -239,7 +239,7 @@
 						{
 							"operator": "file-contains",
 							"target": "/apache/logs/access_log",
-							"targetstring": "GET /index.html HTTP/1.1",
+							"targetstring": "GET /",
 							"failmsg": "Apache webserver access failed. This is fatal. Please make sure this works.",
 							"successmsg": "Apache webserver accesses successfully."
 						}

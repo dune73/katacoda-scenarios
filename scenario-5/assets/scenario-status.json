@@ -20,14 +20,14 @@
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
                                                         "targetstring": "LoadModule.*logio_module.*mod_logio.so",
-                                                        "failmsg": "The LogIO module has not been enabled in the httpd.conf. Please get this done in order to advance.",
+                                                        "failmsg": "The LogIO module has not been enabled in the httpd.conf. Please perform this step in order to advance.",
                                                         "successmsg": "LogIO module correctly loaded."
                                                 },
 						{
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
                                                         "targetstring": "LoadModule.*unique_id_module.*mod_unique_id.so",
-                                                        "failmsg": "The UniqueID module has not been enabled in the httpd.conf. Please get this done in order to advance.",
+                                                        "failmsg": "The UniqueID module has not been enabled in the httpd.conf. Please perform this step in order to advance.",
                                                         "successmsg": "UniqueID module correctly loaded."
                                                 }
 					]
@@ -39,14 +39,14 @@
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
                                                         "targetstring": "LogFormat.*BALANCER_WORKER_ROUTE.*ModSecAnomalyScoreOut",
-                                                        "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please get this done in order to advance.",
+                                                        "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please perform this step in order to advance.",
                                                         "successmsg": "Extended log format defined correctly."
                                                 },
 						{
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
                                                         "targetstring": "CustomLog.*logs\/access.log extended",
-                                                        "failmsg": "The extended log format is not configured correctly in the httpd.conf. Please get this done in order to advance.",
+                                                        "failmsg": "The extended log format is not configured correctly in the httpd.conf. Please perform this step in order to advance.",
                                                         "successmsg": "Extended log format configured correctly."
                                                 }
 					]
@@ -63,7 +63,7 @@
                                                         "operator": "file-contains-regexp",
                                                         "target": "/apache/conf/httpd.conf",
                                                         "targetstring": "CustomLog logs\/access-debug.log.*UNIQUE_ID",
-                                                        "failmsg": "The custom log format is not configured correctly in the httpd.conf. Please get this done in order to advance.",
+                                                        "failmsg": "The custom log format is not configured correctly in the httpd.conf. Please perform this step in order to advance.",
                                                         "successmsg": "Custom log format configured correctly."
                                                 }
 					]

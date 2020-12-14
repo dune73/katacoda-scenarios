@@ -48,6 +48,7 @@ This example gives us entries using the following pattern:
 ```
 
 So much for _%t_.
+
 This brings us to _%r_ and the request line. This is the first line of the HTTP request as it was sent from the client to the server. Strictly speaking, the request line does not belong in the group of request headers, but it is normally subsumed along with them. In any case, in the request line the client transmits the identification of the resource it is demanding.
 
 Specifically, the line follows this pattern:
