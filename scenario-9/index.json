@@ -8,8 +8,6 @@
       {
         "title": "Step 1: Preparing the backend", 
         "text": "step1.md",
-        "answer": "step1-answer.md",
-        "verify": "step1-verify.sh",
         "code": "step1-set-counter.sh"
       },
       {
@@ -29,8 +27,6 @@
       {
         "title": "Step 4: Proxy stanza",
         "text": "step4.md",
-        "answer": "step4-answer.md",
-        "verify": "step4-verify.sh",
         "code": "step4-set-counter.sh"
       },
       {
