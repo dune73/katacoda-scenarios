@@ -37,8 +37,6 @@
       {
         "title": "Step 6: Writing other request and response headers to an additional log file",
         "text": "step6.md",
-        "answer": "step6-answer.md",
-        "verify": "step6-verify.sh",
         "code": "step6-set-counter.sh"
       },
       {
@@ -56,15 +54,11 @@
       {
         "title": "Step 9: Greater in-depth analysis of an example log file",
         "text": "step9.md",
-        "answer": "step9-answer.md",
-        "verify": "step9-verify.sh",
         "code": "step9-set-counter.sh"
       },
       {
         "title": "Step 10: Analyses using percentages and simple statistics",
         "text": "step10.md",
-        "answer": "step10-answer.md",
-        "verify": "step10-verify.sh",
         "code": "step10-set-counter.sh"
       }
     ],

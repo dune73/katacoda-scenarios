@@ -73,13 +73,6 @@
 				{
 					"step": "step-6",
 					"items" : [
-						{
-                                                        "operator": "file-contains-regexp",
-                                                        "target": "/apache/conf/httpd.conf",
-                                                        "targetstring": "CustomLog logs\/access-debug.log.*UNIQUE_ID",
-                                                        "failmsg": "The custom log format is not configured correctly in the httpd.conf. Please perform this step in order to advance.",
-                                                        "successmsg": "Custom log format configured correctly."
-                                                }
 					]
 				},
 				{

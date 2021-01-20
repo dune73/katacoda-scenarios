@@ -196,7 +196,7 @@
                                                         "operator": "file-contains",
                                                         "target": "/apache/conf/httpd.conf",
                                                         "targetstring": "SecRule.*id:12000",
-							"failmsg": "The ModSecurity rule 12000 configured properly. This is fatal. Please fix it.",
+							"failmsg": "The ModSecurity rule 12000 not configured properly. This is fatal. Please fix it.",
 							"successmsg": "ModSecurity rule 12000 loaded properly in the Apache configuration. Looks like everything is OK."
                                                 }
 					]

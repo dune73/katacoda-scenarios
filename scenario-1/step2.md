@@ -13,6 +13,7 @@ Get the checksum file:
 And now run the check:
 
 `sha256sum --check apr-1.7.0.tar.bz2.sha256`{{execute}}
+
 `apr-1.7.0.tar.bz2: OK`
 
 The test should not result in any problems, OK. We can now continue with unpacking, pre-configuring and compiling `apr`.
