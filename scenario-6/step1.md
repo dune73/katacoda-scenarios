@@ -1,3 +1,9 @@
+_There is an issue with the way Katacoda configures the bash shell. Please execute the following command to launch a new shell that is properly configured._
+
+```
+while [ 1 ]; do grep -q "Env downloaded" /tmp/tmp.log 2>/dev/null && break; sleep 1; done; echo "Environment ready"; bash
+```{{execute}}
+
 We previously downloaded the source code for the web server to <i>/usr/src/apache</i>. We will now be doing the same with ModSecurity. To do so, we create the directory <i>/usr/src/modsecurity/</i> as root, we transfer it to ourselves and then download the code into the folder. 
 
 ```
