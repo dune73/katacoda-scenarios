@@ -3,7 +3,7 @@ ModSecurity is set up and configured using the configuration above. It can dilig
 Let’s take a simple case: We want to be sure that access to a specific URI on the server is blocked. We want to respond to such a request with _HTTP status 403_. We write the rule for this in the _ModSecurity rule_ section in the configuration and assign it ID 10000 (_service-specific before core-rules_).
 
 ```
-SecRule  REQUEST_FILENAME "/phpmyadmin" "id:10000,phase:1,deny,log,t:lowercase,t:normalisePath,\
+SecRule  REQUEST_FILENAME "/phpmyadmin" "id:10000,phase:1,deny,log,t:lowercase,t:normalisePathWin,\
   msg:'Blocking access to %{MATCHED_VAR}.',tag:'Blacklist Rules'"
 ```
 
