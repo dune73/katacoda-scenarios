@@ -59,8 +59,8 @@ SecRuleUpdateTargetById 942450 "!REQUEST_COOKIES_NAMES"
 SecRuleRemoveById 920273
 SecRuleRemoveById 942432
 
-# ModSec Rule Exclusion: 930000 - 943999 : All application rules for password parameters
-SecRuleUpdateTargetById 930000-943999 "!ARGS:account[pass][pass1]"
-SecRuleUpdateTargetById 930000-943999 "!ARGS:account[pass][pass2]"
-SecRuleUpdateTargetById 930000-943999 "!ARGS:pass"
+# ModSec Rule Exclusion: 930000 - 944999 : All application rules for password parameters
+SecRuleUpdateTargetById 930000-944999 "!ARGS:account[pass][pass1]"
+SecRuleUpdateTargetById 930000-944999 "!ARGS:account[pass][pass2]"
+SecRuleUpdateTargetById 930000-944999 "!ARGS:pass"
 ```
