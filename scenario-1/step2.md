@@ -49,12 +49,13 @@ And once we are at it, let's install everything else we are going to need throug
     nikto
     ruby
     ssl-cert
+    uuid
     zlibc
     zlib1g-dev
 
 Here is how to install all this stuff with a single command:
 
-`sudo apt-get --assume-yes install build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby gawk libxml2-dev libexpat1-dev libyajl-dev`{{execute}}
+`sudo apt-get --assume-yes install build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby uuid gawk libxml2-dev libexpat1-dev libyajl-dev`{{execute}}
 
 
 These are the package names on Debian-based distributions. The packages may have different names elsewhere. The absence of these files can be easily rectified by re-installing them using the utilities from your own distribution. Afterwards, run configure again, perhaps re-install something again and eventually the script will run successfully (individual warnings during the configure steps are no big problem. We just need to be sure the script did not die unexpectedly).
