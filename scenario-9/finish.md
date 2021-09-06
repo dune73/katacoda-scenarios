@@ -1,10 +1,6 @@
 ## Finished
 
-Congratulations. You have completed this tutorial. And thank you for FIXME
+Congratulations! You have completed this tutorial successfully.
 
-FIXME: References
-
-FIXME: Tell the world about this
-
-FIXME: Give me some feedback (interactive survey)
+Please find more information (and more tutorials) over at [netnea.com](https://netnea.com/cms/apache-tutorials).
 
