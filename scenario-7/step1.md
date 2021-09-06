@@ -1,7 +1,8 @@
 _There is an issue with the way Katacoda configures the bash shell. Please execute the following command to launch a new shell that is properly configured._
 
+
 ```
-bash
+while [ 1 ]; do grep -q "Env downloaded" /tmp/tmp.log 2>/dev/null && break; sleep 1; done; echo "Environment ready"; bash
 ```{{execute}}
 
 Now we are ready.

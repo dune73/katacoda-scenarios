@@ -60,6 +60,6 @@ Percentage of the requests served within a certain time (ms)
   98%      1
   99%      1
  100%      3 (longest request)
-```{{execute}}
+```
 
 What’s of primary interest to us is the number of errors (Failed requests) and the number of requests per second (Requests per second). A value above one thousand is a good start. Especially considering that we are still working with a single process and not a parallelized daemon (which is also why the concurrency level is set to 1).
