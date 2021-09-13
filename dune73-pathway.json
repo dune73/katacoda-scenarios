@@ -1,12 +1,12 @@
 {
   "title": "ModSecurity / CRS Course",
-  "description": "See https://www.netnea.com/cms/apache-tutorials",
+  "description": "Also see https://www.netnea.com/cms/apache-tutorials",
   "courses": [
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-1",
-      "course_id": "dune73",
-      "title": "Scenario 1",
+      "course_id": "XXX1",
+      "title": "Scenario XXX1-2",
       "description": "..."
     },
     {
