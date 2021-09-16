@@ -1,4 +1,4 @@
-We have a new pair of logs: 
+Here is the pair of logs I got after running the traffic generator once more:
 
 * [tutorial-8-example-access-round-4.log](https://www.netnea.com/files/tutorial-8-example-access-round-4.log)
 * [tutorial-8-example-error-round-4.log](https://www.netnea.com/files/tutorial-8-example-error-round-4.log)
@@ -8,75 +8,94 @@ These are the statistics:
 ```
 cat tutorial-8-example-access-round-4.log | alscores | modsec-positive-stats.rb --incoming
 ```{{execute}}
-
 ```
 INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
 Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
 
 Empty or miss. incoming score   |      0 |   0.0000% |   0.0000% | 100.0000%
-Reqs with incoming score of   0 |   9561 |  95.6100% |  95.6100% |   4.3900%
-Reqs with incoming score of   1 |      0 |   0.0000% |  95.6100% |   4.3900%
-Reqs with incoming score of   2 |      0 |   0.0000% |  95.6100% |   4.3900%
-Reqs with incoming score of   3 |      0 |   0.0000% |  95.6100% |   4.3900%
-Reqs with incoming score of   4 |      0 |   0.0000% |  95.6100% |   4.3900%
-Reqs with incoming score of   5 |    439 |   4.3900% | 100.0000% |   0.0000%
+Reqs with incoming score of   0 |   9571 |  95.7099% |  95.7099% |   4.2901%
+Reqs with incoming score of   1 |      0 |   0.0000% |  95.7099% |   4.2901%
+Reqs with incoming score of   2 |      0 |   0.0000% |  95.7099% |   4.2901%
+Reqs with incoming score of   3 |    388 |   3.8800% |  99.5899% |   0.4101%
+Reqs with incoming score of   4 |      0 |   0.0000% |  99.5899% |   0.4101%
+Reqs with incoming score of   5 |     41 |   0.4100% |  99.9999% |   0.0001%
 
-Incoming average:   0.2195    Median   0.0000    Standard deviation   1.0244
+Incoming average:   0.1369    Median   0.0000    Standard deviation   0.6580
 ```
 
-It seems that we are almost done. What rules are behind these remaining alerts?
+It seems that we are almost done. What rules are behind these remaining alerts at anomaly score 3 and 5?
 
 
 ```
-cat tutorial-8-example-access-round-4.log | egrep " 5 [0-9-]+$"  | alreqid > ids
+cat tutorial-8-example-error-round-4.log  | melidmsg | sucs
 ```{{execute}}
 
 ```
-grep -F -f ids tutorial-8-example-error-round-4.log  | melidmsg | sucs
-```{{execute}}
-
-```
-     30 921180 HTTP Parameter Pollution (ARGS_NAMES:op)
      41 932160 Remote Command Execution: Unix Shell Code Found
-    368 921180 HTTP Parameter Pollution (ARGS_NAMES:fields[])
+    388 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
 ```
 
-So our friend 921180 is back again for two parameters and another shell execution. Probably another occurrence of the password parameter. Let's check this:
+Look, the Remote Command Execution is back. What's the matter exactly?
 
 ```
-grep -F -f ids tutorial-8-example-error-round-4.log  | grep 921180 | modsec-rulereport.rb -m combined
+$> cat ~/data/git/laboratory/tutorial-8/tutorial-8-example-error-round-4.log | grep 932160 | meluri | sucs
 ```{{execute}}
 
 ```
-398 x 921180 HTTP Parameter Pollution (ARGS_NAMES:op)
------------------------------------------------------
-      # ModSec Rule Exclusion: 921180 : HTTP Parameter Pollution (ARGS_NAMES:op)
-      SecRule REQUEST_URI "@beginsWith /drupal/index.php/quickedit/metadata" \
-              "phase:2,nolog,pass,id:10000,\
-              ctl:ruleRemoveTargetById=921180;TX:paramcounter_ARGS_NAMES:fields[]"
-      SecRule REQUEST_URI "@beginsWith /drupal/core/install.php" \
-              "phase:2,nolog,pass,id:10001,ctl:ruleRemoveTargetById=921180;TX:paramcounter_ARGS_NAMES:op"
+     41 /drupal/index.php/user/login
 ```
 
-It's simple enough to add this in the usual place with new rule IDs. And then the final alert:
-
-
 ```
-grep -F -f ids tutorial-8-example-error-round-4.log  | grep 932160 | modsec-rulereport.rb -m combined
+$> cat ~/data/git/laboratory/tutorial-8/tutorial-8-example-error-round-4.log | grep 932160 | melmatch | sucs
 ```{{execute}}
 
 ```
-41 x 932160 Remote Command Execution: Unix Shell Code Found
------------------------------------------------------------
-      # ModSec Rule Exclusion: 932160 : Remote Command Execution: Unix Shell Code Found
-      SecRule REQUEST_URI "@beginsWith /drupal/index.php/user/login" \
-              "phase:2,nolog,pass,id:10000,ctl:ruleRemoveTargetById=932160;ARGS:pass"
+     41 ARGS:pass
 ```
 
-So yes, it is the password field again. I think it is best to execute the same process we performed with the other occurrences of the password. That was probably the registration, while this time it is the login form.
+Ah yes, that makes sense. The previous alerts were the instances where the password had been set, and here, the password is used for the login. We'll simply a
+dd this to the previous password rule exclusion:
 
 ```
+# ModSec Rule Exclusion: 930000 - 944999 : All application rules for password parameters
+SecRuleUpdateTargetById 930000-944999 "!ARGS:account[pass][pass1]"
+SecRuleUpdateTargetById 930000-944999 "!ARGS:account[pass][pass2]"
 SecRuleUpdateTargetById 930000-944999 "!ARGS:pass"
 ```
 
-And with this, we are done. We have successfully fought all the false positives of a content management system with peculiar parameter formats and a ModSecurity rule set pushed to insanely paranoid levels. 
+And then we're facing 942431 Restricted SQL Character Anomaly Detection again. We have done a rule exclusion for this rule on parameter `ids[]` on path `/drup
+al/index.php/contextual/render`. We could kick the rule completely, but given this is the remaining alert, we can also approach this with a bit more patience:
+
+```
+cat tutorial-8-example-error-round-4.log | grep 942431 | meluri  | sucs
+```{{execute}}
+
+```
+    388 /drupal/index.php/quickedit/attachments
+```
+
+```
+cat tutorial-8-example-error-round-4.log | grep 942431 | melmatch  | sucs
+```{{execute}}
+
+```
+    388 ARGS:ajax_page_state[libraries]
+```
+
+So it's a single parameter again. Let's call the helper script one last time and tell it to use 10002 as the new rule ID.
+
+```
+cat tutorial-8-example-error-round-4.log | grep 942431 | \
+        modsec-rulereport.rb --runtime --target --byid --baseruleid 10002
+```{{execute}}
+
+```
+# ModSec Rule Exclusion: 942431 : Restricted SQL Character Anomaly Detection (args): # of special …
+SecRule REQUEST_URI "@beginsWith /drupal/index.php/quickedit/attachments" 
+        "phase:1,nolog,pass,id:10002,ctl:ruleRemoveTargetById=942431;ARGS:ajax_page_state[libraries]"
+```
+
+And with this, we are done. We have successfully fought all the false positives of a content management system with peculiar parameter formats and a ModSecurity rule set pushed to insanely paranoid levels.
+
+I suggest you run the traffic generator again and check the output. I did and I ended up with zero alerts. This confirms that our tuning was effective and we were able to bring down the number of alerts to zero with just four relatively simple iterations.
+

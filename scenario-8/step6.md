@@ -1,8 +1,7 @@
-Here are the new exercise files. It's still the same traffic, but with fewer alerts again thanks to the rule exclusions.
+I've executed the traffic generator after applying the 2nd batch of rule exclusions. If you want to skip that step, here are the log files I ended up with:
 
 * [tutorial-8-example-access-round-3.log](https://www.netnea.com/files/tutorial-8-example-access-round-3.log)
 * [tutorial-8-example-error-round-3.log](https://www.netnea.com/files/tutorial-8-example-error-round-3.log)
-
 
 This brings us to the following statistics (this time only printing numbers for the incoming requests):
 
@@ -15,60 +14,48 @@ INCOMING                     Num of req. | % of req. |  Sum of % | Missing %
 Number of incoming req. (total) |  10000 | 100.0000% | 100.0000% |   0.0000%
 
 Empty or miss. incoming score   |      0 |   0.0000% |   0.0000% | 100.0000%
-Reqs with incoming score of   0 |   9192 |  91.9200% |  91.9200% |   8.0800%
-Reqs with incoming score of   1 |      0 |   0.0000% |  91.9200% |   8.0800%
-Reqs with incoming score of   2 |      0 |   0.0000% |  91.9200% |   8.0800%
-Reqs with incoming score of   3 |      0 |   0.0000% |  91.9200% |   8.0800%
-Reqs with incoming score of   4 |      0 |   0.0000% |  91.9200% |   8.0800%
-Reqs with incoming score of   5 |    439 |   4.3900% |  96.3100% |   3.6900%
-Reqs with incoming score of   6 |      0 |   0.0000% |  96.3100% |   3.6900%
-Reqs with incoming score of   7 |      0 |   0.0000% |  96.3100% |   3.6900%
-Reqs with incoming score of   8 |    368 |   3.6800% |  99.9900% |   0.0100%
-Reqs with incoming score of   9 |      0 |   0.0000% |  99.9900% |   0.0100%
-Reqs with incoming score of  10 |      1 |   0.0100% | 100.0000% |   0.0000%
+Reqs with incoming score of   0 |   9535 |  95.3500% |  95.3500% |   4.6500%
+Reqs with incoming score of   1 |      0 |   0.0000% |  95.3500% |   4.6500%
+Reqs with incoming score of   2 |      0 |   0.0000% |  95.3500% |   4.6500%
+Reqs with incoming score of   3 |    388 |   3.8800% |  99.2299% |   0.7701%
+Reqs with incoming score of   4 |      0 |   0.0000% |  99.2299% |   0.7701%
+Reqs with incoming score of   5 |     41 |   0.4100% |  99.6399% |   0.3601%
+Reqs with incoming score of   6 |      0 |   0.0000% |  99.6399% |   0.3601%
+Reqs with incoming score of   7 |      0 |   0.0000% |  99.6399% |   0.3601%
+Reqs with incoming score of   8 |      0 |   0.0000% |  99.6399% |   0.3601%
+Reqs with incoming score of   9 |      0 |   0.0000% |  99.6399% |   0.3601%
+Reqs with incoming score of  10 |     36 |   0.3600% |  99.9999% |   0.0001%
 
-Incoming average:   0.5149    Median   0.0000    Standard deviation   1.7882
+Incoming average:   0.1729    Median   0.0000    Standard deviation   0.8842
 ```
 
-So again, a great deal of the false positives disappeared because of a bunch of exclusions for a score of 60. For this tuning round, we'll tackle the lone request at 10 and the cluster at 8, allowing us to reduce the anomaly threshold to 10 afterwards, which is already quite low.
-
-
-```
-egrep " (10|8) [0-9-]+$" tutorial-8-example-access-round-3.log | alreqid > ids
-```{{execute}}
+So again, a great deal of the false positives disappeared because of a bunch of exclusions for a score of 60. The original plan was to go from limit 50 to limit 20 first. But the stats are much better now. If we handle the 36 request standing in our way we can go to 10 immediately.
 
 ```
+egrep " 10 [0-9-]+$" tutorial-8-example-access-round-3.log | alreqid > ids
 grep -F -f ids tutorial-8-example-error-round-3.log | melidmsg | sucs
 ```{{execute}}
-
 ```
-      2 932160 Remote Command Execution: Unix Shell Code Found
-    368 921180 HTTP Parameter Pollution (ARGS_NAMES:editors[])
-    368 942431 Restricted SQL Character Anomaly Detection (args): # of special characters …
+     72 932160 Remote Command Execution: Unix Shell Code Found
 ```
 
-The first alert is funny: "Remote command execution." What's this?
-
+Wow, that's really simple. A single rule triggering twice for every request. But what does "Remote Command Execution" mean in this context?
 
 ```
-grep -F -f ids tutorial-8-example-error-round-3.log | grep 932160 | melmatch
+grep -F -f ids tutorial-8-example-error-round-3.log | melmatch | sucs
 ```{{execute}}
-
 ```
 ARGS:account[pass][pass1]
 ARGS:account[pass][pass2]
-```
 
 ```
-grep -F -f ids tutorial-8-example-error-round-3.log | grep 932160 | meldata
+$> grep -F -f ids tutorial-8-example-error-round-3.log | grep 932160 | meldata | sucs
 ```{{execute}}
-
 ```
-Matched Data: /bin/bash found within ARGS:account[pass
-Matched Data: /bin/bash found within ARGS:account[pass
+     72 Matched Data: /bin/bash found within ARGS:account[pass
 ```
 
-OK, so there seems to be a password `/bin/bash`. That is probably not the smartest choice, but nothing that should harm us. We can easily suppress this rule for this parameter. Or looking forward a bit, we can expect other funny passwords to trigger all sorts of rules on the password field. And, in fact, the password field is not a typical target of an attack. So this might be a situation where it makes sense to disable a whole class of rules. We have multiple options. We can disable by tag, or we can disable by rule ID range. Let's look over the various rules files:
+This looks like there is a password `/bin/bash` here. That is probably not the smartest choice, but nothing that should really harm us, since passwords are rarely executed like a shell script. In fact a decent piece of software like Drupal will hash the payload before it is used to check the identity of a user. So we can easily suppress this rule for the password parameter. Or looking forward a bit, we can expect other funny passwords to trigger all sorts of rules on the password field. In fact, this is another situation where it makes sense to disable a whole class of rules. We have multiple options. We can disable by tag as we've done before, or we can disable by rule ID range. Let's look over the various rules files for a moment:
 
 ```
 REQUEST-901-INITIALIZATION.conf
@@ -103,8 +90,7 @@ RESPONSE-954-DATA-LEAKAGES-IIS.conf
 RESPONSE-959-BLOCKING-EVALUATION.conf
 RESPONSE-980-CORRELATION.conf
 ```
-
-We do not want to ignore the protocol attacks, but all the application stuff should be off limits. So let's kick the rules from `REQUEST-930-APPLICATION-ATTACK-LFI.conf` to `REQUEST-944-APPLICATION-ATTACK-JAVA.conf`. This is effectively the rule range from 930,000 to 944,999. We can exclude the two parameters for all these rules with the following startup time directives:
+We do not want to ignore the protocol attacks, but all the application stuff should be off limits. So let's kick the rules from `REQUEST-930-APPLICATION-ATTACK-LFI.conf` to `REQUEST-944-APPLICATION-ATTACK-JAVA.confa for the parameters in question`. This is effectively the rule range from 930,000 to 944,999. The script can't do rule ranges, but we can easily complement this ourselves:
 
 ```
 # ModSec Rule Exclusion: 930000 - 944999 : All application rules for password parameters
@@ -112,35 +98,5 @@ SecRuleUpdateTargetById 930000-944999 "!ARGS:account[pass][pass1]"
 SecRuleUpdateTargetById 930000-944999 "!ARGS:account[pass][pass2]"
 ```
 
-We are left with another instance of 921180, plus the 942431 which we have seen before too. Here is what the script proposes:
+Time to reduce the limit once more (down to 10!) and see what happens.
 
-```
-grep -F -f ids tutorial-8-example-error-round-3.log | grep "921180\|942431" | \
-modsec-rulereport.rb -m combined 
-```{{execute}}
-
-```
-448 x 921180 HTTP Parameter Pollution (ARGS_NAMES:editors[])
-------------------------------------------------------------
-      # ModSec Rule Exclusion: 921180 : HTTP Parameter Pollution (ARGS_NAMES:editors[])
-      SecRule REQUEST_URI "@beginsWith /drupal/index.php/quickedit/attachments" \
-              "phase:2,nolog,pass,id:10000,\
-              ctl:ruleRemoveTargetById=921180;TX:paramcounter_ARGS_NAMES:editors[]"
-
-448 x 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
-----------------------------------------------------------------------------------------------------
-      # ModSec Rule Exclusion: 942431 : Restricted SQL Character Anomaly Detection (args): …
-      SecRule REQUEST_URI "@beginsWith /drupal/index.php/quickedit/attachments" \
-              "phase:2,nolog,pass,id:10001,ctl:ruleRemoveTargetById=942431;ARGS:ajax_page_state[libraries]"
-```
-
-You know the drill by now: The first one goes with the other 921180 exclusions (don't forget to pick a new rule ID) and the second is added as a new entry:
-
-
-```
-# ModSec Rule Exclusion: 942431 : Restricted SQL Character Anomaly Detection (args): …
-SecRule REQUEST_URI "@beginsWith /drupal/index.php/quickedit/attachments" \
-    "phase:2,nolog,pass,id:10005,ctl:ruleRemoveTargetById=942431;ARGS:ajax_page_state[libraries]"
-```
-
-Time to reduce the limit once more (down to 10 this time) and see what happens.

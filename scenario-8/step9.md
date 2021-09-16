@@ -13,6 +13,7 @@ grep -E " $S [0-9-]+$" tutorial-8-example-access.log \
 ```
 INCOMING SCORE 5
      30 921180 HTTP Parameter Pollution (ARGS_NAMES:op)
+   3532 942450 SQL Hex Encoding Identified
 
 INCOMING SCORE 8
       1 920273 Invalid character in request (outside of very strict set)
@@ -20,72 +21,80 @@ INCOMING SCORE 8
 
 INCOMING SCORE 10
       4 920273 Invalid character in request (outside of very strict set)
-   6384 942450 SQL Hex Encoding Identified
 
 INCOMING SCORE 20
-     56 932160 Remote Command Execution: Unix Shell Code Found
-    168 920273 Invalid character in request (outside of very strict set)
+     41 932160 Remote Command Execution: Unix Shell Code Found
+    123 920273 Invalid character in request (outside of very strict set)
+
+INCOMING SCORE 24
+     50 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
+     50 942450 SQL Hex Encoding Identified
+    100 920273 Invalid character in request (outside of very strict set)
+    100 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
 
 INCOMING SCORE 30
-     77 920273 Invalid character in request (outside of very strict set)
-     77 942190 Detects MSSQL code execution and information gathering attempts
-     77 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
-     77 942260 Detects basic SQL authentication bypass attempts 2/3
-     77 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
-     77 942410 SQL Injection Attack
+     76 920273 Invalid character in request (outside of very strict set)
+     76 942190 Detects MSSQL code execution and information gathering attempts
+     76 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
+     76 942260 Detects basic SQL authentication bypass attempts 2/3
+     76 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others
+     76 942480 SQL Injection Attack
 
 INCOMING SCORE 35
-     77 920273 Invalid character in request (outside of very strict set)
-     77 942100 SQL Injection Attack Detected via libinjection
-     77 942190 Detects MSSQL code execution and information gathering attempts
-     77 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
-     77 942260 Detects basic SQL authentication bypass attempts 2/3
-     77 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
-     77 942410 SQL Injection Attack
+     76 920273 Invalid character in request (outside of very strict set)
+     76 942100 SQL Injection Attack Detected via libinjection
+     76 942190 Detects MSSQL code execution and information gathering attempts
+     76 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
+     76 942260 Detects basic SQL authentication bypass attempts 2/3
+     76 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others
+     76 942480 SQL Injection Attack
+
+INCOMING SCORE 37
+      5 921180 HTTP Parameter Pollution (ARGS_NAMES:ids[])
+      5 942450 SQL Hex Encoding Identified
+     15 920273 Invalid character in request (outside of very strict set)
+     20 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+
+INCOMING SCORE 74
+    388 921180 HTTP Parameter Pollution (ARGS_NAMES:editors[])
+    388 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
+    388 942450 SQL Hex Encoding Identified
+   2716 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+   3104 920273 Invalid character in request (outside of very strict set)
 
 INCOMING SCORE 78
-     77 921180 HTTP Parameter Pollution (ARGS_NAMES:keys)
-     77 942100 SQL Injection Attack Detected via libinjection
-     77 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
-    154 942190 Detects MSSQL code execution and information gathering attempts
-    154 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
-    154 942260 Detects basic SQL authentication bypass attempts 2/3
-    154 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others.
-    154 942410 SQL Injection Attack
-    231 920273 Invalid character in request (outside of very strict set)
+     76 921180 HTTP Parameter Pollution (ARGS_NAMES:keys)
+     76 942100 SQL Injection Attack Detected via libinjection
+     76 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+    152 942190 Detects MSSQL code execution and information gathering attempts
+    152 942200 Detects MySQL comment-/space-obfuscated injections and backtick termination
+    152 942260 Detects basic SQL authentication bypass attempts 2/3
+    152 942270 Looking for basic sql injection. Common attack string for mysql, oracle and others
+    152 942480 SQL Injection Attack
+    228 920273 Invalid character in request (outside of very strict set)
 
 INCOMING SCORE 79
-    448 921180 HTTP Parameter Pollution (ARGS_NAMES:editors[])
-    448 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
-    896 942450 SQL Hex Encoding Identified
-   3144 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
-   3595 920273 Invalid character in request (outside of very strict set)
+      8 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+     11 920273 Invalid character in request (outside of very strict set)
 
-INCOMING SCORE 93
-      2 932160 Remote Command Execution: Unix Shell Code Found
-      6 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
-     13 920273 Invalid character in request (outside of very strict set)
-
-INCOMING SCORE 98
-    448 921180 HTTP Parameter Pollution (ARGS_NAMES:fields[])
-    896 942450 SQL Hex Encoding Identified
-   2688 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
-   5824 920273 Invalid character in request (outside of very strict set)
-
-INCOMING SCORE 189
-      1 921180 HTTP Parameter Pollution (ARGS_NAMES:ids[])
-      5 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
-      9 942130 SQL Injection Attack: SQL Tautology Detected.
-     14 920273 Invalid character in request (outside of very strict set)
-     18 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
-
-INCOMING SCORE 231
+INCOMING SCORE 171
       6 921180 HTTP Parameter Pollution (ARGS_NAMES:ids[])
-     12 942450 SQL Hex Encoding Identified
+      6 942450 SQL Hex Encoding Identified
      30 942431 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
-     66 942130 SQL Injection Attack: SQL Tautology Detected.
      96 920273 Invalid character in request (outside of very strict set)
     132 942432 Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
+```
+
+Before we finish with this tutorial, let me iterate my tuning policy again:
+
+* Always work in blocking mode
+* Highest scoring requests go first
+* Work in several iterations
+
+When you grow more proficient, you can reduce the number of iterations and tackle more false alarms in a single batch. Or you can concentrate on the rules that are triggered most often. That may work as well and in the end, when all rule exclusions are in place, you should end up with the same configuration. But in my experience, the policy with the three simple guiding rules is the one with the highest chance of success and the one with the lowest drop out rate.
+
+We have now reached the end of the block consisting of three *ModSecurity tutorials*. The next one will look into setting up a *reverse proxy*.
+
 ```
 
 A similar script that has been slightly extended is part of my private toolbox.
