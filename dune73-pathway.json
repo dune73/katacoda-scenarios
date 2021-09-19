@@ -5,49 +5,49 @@
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-1",
-      "course_id": "https://katacoda.com/dune73/scenarios/scenario-1",
+      "course_id": "modsec-course",
       "title": "Scenario XXX1-2",
       "description": "..."
     },
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-2",
-      "course_id": "dune73",
+      "course_id": "modsec-course",
       "title": "Scenario 2",
       "description": "..."
     },
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-5",
-      "course_id": "dune73",
+      "course_id": "modsec-course",
       "title": "Scenario 5",
       "description": "..."
     },
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-6",
-      "course_id": "dune73",
+      "course_id": "modsec-course",
       "title": "Scenario 6",
       "description": "..."
     },
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-7",
-      "course_id": "dune73",
+      "course_id": "modsec-course",
       "title": "Scenario 7",
       "description": "..."
     },
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-8",
-      "course_id": "dune73",
+      "course_id": "modsec-course",
       "title": "Scenario 8",
       "description": "..."
     },
     {
       "pathway_id": "dune73_pathway",
       "id": "scenarios/scenario-9",
-      "course_id": "dune73",
+      "course_id": "modsec-course",
       "title": "Scenario 9",
       "description": "..."
     }
