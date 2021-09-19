@@ -5,7 +5,7 @@
     {
       "pathway_id": "modsec-course-pathway",
       "id": "modsec-course/modsec-course-scenario-1",
-      "course_id": "modsec-course",
+      "course_id": "modsec-course-scenario-1",
       "title": "Scenario XXX1-2",
       "description": "..."
     },
