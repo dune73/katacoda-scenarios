@@ -3,6 +3,7 @@
   "description": "...",
   "courses": [
     {
+      "patchway_id": "training",
       "id": "modsec-crs-course/scenario-1",
       "course_id": "scenario-1",
       "title": "Scenario / Tutorial 1 - Compiling Apache",
