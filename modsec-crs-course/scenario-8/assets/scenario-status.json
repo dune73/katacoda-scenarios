@@ -1,0 +1,59 @@
+[
+	{
+		"scenario1": {
+			"steps": [
+				{
+					"step": "step-1",
+					"items" : [
+					]
+				},
+
+				{
+					"step": "step-2",
+					"items" : [
+					]
+				},		
+				{
+					"step": "step-3",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-4",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-5",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-6",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-7",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-8",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-9",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-10",
+					"items" : [
+					]
+				}
+			]
+		}
+	}
+]
