@@ -1,0 +1,116 @@
+[
+	{
+		"scenario1": {
+			"steps": [
+				{
+					"step": "step-1",
+					"items" : [
+					]
+				},
+
+				{
+					"step": "step-2",
+					"items" : [
+					]
+				},		
+				{
+					"step": "step-3",
+					"items" : [
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "LoadModule.*logio_module.*mod_logio.so",
+                                                        "failmsg": "The LogIO module has not been enabled in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "LogIO module correctly loaded."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "LoadModule.*unique_id_module.*mod_unique_id.so",
+                                                        "failmsg": "The UniqueID module has not been enabled in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "UniqueID module correctly loaded."
+                                                }
+					]
+				},
+				{
+					"step": "step-4",
+					"items" : [
+                                                {
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "LogFormat.*GEOIP_COUNTRY_CODE",
+                                                        "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "Extended log format defined correctly."
+                                                },
+                                                {
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "BALANCER_WORKER_ROUTE.*SSL_CIPHER",
+                                                        "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "Extended log format defined correctly."
+                                                },
+                                                {
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "ModSecAnomalyScoreIn.*extended",
+                                                        "failmsg": "The extended log format is not defined correctly in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "Extended log format defined correctly."
+                                                },
+						{
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "CustomLog.*logs\/access.log extended",
+                                                        "failmsg": "The extended log format is not enabled correctly in the httpd.conf. Please perform this step in order to advance.",
+                                                        "successmsg": "Extended log format configured correctly."
+                                                }
+					]
+				},
+				{
+					"step": "step-5",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-6",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-7",
+					"items" : [
+						{
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/access.log",
+                                                        "targetstring": "GET /index.html?n=1a",
+                                                        "failmsg": "The access log does not contain the GET requests expected to result from the nested loop. Please execute this call in order to advance.",
+                                                        "successmsg": "GET requests found in access log."
+                                                },
+						{
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/access.log",
+                                                        "targetstring": "POST /index.html?n=100b",
+                                                        "failmsg": "The access log does not contain the POST requests expected to result from the nested loop. Please execute this call in order to advance.",
+                                                        "successmsg": "POST requests found in access log."
+                                                }
+					]
+				},
+				{
+					"step": "step-8",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-9",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-10",
+					"items" : [
+					]
+				}
+			]
+		}
+	}
+]
+

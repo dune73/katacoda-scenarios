@@ -1,0 +1,110 @@
+[
+	{
+		"scenario1": {
+			"steps": [
+				{
+					"step": "step-1",
+					"items" : [
+						{
+							"operator": "file-contains",
+							"target": "/apache/conf/httpd.conf",
+							"targetstring": "logs/httpd.pid",
+							"failmsg": "New Apache configuration is not correct. This is fatal. Please make sure you access the link to your server and that you get a successful response.",
+							"successmsg": "Config check 1: New Apache configuration is fine."
+						},
+						{
+							"operator": "file-contains",
+							"target": "/apache/conf/httpd.conf",
+							"targetstring": "[%{cu}t]",
+							"failmsg": "New Apache configuration is not correct. This is fatal. Please make sure you access the link to your server and that you get a successful response.",
+							"successmsg": "Config check 2: New Apache configuration is fine."
+						},
+						{
+							"operator": "file-contains",
+							"target": "/apache/conf/httpd.conf",
+							"targetstring": "Options SymLinksIfOwnerMatch",
+							"failmsg": "New Apache configuration is not correct. This is fatal. Please make sure you access the link to your server and that you get a successful response.",
+							"successmsg": "Config check 3: New Apache configuration is fine."
+						}
+					]
+				},
+
+				{
+					"step": "step-2",
+					"items" : [
+					]
+				},		
+				{
+					"step": "step-3",
+					"items" : [
+						{
+							"operator": "file-exists",
+							"target": "/apache/logs/error.log",
+							"failmsg": "File $TARGET not found. This indicates that Apache has not been launched. Please start it.",
+							"successmsg": "File $TARGET found. Apache thus started."
+						}
+					]
+				},
+				{
+					"step": "step-4",
+					"items" : [
+                                                {
+                                                        "operator": "file-exists",
+                                                        "target": "/apache/logs/access.log",
+                                                        "failmsg": "File $TARGET not found. This is fatal. Please fix.",
+                                                        "successmsg": "File $TARGET found."
+                                                },
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/access.log",
+                                                        "targetstring": "GET /",
+                                                        "failmsg": "Apache webserver access failed (or did not happen yet). This is fatal. Please make sure you access the server with curl and that you get a successful response.",
+
+							"failmsg": "File $TARGET not found. This indicates that Apache has not been started. Please start it.",
+                                                        "successmsg": "Apache webserver accessed successfully."
+                                                }
+					]
+				},
+				{
+					"step": "step-5",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-6",
+					"items" : [
+					]
+				},
+				{
+					"step": "step-7",
+					"items" : [
+                                                {
+                                                        "operator": "file-contains",
+                                                        "target": "/apache/logs/access.log",
+                                                        "targetstring": "TRACE /index.html HTTP/1.1",
+                                                        "failmsg": "It looks like you did not try out the TRACE method. Please perform this step in order to advance.",
+                                                        "successmsg": "Apache webserver accessed successfully."
+                                                },
+                                                {
+                                                        "operator": "file-contains-regexp",
+                                                        "target": "/apache/conf/httpd.conf",
+                                                        "targetstring": "TraceEnable.*Off",
+                                                        "failmsg": "The TraceEnable directive is not set of Off. You probably forgot to edit the config file and return it to its original state. Please perform this step in order to advance.",
+                                                        "successmsg": "Apache TraceEnable configuration returned to original state."
+                                                }
+					]
+				},
+				{
+					"step": "step-8",
+					"items" : [
+					]
+				}
+			]
+		}
+	}
+]
+
+
+
+
+
