@@ -9,8 +9,33 @@
     },
     {
       "course_id": "scenario-2",
-      "title": "Scenario / Tutorial 2 - Compiling Apache",
-      "description": "We're compiling an Apache web server for a test system."
+      "title": "Configuring a Miniml Apache Web Server",
+      "description": "We're configuring a minimal Apache web server for a test system or for debugging."
+    },
+    {
+      "course_id": "scenario-5",
+      "title": "Extending and Analyzing the Access Log",
+      "description": "We are defining a greatly extended log format in order to better monitor traffic."
+    },
+    {
+      "course_id": "scenario-6",
+      "title": "Embedding ModSecurity",
+      "description": "We are compiling the ModSecurity module, embedding it in the Apache web server, creating a base configuration and dealing with false positives for the first time."
+    },
+    {
+      "course_id": "scenario-7",
+      "title": "Including OWASP ModSecurity Core Rule Set",
+      "description": "We are embedding the OWASP ModSecurity Core Rule Set in our Apache web server and eliminating false alarms."
+    },
+    {
+      "course_id": "scenario-8",
+      "title": "Handling False Positives with the OWASP ModSecurity Core Rule Set",
+      "description": "To successfully ward off attackers, we are reducing the number of false positives for a fresh installation of OWASP ModSecurity Core Rule Set and set the anomaly limits to a stricter level step by step."
+    },
+    {
+      "course_id": "scenario-9",
+      "title": "Setting up a Reverse Proxy Server",
+      "description": "We are configuring a reverse proxy protecting access to the application and shielding the application server from the internet."
     }
   ]
 }
