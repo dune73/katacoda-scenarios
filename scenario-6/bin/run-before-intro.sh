@@ -11,7 +11,7 @@ chmod +x /usr/local/bin/scenario-status
 mkdir /root/bin
 
 # Move aliases and scripts from where the asset mechanism in index.json placed them
-mv /usr/local/etc/.apache-modsec.alias /root
+mv /usr/local/etc/.apache-modsec.alias /root >> /tmp/tmp.log 2>>/tmp/tmp.log
 mv /usr/local/etc/basicstats.awk /root/bin
 mv /usr/local/etc/modsec-positive-stats.rb /root/bin
 mv /usr/local/etc/modsec-rulereport.rb /root/bin
@@ -66,6 +66,7 @@ cd apr-1.7.0
 ./configure --prefix=/usr/local/apr/
 make
 make install
+echo "Apr compiled " >> /tmp/tmp.log
 cd /usr/src/apache
 wget https://www-eu.apache.org/dist/apr/apr-util-1.6.1.tar.bz2
 tar -xvjf apr-util-1.6.1.tar.bz2
@@ -73,8 +74,9 @@ cd apr-util-1.6.1
 ./configure --prefix=/usr/local/apr/ --with-apr=/usr/local/apr/
 make
 make install
+echo "Apr-Util compiled " >> /tmp/tmp.log
 cd /usr/src/apache
-wget https://www-eu.apache.org/dist//httpd/httpd-2.4.48.tar.bz2
+wget https://christian-folini.ch/httpd-2.4.48.tar.bz2
 tar -xvjf httpd-2.4.48.tar.bz2
 cd httpd-2.4.48
 ./configure --prefix=/opt/apache-2.4.48  --with-apr=/usr/local/apr/bin/apr-1-config \
@@ -82,10 +84,11 @@ cd httpd-2.4.48
    --enable-mpms-shared=event \
    --enable-mods-shared=all \
    --enable-nonportable-atomics=yes
+echo "Apache compilation configured " >> /tmp/tmp.log
 make
-make install
-
 echo "Apache compiled " >> /tmp/tmp.log
+make install
+echo "Apache installed " >> /tmp/tmp.log
 
 
 #wget https://www.netnea.com/files/apache-compiled-src-2.4.48.tar.bz2
