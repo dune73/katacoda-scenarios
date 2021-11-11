@@ -11,13 +11,12 @@ chmod +x /usr/local/bin/scenario-status
 mkdir /root/bin
 
 # Move aliases and scripts from where the asset mechanism in index.json placed them
-mv /usr/local/etc/.apache-modsec.alias /root
+mv /usr/local/etc/.apache-modsec.alias /root >> /tmp/tmp.log 2>> /tmp/tmp.log
 mv /usr/local/etc/basicstats.awk /root/bin
 mv /usr/local/etc/modsec-positive-stats.rb /root/bin
 mv /usr/local/etc/modsec-rulereport.rb /root/bin
 mv /usr/local/etc/percent.awk /root/bin
 cat /usr/local/etc/.bashrc_snippet >> /root/.bashrc
-cat /usr/local/etc/.bashrc_snippet
 
 echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 
