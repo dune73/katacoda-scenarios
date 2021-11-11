@@ -74,7 +74,7 @@ cd apr-util-1.6.1
 make
 make install
 cd /usr/src/apache
-wget https://www-eu.apache.org/dist//httpd/httpd-2.4.48.tar.bz2
+wget https://christian-folini.ch/httpd-2.4.48.tar.bz2
 tar -xvjf httpd-2.4.48.tar.bz2
 cd httpd-2.4.48
 ./configure --prefix=/opt/apache-2.4.48  --with-apr=/usr/local/apr/bin/apr-1-config \
