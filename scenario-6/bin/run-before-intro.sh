@@ -11,6 +11,10 @@ chmod +x /usr/local/bin/scenario-status
 mkdir /root/bin
 
 # Move aliases and scripts from where the asset mechanism in index.json placed them
+while [ ! -f /usr/local/etc/.apache-modsec.alias ]; do
+	echo "Sleeping ..." >> /tmp/tmp.log
+	sleep 1
+done
 mv /usr/local/etc/.apache-modsec.alias /root >> /tmp/tmp.log 2>>/tmp/tmp.log
 mv /usr/local/etc/basicstats.awk /root/bin
 mv /usr/local/etc/modsec-positive-stats.rb /root/bin
