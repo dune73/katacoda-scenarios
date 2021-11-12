@@ -23,7 +23,6 @@ mv /usr/local/etc/modsec-positive-stats.rb /root/bin
 mv /usr/local/etc/modsec-rulereport.rb /root/bin
 mv /usr/local/etc/percent.awk /root/bin
 cat /usr/local/etc/.bashrc_snippet >> /root/.bashrc
-cat /usr/local/etc/.bashrc_snippet
 
 echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 

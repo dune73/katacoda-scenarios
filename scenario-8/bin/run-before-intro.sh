@@ -23,7 +23,6 @@ mv /usr/local/etc/modsec-positive-stats.rb /root/bin
 mv /usr/local/etc/modsec-rulereport.rb /root/bin
 mv /usr/local/etc/percent.awk /root/bin
 cat /usr/local/etc/.bashrc_snippet >> /root/.bashrc
-cat /usr/local/etc/.bashrc_snippet
 
 echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 
@@ -42,6 +41,7 @@ chown root:root /apache
 cd /apache/modules
 wget https://netnea.com/files/mod_security2.so
 mkdir /apache/logs/audit
+chown www-data:www-data /apache/logs/audit
 
 echo "Apache downloaded and installed" >> /tmp/tmp.log
 
