@@ -4,6 +4,12 @@
 # General Init
 # --------------------------------------------------------------
 
+# Wait until everything is in place (this can take a few seconds)
+while [ ! -f /usr/local/etc/.apache-modsec.alias ]; do
+	echo "Sleeping ..." >> /tmp/tmp.log
+	sleep 1
+done
+
 # chmod +x when copying assets does not work. Doing this by hand.
 chmod +x /usr/local/bin/scenario-status
 
