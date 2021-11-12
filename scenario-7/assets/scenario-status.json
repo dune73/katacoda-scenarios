@@ -7,7 +7,7 @@
 					"items" : [
 						{
                                                         "operator": "folder-exists",
-                                                        "target": "/apache/conf/coreruleset-3.3.0",
+                                                        "target": "/apache/conf/coreruleset-3.3.2",
                                                         "failmsg": "Folder $TARGET does not exist. Please download CRS and untar it so the folder gets created.",
                                                         "successmsg": "Folder $TARGET exists."
                                                 },
