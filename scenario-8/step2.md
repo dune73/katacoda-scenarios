@@ -201,7 +201,7 @@ So we have 10,000 requests and about half of them pass without raising an alarm.
 
 Let's visualize this:
 
-<img src="/files/tutorial-8-distribution-untuned.png" alt="Untuned Distribution" width="950" height="550" />
+<img src="https://www.netnea.com/files/tutorial-8-distribution-untuned.png" alt="Untuned Distribution" width="950" height="550" />
 
 _A quick overview over the stats generated above_
 
