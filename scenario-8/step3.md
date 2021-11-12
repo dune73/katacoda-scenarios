@@ -81,6 +81,7 @@ The next one is 942450. This is the rule looking for traces of hex encoding. Thi
 ```
 grep -F -f ids tutorial-8-example-error.log  | grep 942450 | melmatch | sucs
 ```{execute}
+
 ```
       6 REQUEST_COOKIES:98febd3dhf84de73ab2e32889dc5f0x032a9
       6 REQUEST_COOKIES_NAMES:SESS29af1facda0a866a687d5055f0x034ca
