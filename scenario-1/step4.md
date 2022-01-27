@@ -2,7 +2,7 @@ After verification we can unpack the package.
 
 Extract the source code:
 
-`tar -xvjf httpd-2.4.48.tar.bz2`{{execute}}
+`tar -xvjf httpd-2.4.52.tar.bz2`{{execute}}
 
 This results in approximately 38 MB.
 
@@ -10,11 +10,11 @@ We now enter the directory and configure the compiler with our entries and with 
 
 Change into the folder:
 
-`cd httpd-2.4.48`{{execute}}
+`cd httpd-2.4.52`{{execute}}
 
 Configure the compilaton process:
 
-```./configure --prefix=/opt/apache-2.4.48  --with-apr=/usr/local/apr/bin/apr-1-config \
+```./configure --prefix=/opt/apache-2.4.52  --with-apr=/usr/local/apr/bin/apr-1-config \
    --with-apr-util=/usr/local/apr/bin/apu-1-config \
    --enable-mpms-shared=event \
    --enable-mods-shared=all \
