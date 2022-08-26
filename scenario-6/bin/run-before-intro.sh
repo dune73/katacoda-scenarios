@@ -29,9 +29,9 @@ echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 
 # Get env as prepared in scenario 1
 cd /
-wget https://netnea.com/files/apache-compiled-2.4.52.tar.bz2
-tar xvjf apache-compiled-2.4.52.tar.bz2
-ln -s /opt/apache-2.4.52 /apache
+wget https://netnea.com/files/apache-compiled-2.4.48.tar.bz2
+tar xvjf apache-compiled-2.4.48.tar.bz2
+ln -s /opt/apache-2.4.48 /apache
 chown root:root /usr
 chown root:root /usr/local
 chown -R root:root /usr/local/apr
@@ -81,10 +81,10 @@ make
 make install
 echo "Apr-Util compiled " >> /tmp/tmp.log
 cd /usr/src/apache
-wget https://christian-folini.ch/httpd-2.4.52.tar.bz2
-tar -xvjf httpd-2.4.52.tar.bz2
-cd httpd-2.4.52
-./configure --prefix=/opt/apache-2.4.52  --with-apr=/usr/local/apr/bin/apr-1-config \
+wget https://christian-folini.ch/httpd-2.4.48.tar.bz2
+tar -xvjf httpd-2.4.48.tar.bz2
+cd httpd-2.4.48
+./configure --prefix=/opt/apache-2.4.48  --with-apr=/usr/local/apr/bin/apr-1-config \
    --with-apr-util=/usr/local/apr/bin/apu-1-config \
    --enable-mpms-shared=event \
    --enable-mods-shared=all \
@@ -96,8 +96,8 @@ make install
 echo "Apache installed " >> /tmp/tmp.log
 
 
-#wget https://www.netnea.com/files/apache-compiled-src-2.4.52.tar.bz2
-#tar xjf apache-compiled-src-2.4.52.tar.bz2
+#wget https://www.netnea.com/files/apache-compiled-src-2.4.48.tar.bz2
+#tar xjf apache-compiled-src-2.4.48.tar.bz2
 
 #echo "Apache compiled src code downloaded" >> /tmp/tmp.log
 

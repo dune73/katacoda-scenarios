@@ -29,9 +29,9 @@ echo "Aliases and custom scripts ready" >> /tmp/tmp.log
 
 # Get env as prepared in scenario 1
 cd /
-wget https://netnea.com/files/apache-compiled-2.4.52.tar.bz2
-tar xvjf apache-compiled-2.4.52.tar.bz2
-ln -s /opt/apache-2.4.52 /apache
+wget https://netnea.com/files/apache-compiled-2.4.48.tar.bz2
+tar xvjf apache-compiled-2.4.48.tar.bz2
+ln -s /opt/apache-2.4.48 /apache
 chown root:root /usr
 chown root:root /usr/local
 chown -R root:root /usr/local/apr
