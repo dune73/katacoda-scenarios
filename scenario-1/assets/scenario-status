@@ -97,9 +97,9 @@ if [ "$MINSTEP" -gt "$MAXSTEP" ]; then
 	exit 1
 fi
 
-if [ "$MINSTEP" -gt "$STEPCOUNTER" ]; then
-	echo "Checking steps beyond the current scenario step. This is likely going to fail."
-fi
+#if [ "$MINSTEP" -gt "$STEPCOUNTER" ]; then
+#	echo "Checking steps beyond the current scenario step. This is likely going to fail."
+#fi
 
 
 for STEP in $(seq $MINSTEP 1 $MAXSTEP); do

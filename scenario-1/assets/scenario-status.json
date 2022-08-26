@@ -164,9 +164,9 @@
 					"items" : [
 						{
 							"operator": "file-exists",
-							"target": "/usr/src/apache/httpd-2.4.52.tar.bz2",
-							"failmsg": "Source code file \"httpd-2.4.52.tar.bz2\" not downloaded properly. This is fatal. Please fix it.",
-							"successmsg": "Source code file \"httpd-2.4.52.tar.bz2\" downloaded properly."
+							"target": "/usr/src/apache/httpd-2.4.54.tar.bz2",
+							"failmsg": "Source code file \"httpd-2.4.54.tar.bz2\" not downloaded properly. This is fatal. Please fix it.",
+							"successmsg": "Source code file \"httpd-2.4.54.tar.bz2\" downloaded properly."
 						}
 					]
 				},
@@ -175,13 +175,13 @@
 					"items" : [
 						{
 							"operator": "folder-exists",
-							"target": "/usr/src/apache/httpd-2.4.52",
+							"target": "/usr/src/apache/httpd-2.4.54",
 							"failmsg": "Folder $TARGET not found. This is fatal. Please fix.",
 							"successmsg": "Folder $TARGET found."
 						},
 						{
 							"operator": "tail1-contains",
-							"target": "/usr/src/apache/httpd-2.4.52/config.log",
+							"target": "/usr/src/apache/httpd-2.4.54/config.log",
 							"targetstring": "configure: exit 0",
 							"failmsg": "Configure for \"apache\" compilation did not run properly. This is fatal. Please fix it.",
 							"successmsg": "Configure for \"apache\" compilation ran properly."
@@ -193,7 +193,7 @@
 					"items" : [
 						{
 							"operator": "file-exists",
-							"target": "/usr/src/apache/httpd-2.4.52/httpd",
+							"target": "/usr/src/apache/httpd-2.4.54/httpd",
 							"failmsg": "Compilation for \"apache\" failed. This is fatal. Please fix.",
 							"successmsg": "Compilation of \"apache\" successful."
 						}
@@ -204,7 +204,7 @@
 					"items" : [
 						{
 							"operator": "folder-exists",
-							"target": "/opt/apache-2.4.52",
+							"target": "/opt/apache-2.4.54",
 							"failmsg": "Installation of compiled \"apache\" failed. This is fatal. Please fix it.",
 							"successmsg": "Installation of \"apache\" successful."
 						},
