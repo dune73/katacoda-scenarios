@@ -2,11 +2,11 @@ We’ll now download the program code from the internet. This can be done by dow
 
 Move back to the apache source code folder:
 
-`cd /usr/src/apache`{{execute}}
+`cd /usr/src/apache`
 
 Get the source code:
 
-`wget https://www-eu.apache.org/dist//httpd/httpd-2.4.52.tar.bz2`{{execute}}
+`wget https://www-eu.apache.org/dist//httpd/httpd-2.4.54.tar.bz2`
 
 The compressed source code is approximately 5 MB in size.
 
@@ -14,10 +14,10 @@ We’ll now download the checksum of the source code file from Apache. At least 
 
 Get the checksum file:
 
-`wget https://www.apache.org/dist/httpd/httpd-2.4.52.tar.bz2.sha256`{{execute}}
+`wget https://www.apache.org/dist/httpd/httpd-2.4.54.tar.bz2.sha256`
 
 Execute the check:
 
-`sha256sum --check httpd-2.4.52.tar.bz2.sha256`{{execute}}
+`sha256sum --check httpd-2.4.54.tar.bz2.sha256`
 
-`httpd-2.4.52.tar.bz2: OK`
+`httpd-2.4.54.tar.bz2: OK`

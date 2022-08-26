@@ -4,7 +4,7 @@ https://<HOSTNAME-OR-IP-ADDRESS>/index.html
 
 We then expect the following:
 
-![Katacoda Logo](./assets/apache-tutorial-1-screenshot-it-works.png)
+![Screenshot](https://www.netnea.com/files/apache-tutorial-1-screenshot-it-works.png)
 
 Apache shows the first signs of life in the browser.
 

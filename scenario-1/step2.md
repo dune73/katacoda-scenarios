@@ -2,17 +2,17 @@ Since the release of version 2.4, the Apache web server comes without two import
 
 Let’s start with apr and download the package.
 
-`wget https://www-eu.apache.org/dist/apr/apr-1.7.0.tar.bz2`{{execute}}
+`wget https://www-eu.apache.org/dist/apr/apr-1.7.0.tar.bz2`
 
 We’ll now download the checksum of the source code file from Apache. We’ll verify the integrity of the source code we downloaded that way. For better security we’ll be using a secure connection for downloading. Without https this verification doesn’t make much sense. Both files, the source code and the small checksum file, should be placed together in `/usr/src/apache`. We can now verify the checksum:
 
 Get the checksum file:
 
-`wget https://www.apache.org/dist/apr/apr-1.7.0.tar.bz2.sha256`{{execute}}
+`wget https://www.apache.org/dist/apr/apr-1.7.0.tar.bz2.sha256`
 
 And now run the check:
 
-`sha256sum --check apr-1.7.0.tar.bz2.sha256`{{execute}}
+`sha256sum --check apr-1.7.0.tar.bz2.sha256`
 
 `apr-1.7.0.tar.bz2: OK`
 
@@ -20,15 +20,15 @@ The test should not result in any problems, OK. We can now continue with unpacki
 
 Unpack the repository:
 
-`tar -xvjf apr-1.7.0.tar.bz2`{{execute}}
+`tar -xvjf apr-1.7.0.tar.bz2`
 
 Change into the folder:
 
-`cd apr-1.7.0`{{execute}}
+`cd apr-1.7.0`
 
 Configure the compilation process:
 
-`./configure --prefix=/usr/local/apr/`{{execute}}
+`./configure --prefix=/usr/local/apr/`
 
 After unpacking, we now change to the new directory containing the source code and start configure. This configures the compiler. We specify the installation path and configure gathers a variety of information and settings about our system. Sometimes, a warning about `libtoolT` is printed but it can be ignored. The configure command frequently complains about missing components. One thing is certain: Without a working compiler we will be unable to compile and it’s configure’s task to check whether everything is assembled correctly.
 
@@ -55,57 +55,57 @@ And once we are at it, let's install everything else we are going to need throug
 
 Here is how to install all this stuff with a single command:
 
-`sudo apt-get --assume-yes install build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby uuid gawk libxml2-dev libexpat1-dev libyajl-dev`{{execute}}
+`sudo apt-get --assume-yes install build-essential binutils gcc libpcre3-dev libssl-dev zlibc zlib1g-dev ssl-cert ruby uuid gawk libxml2-dev libexpat1-dev libyajl-dev`
 
 
 These are the package names on Debian-based distributions. The packages may have different names elsewhere. The absence of these files can be easily rectified by re-installing them using the utilities from your own distribution. Afterwards, run configure again, perhaps re-install something again and eventually the script will run successfully (individual warnings during the configure steps are no big problem. We just need to be sure the script did not die unexpectedly).
 
 Once it runs without a problem, we can assume that the time for compiling has come.
 
-`make`{{execute}}
+`make`
 
 This takes a moment after which we get the compiled apr, which we promptly install.
 
-`sudo make install`{{execute}}
+`sudo make install`
 
 Once this is successful, we'll do the same with apr-util.
 
 Move back to the apache source code folder:
 
-`cd /usr/src/apache`{{execute}}
+`cd /usr/src/apache`
 
 Get the `apr-util` source code.
 
-`wget https://www-eu.apache.org/dist/apr/apr-util-1.6.1.tar.bz2`{{execute}}
+`wget https://www-eu.apache.org/dist/apr/apr-util-1.6.1.tar.bz2`
 
 Get the checksum file:
 
-`wget https://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256`{{execute}}
+`wget https://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256`
 
 Perform the check:
 
-`sha256sum --check apr-util-1.6.1.tar.bz2.sha256`{{execute}}
+`sha256sum --check apr-util-1.6.1.tar.bz2.sha256`
 
 `apr-util-1.6.1.tar.bz2: OK`
 
 Extract the source code from the archive:
 
-`tar -xvjf apr-util-1.6.1.tar.bz2`{{execute}}
+`tar -xvjf apr-util-1.6.1.tar.bz2`
 
 Enter the folder:
 
-`cd apr-util-1.6.1`{{execute}}
+`cd apr-util-1.6.1`
 
 Configure the compiler:
 
-`./configure --prefix=/usr/local/apr/ --with-apr=/usr/local/apr/`{{execute}}
+`./configure --prefix=/usr/local/apr/ --with-apr=/usr/local/apr/`
 
 Run the compilation:
 
-`make`{{execute}}
+`make`
 
 Install the compiled binaries:
 
-`sudo make install`{{execute}}
+`sudo make install`
 
 Once this works in both cases we're ready for the web server itself.

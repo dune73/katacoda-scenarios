@@ -1,10 +1,10 @@
 Before completing the tutorial, we’d like to take a closer look at the server. Let’s open the engine compartment and take a peek inside. We can get information about our binary as follows:
 
-`sudo ./bin/httpd -V`{{execute}}
+`sudo ./bin/httpd -V`
 
 ```
-Server version: Apache/2.4.43 (Unix)
-Server built:   November 12 2019 13:32:29
+Server version: Apache/2.4.54 (Unix)
+Server built:   November 12 2021 13:32:29
 Server's Module Magic Number: 20120211:83
 Server loaded:  APR 1.7.0, APR-UTIL 1.6.1
 Compiled using: APR 1.7.0, APR-UTIL 1.6.1
@@ -16,7 +16,7 @@ Because we specified the version when we compiled, `apr` is mentioned and the `e
 
 You can however get even more information from the system and inquire about the modules compiled firmly into the server.
 
-`sudo ./bin/httpd -l`{{execute}}
+`sudo ./bin/httpd -l`
 
 ```
 Compiled in modules:
@@ -29,7 +29,7 @@ This and the information above can be helpful for debugging and useful when subm
 
 The binary itself (`/apache/bin/httpd`) is approx. 2.0 MB in size and the list of modules appears as follows:
 
-`ls -lh modules`{{execute}}
+`ls -lh modules`
 
 ```
 total 8.8M

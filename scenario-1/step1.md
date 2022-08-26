@@ -2,12 +2,12 @@ It’s not all that important where the source code is located. The following is
 
 Create folder:
 
-`sudo mkdir /usr/src/apache`{{execute}}
+`sudo mkdir /usr/src/apache`
 
 Take ownership of folder:
 
-`sudo chown $(whoami) /usr/src/apache`{{execute}}
+`sudo chown $(whoami) /usr/src/apache`
 
 Change directory to the folder:
 
-`cd /usr/src/apache`{{execute}}
+`cd /usr/src/apache`
